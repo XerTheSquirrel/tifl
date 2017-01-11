@@ -1,0 +1,54 @@
+# Trouble In Furry Land
+
+ * Copyright (C) 2017-2017 Steven Gawroriski
+   <steven@multiphasicapps.net>
+ * Copyright (C) 2017-2017 Multi-Phasic Applications
+   <http://multiphasicapps.net/>
+
+**Trouble In Furry Land** is a first person shooter where you run around in a
+level and turn feral creatures back into their anthropomorphic form.
+
+## Licenses
+
+ * Source:
+   [GNU General Public License, Version 3 or later](license.mkd)
+ * Non-Source:
+   [Creative Commons CC-BY-SA 4.0](license.mkd)
+
+## Repository
+
+ * [Online repository](http://multiphasicapps.net/)
+   * SquirrelJME uses `fossil` <http://fossil-scm.org/>.
+   * The repository may be cloned with:
+     * `fossil clone -u http://multiphasicapps.net:8080/tifl `
+       ` tifl.fossil`
+     * `mkdir tifl`
+     * `cd tifl`
+     * `fossil open ../tifl.fossil`
+   * Trunk Source Snapshot (`fossil serve` only):
+     * [TAR.GZ](/tarball/tifl-trunk.tar.gz?uuid=trunk)
+     * [ZIP](/zip/tifl-trunk.zip?uuid=trunk)
+   * Read-Only Mirrors:
+     * Bitbucket: <https://bitbucket.org/mpasteven/tifl>
+     * GitHub: <http://github.com/mpasteven/tifl>
+
+## Links
+
+ * [Twitter](https://twitter.com/MultiPhasicApps)
+
+## Donations
+
+You may donate to Trouble In Furry Land to which would be used by the author to
+keep the web server online, the purchasing of new hardware/software, and for
+the purchasing of food items for consumption.
+
+ * BitCoin (**BTC/XBT**): [`13UYwi2zuQd8NLhjyu1BA7a8NWktDotmq4`](
+   bitcoin:13UYwi2zuQd8NLhjyu1BA7a8NWktDotmq4)
+ * Ethereum (**ETH**): [`0x9738136f7EcB11d554Ef767704F62216a646e0AB`](
+   ethereum:0x9738136f7EcB11d554Ef767704F62216a646e0AB)
+ * LiteCoin (**LTC**): [`LKytAQcbPyox75uYMKo1NH1w2k1SqBaELi`](
+   litecoin:LKytAQcbPyox75uYMKo1NH1w2k1SqBaELi)
+ * DogeCoin (**DOGE**): [`DPsW21MV8RMuXhA3GoN8VPjkmQEugrEn8h`](
+   dogecoin:DPsW21MV8RMuXhA3GoN8VPjkmQEugrEn8h)
+ * [FreedomSponsors](https://freedomsponsors.org/user/mpasteven/)
+
