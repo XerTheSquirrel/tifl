@@ -8,28 +8,21 @@
 // See license.mkd for licensing and copyright information.
 // ---------------------------------------------------------------------------
 
-package net.multiphasicapps.tifl.swing;
-
-import javax.swing.JFrame;
+package net.multiphasicapps.tifl;
 
 /**
- * Main entry point for the Swing interface.
+ * This contains the rasterizer for the game which renders it.
  *
  * @since 2017/01/11
  */
-public class Main
+public class Rasterizer
 {
-	/**
-	 * Main entry point.
-	 *
-	 * @param __args Program arguments.
-	 * @since 2017/01/11
-	 */
-	public static void main(String... __args)
-	{
-		GameFrame gf = new GameFrame(__args);
-		gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gf.setVisible(true);
-	}
+	/** The screen width. */
+	public static final int SCREEN_WIDTH =
+		320;
+	
+	/** The screen height. */
+	public static final int SCREEN_HEIGHT =
+		200;
 }
 

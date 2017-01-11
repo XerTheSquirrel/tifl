@@ -10,26 +10,41 @@
 
 package net.multiphasicapps.tifl.swing;
 
+import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
 /**
- * Main entry point for the Swing interface.
+ * This is the game frame which is used to show the actual game and
+ * also potentially interact with it.
  *
  * @since 2017/01/11
  */
-public class Main
+public class GameFrame
+	extends JFrame
 {
+	/** The panel used to render the game. */
+	protected final RenderPanel renderpanel;
+	
 	/**
-	 * Main entry point.
+	 * Initializes the game frame.
 	 *
-	 * @param __args Program arguments.
+	 * @param __args The program arguments.
 	 * @since 2017/01/11
 	 */
-	public static void main(String... __args)
+	public GameFrame(String... __args)
 	{
-		GameFrame gf = new GameFrame(__args);
-		gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gf.setVisible(true);
+		super("Trouble In Furry Land");
+		
+		// Setup the render panel
+		RenderPanel renderpanel = new RenderPanel();
+		this.renderpanel = renderpanel;
+		
+		// Add it to the frame
+		add(renderpanel, BorderLayout.CENTER);
+		
+		// Pack and center to make it neat
+		pack();
+		setLocationRelativeTo(null);
 	}
 }
 
