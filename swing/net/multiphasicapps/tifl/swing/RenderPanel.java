@@ -12,11 +12,16 @@ package net.multiphasicapps.tifl.swing;
 
 import java.awt.Dimension;
 import java.awt.DisplayMode;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.awt.Toolkit;
 import javax.swing.JPanel;
+import net.multiphasicapps.tifl.FramebufferProvider;
 import net.multiphasicapps.tifl.Rasterizer;
 
 /**
@@ -26,7 +31,17 @@ import net.multiphasicapps.tifl.Rasterizer;
  */
 public class RenderPanel
 	extends JPanel
+	implements FramebufferProvider;
 {
+	/** Rasterizer for the game. */
+	protected final Rasterizer rasterizer;
+	
+	/** Base buffer image. */
+	protected final BufferedImage rasterimage;
+	
+	/** The raster size. */
+	protected final rasterwidth, rasterheight;
+	
 	/**
 	 * Initializes the render panel.
 	 *
@@ -34,9 +49,12 @@ public class RenderPanel
 	 */
 	public RenderPanel()
 	{
+		// The desired sized used
+		int bw = Rasterizer.SCREEN_WIDTH,
+			bh = Rasterizer.SCREEN_HEIGHT;
+		
 		// Never go below the intended resolution
-		Dimension dim = new Dimension(
-			Rasterizer.SCREEN_WIDTH, Rasterizer.SCREEN_HEIGHT);
+		Dimension dim = new Dimension(bw, bh);
 		setMinimumSize(dim);
 		setSize(dim);
 		
@@ -52,16 +70,46 @@ public class RenderPanel
 		double sw = dm.getWidth(), sh = dm.getHeight();
 		
 		// Ratio to simulate a lower desktop resolution
-		double rw = sw / (Rasterizer.SCREEN_WIDTH * 1.5),
-			rh = sh / (Rasterizer.SCREEN_HEIGHT * 1.5);
+		double rw = sw / (bw * 1.5),
+			rh = sh / (bh * 1.5);
 		
 		// Calculate used size
 		Dimension use = new Dimension();
-		use.width = (int)(Rasterizer.SCREEN_WIDTH * rw);
-		use.height = (int)(Rasterizer.SCREEN_HEIGHT * rh);
+		use.width = (int)(bw * rw);
+		use.height = (int)(bh * rh);
 		
 		// Use that size
 		setPreferredSize(use);
+		
+		// Data is drawn directly onto this buffered image
+		if (true)
+			throw new Error("TODO");
+		
+		// Setup rasterizer
+		Rasterizer rasterizer = new Rasterizer(this, bw, bh);
+		this.rasterizer = rasterizer;
+		this.rasterwidth = bw;
+		this.rasterheight = bh;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @since 2017/01/11
+	 */
+	@Override
+	public int[] createFramebuffer(int __w, int __h)
+	{
+		throw new Error("TODO");
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @since 2017/01/11
+	 */
+	@Override
+	protected void paintComponent(Graphics __g)
+	{
+		super.paintComponent(__g);
 	}
 }
 

@@ -24,5 +24,124 @@ public class Rasterizer
 	/** The screen height. */
 	public static final int SCREEN_HEIGHT =
 		200;
+	
+	/** The game framebuffer. */
+	protected final int[] framebuffer;
+	
+	/** The view width. */
+	protected final int width;
+	
+	/** The view height. */
+	protected final int height;
+	
+	/**
+	 * Initializes the rasterizer with the default resolution.
+	 *
+	 * @since 2017/01/11
+	 */
+	public Rasterizer()
+	{
+		this(SCREEN_WIDTH, SCREEN_HEIGHT);
+	}
+	
+	/**
+	 * Initializes the rasterizer with the given resolution.
+	 *
+	 * @param __w The width.
+	 * @param __h The height.
+	 * @throws IllegalArgumentException If any dimension is zero or negative.
+	 * @since 2017/01/11
+	 */
+	public Rasterizer(int __w, int __h)
+		throws IllegalArgumentException
+	{
+		this(new FrameBufferProvider()
+			{
+				/**
+				 * {@inheritDoc}
+				 * @since 2017/01/11
+				 */
+				@Override
+				public int[] createFramebuffer(int __w, int __h)
+				{
+					return new int[__w * __h];
+				}
+			}, __w, __h);
+	}
+	
+	/**
+	 * Initializes the rasterizer with the default resolution and the given
+	 * framebuffer provider.
+	 *
+	 * @param __fbp The framebuffer provider to use.
+	 * @throws NullPointerException On null arguments.
+	 * @since 2017/01/11
+	 */
+	public Rasterizer(FrameBufferProvider __fbp)
+		throws NullPointerException
+	{
+		this(__fbp, SCREEN_WIDTH, SCREEN_HEIGHT);
+	}
+	
+	/**
+	 * Initializes the rasterizer with the given resolution and the given
+	 * framebuffer provider.
+	 *
+	 * @param __fbp The framebuffer provider to use.
+	 * @param __w The width.
+	 * @param __h The height.
+	 * @throws IllegalArgumentException If any dimension is zero or negative.
+	 * @throws NullPointerException On null arguments.
+	 * @since 2017/01/11
+	 */
+	public Rasterizer(FrameBufferProvider __fbp, int __w, int __h)
+		throws IllegalArgumentException, NullPointerException
+	{
+		// Check
+		if (__fbp == null)
+			throw new NullPointerException();
+		if (__w <= 0 || __h <= 0)
+			throw new IllegalArgumentException();
+		
+		// Set
+		this.width = __w;
+		this.height = __h;
+		
+		// Setup framebuffer
+		this.framebuffer = __fbp.createFramebuffer(__w, __h);
+	}
+	
+	/**
+	 * Returns the raw framebuffer.
+	 *
+	 * @return The framebuffer
+	 * @since 2017/01/11
+	 */
+	public int[] framebuffer()
+	{
+		return this.framebuffer;
+	}
+	
+	/**
+	 * Returns the height.
+	 *
+	 * @return The height.
+	 * @since 2017/01/11
+	 */
+	public int height()
+	{
+		return this.height;
+	}
+	
+	/**
+	 * Returns the width.
+	 *
+	 * @return The width.
+	 * @since 2017/01/11
+	 */
+	public int width()
+	{
+		return this.width;
+	}
 }
 
