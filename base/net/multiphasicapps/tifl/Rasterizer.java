@@ -32,11 +32,11 @@ public class Rasterizer
 	/** The game framebuffer. */
 	protected final int[] framebuffer;
 	
-	/** The view width. */
-	protected final int width;
+	/** The view width and height in pixels. */
+	protected final int width, height;
 	
-	/** The view height. */
-	protected final int height;
+	/** The view width and height in fixed point pixels. */
+	protected final int xwidth, xheight;
 	
 	/** The distance to the projection plane. */
 	protected final int fixedprojectionplanedist;
@@ -120,6 +120,12 @@ public class Rasterizer
 		this.width = __w;
 		this.height = __h;
 		
+		// As fixed
+		int xwidth = __w << FixedPoint.FRACTION_BITS,
+			xheight = __w << FixedPoint.FRACTION_BITS;
+		this.xwidth = xwidth;
+		this.xheight = xheight;
+		
 		// Setup framebuffer
 		int[] framebuffer = __fbp.createFramebuffer(__w, __h);
 		this.framebuffer = framebuffer;
@@ -192,6 +198,7 @@ public class Rasterizer
 		// Get framebuffer
 		int[] framebuffer = this.framebuffer;
 		int width = this.width, height = this.height;
+		int xwidth = this.xwidth, xheight = this.xheight;
 		int frame = simulation.currentFrame();
 		
 		// Initialize framebuffer with something, to see how it works
@@ -206,6 +213,12 @@ public class Rasterizer
 			if (((i + 1) % width) == 0)
 				br = -br;
 		}
+		
+		// Test the unit circle
+		int bam = BinaryAngle.DEGREES_1 * frame;
+		int x = FixedPoint.fixedToInt(FixedPoint.multiply(BinaryAngle.cos(bam), xwidth >> 1) + (xwidth >> 1));
+		int y = FixedPoint.fixedToInt(FixedPoint.multiply(BinaryAngle.sin(bam), xheight >> 1) + (xheight >> 1));
+		framebuffer[(Math.max(0, Math.min(height - 1, y)) * width) + Math.max(0, Math.min(width - 1, x))] = 0xFF0000;
 	}
 }
 

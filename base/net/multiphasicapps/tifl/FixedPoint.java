@@ -80,5 +80,30 @@ public final class FixedPoint
 	{
 		return (int)(((long)__a) << FRACTION_BITS) / __b;
 	}
+	
+	/**
+	 * Converts a fixed point value to an integer value.
+	 *
+	 * @param __v The value to convert.
+	 * @return The converted value.
+	 * @since 2017/01/11
+	 */
+	public static int fixedToInt(int __v)
+	{
+		return __v >> FRACTION_BITS;
+	}
+	
+	/**
+	 * Multiplies two fixed point values.
+	 *
+	 * @param __a The first value.
+	 * @param __b The second value.
+	 * @return The result of multiplication.
+	 * @since 2017/01/11
+	 */
+	public static int multiply(int __a, int __b)
+	{
+		return (int)((((long)__a) * ((long)__b)) >> FRACTION_BITS);
+	}
 }
 
