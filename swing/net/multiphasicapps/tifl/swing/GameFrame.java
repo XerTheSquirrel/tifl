@@ -92,6 +92,9 @@ public class GameFrame
 			// Run until it ends
 			while (!simulation.hasEnded())
 			{
+				// Needed for timing
+				long entertime = System.nanoTime();
+				
 				// Single frame
 				simulation.runFrame();
 				
@@ -100,6 +103,22 @@ public class GameFrame
 				
 				// Tell panel to update
 				renderpanel.repaint();
+				
+				// Count time spent in the loop
+				long exittime = System.nanoTime(),
+					duration = exittime - entertime,
+					rest = (Simulation.NANOS_PER_FRAME - duration) / 1_000L;
+				
+				// Sleep?
+				if (rest > 0)
+					try
+					{
+						Thread.sleep(rest);
+					}
+					catch (InterruptedException e)
+					{
+						// Ignore
+					}
 			}
 		}
 	}
