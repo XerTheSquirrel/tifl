@@ -82,6 +82,18 @@ public final class FixedPoint
 	}
 	
 	/**
+	 * Converts a fixed point value to a double value.
+	 *
+	 * @param __v The value to convert.
+	 * @return The converted value.
+	 * @since 2017/01/11
+	 */
+	public static double fixedToDouble(int __v)
+	{
+		return (double)__v / (double)ONE;
+	}
+	
+	/**
 	 * Converts a fixed point value to an integer value.
 	 *
 	 * @param __v The value to convert.

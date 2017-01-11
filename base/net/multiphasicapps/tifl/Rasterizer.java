@@ -206,6 +206,13 @@ public class Rasterizer
 		for (int i = 0; i < n; i++)
 		{
 			int bam = BinaryAngle.DEGREES_1 * i;
+			int sin = BinaryAngle.sin(bam), cos = BinaryAngle.cos(bam);
+			
+			if (i == (frame - 1))
+				System.err.printf("BAM %08x -> (%f, %f)%n", bam,
+					FixedPoint.fixedToDouble(cos),
+					FixedPoint.fixedToDouble(sin));
+			
 			int color;
 			if (bam > 0 && bam < BinaryAngle.DEGREES_90)
 				color = 0xFF0000;
@@ -217,10 +224,10 @@ public class Rasterizer
 				color = 0xFF00FF;
 			
 			int x = FixedPoint.fixedToInt(
-				FixedPoint.multiply(BinaryAngle.cos(bam), xwidth >> 2) +
+				FixedPoint.multiply(cos, xwidth >> 2) +
 					(xwidth >> 2));
 			int y = FixedPoint.fixedToInt(
-				FixedPoint.multiply(BinaryAngle.sin(bam), xheight >> 2) +
+				FixedPoint.multiply(sin, xheight >> 2) +
 					(xheight >> 2));
 			framebuffer[(Math.max(0, Math.min(height - 1, y)) * width) +
 				Math.max(0, Math.min(width - 1, x))] = color;

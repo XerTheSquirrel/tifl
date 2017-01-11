@@ -135,7 +135,7 @@ public final class BinaryAngle
 		// 180 - 360
 		if (__bam < 0)
 			// 180 - 270: Approaches negative 1
-			if (__bam < DEGREES_270)
+			if (__bam <= DEGREES_270)
 				return -sinetable[nbits];
 		
 			// 270 - 360: Approaches zero
