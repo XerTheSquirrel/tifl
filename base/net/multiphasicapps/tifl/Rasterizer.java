@@ -25,6 +25,10 @@ public class Rasterizer
 	public static final int SCREEN_HEIGHT =
 		200;
 	
+	/** The field of view in bams. */
+	public static final int FIELD_OF_VIEW_BAMS =
+		BinaryAngle.degreeToBam(60);
+	
 	/** The game framebuffer. */
 	protected final int[] framebuffer;
 	
@@ -33,6 +37,12 @@ public class Rasterizer
 	
 	/** The view height. */
 	protected final int height;
+	
+	/** The distance to the projection plane. */
+	protected final int fixedprojectionplanedist;
+	
+	/** The angle of rays (in bams). */
+	protected final int bamrayangle;
 	
 	/** The simulation to draw. */
 	private volatile Simulation _simulation;
@@ -113,6 +123,14 @@ public class Rasterizer
 		// Setup framebuffer
 		int[] framebuffer = __fbp.createFramebuffer(__w, __h);
 		this.framebuffer = framebuffer;
+		
+		// The distance to the projection plane
+		this.fixedprojectionplanedist = FixedPoint.divide(
+			__w << (FixedPoint.FRACTION_BITS - 1),
+			BinaryAngle.tan(FIELD_OF_VIEW_BAMS));
+		
+		// The offset angle for each ray
+		this.bamrayangle = FIELD_OF_VIEW_BAMS / __w;
 	}
 	
 	/**
