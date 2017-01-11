@@ -34,6 +34,9 @@ public class Rasterizer
 	/** The view height. */
 	protected final int height;
 	
+	/** The simulation to draw. */
+	private volatile Simulation _simulation;
+	
 	/**
 	 * Initializes the rasterizer with the default resolution.
 	 *
@@ -110,19 +113,6 @@ public class Rasterizer
 		// Setup framebuffer
 		int[] framebuffer = __fbp.createFramebuffer(__w, __h);
 		this.framebuffer = framebuffer;
-		
-		// Initialize framebuffer with something, to see how it works
-		double br = 255.0 / __w, at = 0.0;
-		for (int i = 0, p = (__w * __h); i < p; i++)
-		{
-			int bid = ((int)at) & 0xFF;
-			framebuffer[i] = (bid << 16) | (bid << 8) | (bid);
-			
-			// Switch directions?
-			at += br;
-			if (((i + 1) % __w) == 0)
-				br = -br;
-		}
 	}
 	
 	/**
@@ -156,6 +146,37 @@ public class Rasterizer
 	public int width()
 	{
 		return this.width;
+	}
+	
+	/**
+	 * Updates and renders the game.
+	 *
+	 * @since 2017/01/11
+	 */
+	public void update()
+	{
+		// Need a simulation to draw on
+		Simulation simulation = this._simulation;
+		if (simulation == null)
+			return;
+		
+		// Get framebuffer
+		int[] framebuffer = this.framebuffer;
+		int width = this.width, height = this.height;
+		int frame = simulation.currentFrame();
+		
+		// Initialize framebuffer with something, to see how it works
+		double br = 255.0 / width, at = 0.0;
+		for (int i = 0, p = (width * height); i < p; i++)
+		{
+			int bid = (((int)at) + frame) & 0xFF;
+			framebuffer[i] = (bid << 16) | (bid << 8) | (bid);
+			
+			// Switch directions?
+			at += br;
+			if (((i + 1) % width) == 0)
+				br = -br;
+		}
 	}
 }
 

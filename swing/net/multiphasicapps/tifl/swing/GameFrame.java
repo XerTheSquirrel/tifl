@@ -11,7 +11,12 @@
 package net.multiphasicapps.tifl.swing;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
+import javax.swing.Timer;
+import net.multiphasicapps.tifl.Rasterizer;
+import net.multiphasicapps.tifl.Simulation;
 
 /**
  * This is the game frame which is used to show the actual game and
@@ -21,9 +26,19 @@ import javax.swing.JFrame;
  */
 public class GameFrame
 	extends JFrame
+	implements Runnable
 {
 	/** The panel used to render the game. */
 	protected final RenderPanel renderpanel;
+	
+	/** The game's rasterizer. */
+	protected final Rasterizer rasterizer;
+	
+	/** The game loop thread. */
+	protected final Thread gameloop;
+	
+	/** The current simulation being ran. */
+	private volatile Simulation _simulation;
 	
 	/**
 	 * Initializes the game frame.
@@ -45,6 +60,48 @@ public class GameFrame
 		// Pack and center to make it neat
 		pack();
 		setLocationRelativeTo(null);
+		
+		// Setup rasterizer for drawing events
+		this.rasterizer = renderpanel.rasterizer();
+		
+		// Setup game loop
+		Thread gameloop = new Thread(this, "TIFLGameLoop");
+		this.gameloop = gameloop;
+		gameloop.setDaemon(true);
+		
+		// Start it
+		gameloop.start();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @since 2017/01/11
+	 */
+	@Override
+	public void run()
+	{
+		// Infinite loop
+		Rasterizer rasterizer = this.rasterizer;
+		RenderPanel renderpanel = this.renderpanel;
+		for (;;)
+		{
+			// Need to create the simulation?
+			Simulation simulation = this._simulation;
+			this._simulation = (simulation = new Simulation());
+			
+			// Run until it ends
+			while (!simulation.hasEnded())
+			{
+				// Single frame
+				simulation.runFrame();
+				
+				// Render it
+				rasterizer.update();
+				
+				// Tell panel to update
+				renderpanel.repaint();
+			}
+		}
 	}
 }
 

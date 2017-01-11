@@ -116,5 +116,16 @@ public class RenderPanel
 		// Draw the game image
 		__g.drawImage(this.rasterimage, 0, 0, getWidth(), getHeight(), null);
 	}
+	
+	/**
+	 * Returns the rasterizer for the game.
+	 *
+	 * @return The game rasterizer.
+	 * @since 2017/01/11
+	 */
+	public Rasterizer rasterizer()
+	{
+		return this.rasterizer;
+	}
 }
 
