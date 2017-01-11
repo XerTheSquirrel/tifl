@@ -22,6 +22,9 @@ public class Floor
 	protected final Grid grid =
 		new Grid();
 	
+	/** The floor ID. */
+	protected final int id;
+	
 	/**
 	 * Initializes the floor.
 	 *
@@ -35,6 +38,9 @@ public class Floor
 		// Check
 		if (__id <= 0)
 			throw new IllegalArgumentException();
+		
+		// Set
+		this.id = __id;
 	}
 	
 	/**
@@ -46,6 +52,17 @@ public class Floor
 	public Grid grid()
 	{
 		return this.grid;
+	}
+	
+	/**
+	 * Returns the ID of the floor.
+	 *
+	 * @return The floor ID.
+	 * @since 2017/01/11
+	 */
+	public int id()
+	{
+		return this.id;
 	}
 }
 
