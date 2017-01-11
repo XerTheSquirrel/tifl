@@ -29,7 +29,7 @@ __qq="$("$__exedir/absolute.sh" "$__in")"
 while [ "$__qq" != "/" ]
 do
 	# Version marker?
-	if [ -f "$__qq/advancedsquirrels-version" ]
+	if [ -f "$__qq/tifl-version" ]
 	then
 		exit 0
 	fi

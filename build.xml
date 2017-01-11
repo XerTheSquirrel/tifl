@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project name="AdvancedSquirrels" basedir="." default="main">
+<project name="tifl" basedir="." default="main">
 	<!-- Some vars -->
 	<property name="root" value="${basedir}" />
 	<property name="out" value="${user.dir}/build" />
@@ -21,7 +21,7 @@
 	<!-- Base JAR -->
 	<target name="base-jar" depends="base-classes">
 		<mkdir dir="${out}" />
-		<jar destfile="${out}/advancedsquirrels-base.jar"
+		<jar destfile="${out}/tifl-base.jar"
 			filesetmanifest="merge"
 			indexMetaInf="true"
 			level="9">
@@ -35,7 +35,7 @@
 	<!-- Base clean -->
 	<target name="base-clean">
 		<delete dir="${out}/base" />
-		<delete dir="${out}/advancedsquirrels-base.jar" />
+		<delete dir="${out}/tifl-base.jar" />
 	</target>
 	
 	<!-- Swing classes -->
@@ -43,7 +43,7 @@
 		<mkdir dir="${out}" />
 		<mkdir dir="${out}/swing" />
 		<javac srcdir="${root}/swing" destdir="${out}/swing"
-			classpath="${out}/advancedsquirrels-base.jar"
+			classpath="${out}/tifl-base.jar"
 			includeantruntime="false" debug="true">
 			<compilerarg value="-source" />
 			<compilerarg value="1.7" />
@@ -56,7 +56,7 @@
 	<!-- Swing JAR -->
 	<target name="swing-jar" depends="swing-classes">
 		<mkdir dir="${out}" />
-		<jar destfile="${out}/advancedsquirrels-swing.jar"
+		<jar destfile="${out}/tifl-swing.jar"
 			filesetmanifest="merge"
 			indexMetaInf="true"
 			level="9">
@@ -70,17 +70,17 @@
 	<!-- Swing clean -->
 	<target name="swing-clean">
 		<delete dir="${out}/swing" />
-		<delete dir="${out}/advancedsquirrels-swing.jar" />
+		<delete dir="${out}/tifl-swing.jar" />
 	</target>
 	
 	<!-- Default JAR -->
 	<target name="jar" depends="base-jar,swing-jar">
-		<jar destfile="${user.dir}/advancedsquirrels.jar"
+		<jar destfile="${user.dir}/tifl.jar"
 			filesetmanifest="merge"
 			indexMetaInf="true"
 			level="9">
-			<zipgroupfileset dir="${out}" includes="advancedsquirrels-base.jar" />
-			<zipgroupfileset dir="${out}" includes="advancedsquirrels-swing.jar" />
+			<zipgroupfileset dir="${out}" includes="tifl-base.jar" />
+			<zipgroupfileset dir="${out}" includes="tifl-swing.jar" />
 		</jar>
 	</target>
 	
