@@ -10,6 +10,9 @@
 
 package net.multiphasicapps.tifl;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+
 /**
  * This is used to calculate binary angles and such, binary angles are treated
  * as unsigned
@@ -49,6 +52,35 @@ public final class BinaryAngle
 	/** 315 degrees. */
 	public static final int DEGREES_315 =
 		DEGREES_1 * 315;
+	
+	/** The table of unsigned sine values. */
+	private static final char[] _SINE_TABLE;
+	
+	/**
+	 * Initializes data tables.
+	 *
+	 * @since 2017/01/11
+	 */
+	static
+	{
+		// Load the sine table
+		char[] sine = new char[12867];
+		try (DataInputStream dis = new DataInputStream(
+			BinaryAngle.class.getResourceAsStream("sinetable")))
+		{
+			for (int i = 0, n = sine.length; i < n; i++)
+				sine[i] = (char)dis.readShort();
+		}
+		
+		// Failed to load the sine table
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		
+		// Set table
+		_SINE_TABLE = sine;
+	}
 	
 	/**
 	 * Not used.
