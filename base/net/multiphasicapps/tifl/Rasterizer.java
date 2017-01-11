@@ -25,9 +25,9 @@ public class Rasterizer
 	public static final int SCREEN_HEIGHT =
 		200;
 	
-	/** The field of view in bams. */
-	public static final int FIELD_OF_VIEW_BAMS =
-		BinaryAngle.degreeToBam(60);
+	/** The field of view in radians. */
+	public static final double FIELD_OF_VIEW_RADIANS =
+		Math.toRadians(60);
 	
 	/** The game framebuffer. */
 	protected final int[] framebuffer;
@@ -35,14 +35,11 @@ public class Rasterizer
 	/** The view width and height in pixels. */
 	protected final int width, height;
 	
-	/** The view width and height in fixed point pixels. */
-	protected final int xwidth, xheight;
-	
 	/** The distance to the projection plane. */
-	protected final int fixedprojectionplanedist;
+	protected final double projectionplanedist;
 	
-	/** The angle of rays (in bams). */
-	protected final int bamrayangle;
+	/** The angle between rays. */
+	protected final double rayangle;
 	
 	/** The simulation to draw. */
 	private volatile Simulation _simulation;
@@ -120,23 +117,15 @@ public class Rasterizer
 		this.width = __w;
 		this.height = __h;
 		
-		// As fixed
-		int xwidth = __w << FixedPoint.FRACTION_BITS,
-			xheight = __w << FixedPoint.FRACTION_BITS;
-		this.xwidth = xwidth;
-		this.xheight = xheight;
-		
 		// Setup framebuffer
 		int[] framebuffer = __fbp.createFramebuffer(__w, __h);
 		this.framebuffer = framebuffer;
 		
 		// The distance to the projection plane
-		this.fixedprojectionplanedist = FixedPoint.divide(
-			__w << (FixedPoint.FRACTION_BITS - 1),
-			BinaryAngle.tan(FIELD_OF_VIEW_BAMS));
+		this.projectionplanedist = (__w / 2) / Math.tan(FIELD_OF_VIEW_RADIANS);
 		
 		// The offset angle for each ray
-		this.bamrayangle = FIELD_OF_VIEW_BAMS / __w;
+		this.rayangle = FIELD_OF_VIEW_RADIANS / __w;
 	}
 	
 	/**
@@ -198,40 +187,6 @@ public class Rasterizer
 		// Get framebuffer
 		int[] framebuffer = this.framebuffer;
 		int width = this.width, height = this.height;
-		int xwidth = this.xwidth, xheight = this.xheight;
-		int frame = simulation.currentFrame();
-		
-		// Test the unit circle
-		int n = Math.min(frame, 360);
-		for (int i = 0; i < n; i++)
-		{
-			int bam = BinaryAngle.DEGREES_1 * i;
-			int sin = BinaryAngle.sin(bam), cos = BinaryAngle.cos(bam);
-			
-			if (i == (frame - 1))
-				System.err.printf("BAM %08x -> (%f, %f)%n", bam,
-					FixedPoint.fixedToDouble(cos),
-					FixedPoint.fixedToDouble(sin));
-			
-			int color;
-			if (bam > 0 && bam < BinaryAngle.DEGREES_90)
-				color = 0xFF0000;
-			else if (bam > 0)
-				color = 0x00FF00;
-			else if (bam > BinaryAngle.DEGREES_270)
-				color = 0x0000FF;
-			else
-				color = 0xFF00FF;
-			
-			int x = FixedPoint.fixedToInt(
-				FixedPoint.multiply(cos, xwidth >> 2) +
-					(xwidth >> 2));
-			int y = FixedPoint.fixedToInt(
-				FixedPoint.multiply(sin, xheight >> 2) +
-					(xheight >> 2));
-			framebuffer[(Math.max(0, Math.min(height - 1, y)) * width) +
-				Math.max(0, Math.min(width - 1, x))] = color;
-		}
 	}
 }
 
