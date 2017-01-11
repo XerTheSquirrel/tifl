@@ -10,17 +10,13 @@
 
 package net.multiphasicapps.tifl;
 
-import java.util.Random;
-
 /**
- * This contains the game simulation which contains the higher level details
- * and per-level floors.
+ * The floor is anything that is specific to a single instance of the level
+ * and contains the actual grid.
  *
  * @since 2017/01/11
  */
-public class Simulation
+public class Floor
 {
-	/** The current floor. */
-	private volatile Floor _floor;
 }
 

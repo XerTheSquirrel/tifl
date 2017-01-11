@@ -18,7 +18,7 @@ package net.multiphasicapps.tifl;
  *
  * @since 2017/01/11
  */
-public class Level
+public class Grid
 {
 }
 
