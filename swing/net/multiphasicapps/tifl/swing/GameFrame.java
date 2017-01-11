@@ -110,7 +110,8 @@ public class GameFrame
 				// Count time spent in the loop
 				long exittime = System.nanoTime(),
 					duration = exittime - entertime,
-					rest = (Simulation.NANOS_PER_FRAME - duration) / 1_000L;
+					rest = (Simulation.NANOS_PER_FRAME - duration) /
+						1_000_000L;
 				
 				// Sleep?
 				if (rest > 0)
