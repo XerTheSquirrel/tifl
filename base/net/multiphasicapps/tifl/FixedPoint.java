@@ -94,6 +94,18 @@ public final class FixedPoint
 	}
 	
 	/**
+	 * Converts an integer value to a fixed point value.
+	 *
+	 * @param __v The value to convert.
+	 * @return The converted value.
+	 * @since 2017/01/11
+	 */
+	public static int intToFixed(int __v)
+	{
+		return __v << FRACTION_BITS;
+	}
+	
+	/**
 	 * Multiplies two fixed point values.
 	 *
 	 * @param __a The first value.

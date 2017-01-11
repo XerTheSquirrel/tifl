@@ -104,7 +104,7 @@ public final class BinaryAngle
 	 */
 	public static int cos(int __bam)
 	{
-		return sin(__bam + DEGREES_90);
+		return sin(DEGREES_90 - __bam);
 	}
 	
 	/**
@@ -130,7 +130,7 @@ public final class BinaryAngle
 	{
 		// Get lower angle bits
 		char[] sinetable = _SINE_TABLE;
-		int nbits = (__bam & DEGREES_90_MASK) >> 15;
+		int nbits = (__bam & DEGREES_90_MASK) >>> 15;
 	
 		// 180 - 360
 		if (__bam < 0)
@@ -140,7 +140,7 @@ public final class BinaryAngle
 		
 			// 270 - 360: Approaches zero
 			else
-				return -sinetable[32768 - nbits];
+				return -sinetable[32767 - nbits];
 		
 		// 0 - 180
 		else
@@ -151,7 +151,6 @@ public final class BinaryAngle
 			// 90 - 180: Approaches zero
 			else
 				return FixedPoint.ONE - sinetable[nbits];
-	
 	}
 	
 	/**
