@@ -89,6 +89,9 @@ public class GameFrame
 			Simulation simulation = this._simulation;
 			this._simulation = (simulation = new Simulation());
 			
+			// Draw this one
+			rasterizer.setSimulation(simulation);
+			
 			// Run until it ends
 			while (!simulation.hasEnded())
 			{

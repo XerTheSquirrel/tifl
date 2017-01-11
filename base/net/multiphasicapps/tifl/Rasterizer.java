@@ -138,6 +138,17 @@ public class Rasterizer
 	}
 	
 	/**
+	 * Sets the game simulation to draw for.
+	 *
+	 * @param __s The simulation to draw for.
+	 * @since 2017/01/11
+	 */
+	public void setSimulation(Simulation __s)
+	{
+		this._simulation = __s;
+	}
+	
+	/**
 	 * Returns the width.
 	 *
 	 * @return The width.
