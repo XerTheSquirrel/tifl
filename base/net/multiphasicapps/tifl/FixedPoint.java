@@ -35,6 +35,40 @@ public final class FixedPoint
 	}
 	
 	/**
+	 * This returns the approximated distance between two points, the returned
+	 * result forms the shape of an octogon. For short distances this should
+	 * be sufficient enough without causing much error.
+	 *
+	 * @param __x1 X1.
+	 * @param __y1 Y1.
+	 * @param __x2 X2.
+	 * @param __y2 Y2.
+	 * @return The octogonal distance.
+	 * @since 2017/01/11
+	 */
+	public static int octogonalDistance(int __x1, int __y1, int __x2, int __y2)
+	{
+		int dx, dy, mm;	
+
+		// Calculate difference between values
+		dx = __x2 - __x1;
+		if (dx < 0)
+			dx = -dx;
+		dy = __y2 - __y1;
+		if (dy < 0)
+			dy = -dy;
+
+		// Maximum distance
+		if (dx > dy)
+			mm = dx;
+		else
+			mm = dy;
+
+		// Difference between them
+		return ((dx + dy) + mm) >> 1;
+	}
+	
+	/**
 	 * Divides two fixed point values.
 	 *
 	 * @param __a The first value.

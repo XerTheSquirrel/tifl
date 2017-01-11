@@ -23,35 +23,39 @@ public final class BinaryAngle
 {
 	/** A single degree in a bam. */
 	public static final int DEGREES_1 =
-		(int)(0x1_0000_0000L / 360L);
+		0x00b60b60;
 	
 	/** 45 degrees. */
 	public static final int DEGREES_45 =
-		DEGREES_1 * 45;
+		0x20000000;
 	
 	/** 90 degrees. */
 	public static final int DEGREES_90 =
-		DEGREES_1 * 90;
+		0x40000000;
 	
 	/** 135 degrees. */
 	public static final int DEGREES_135 =
-		DEGREES_1 * 135;
+		0x60000000;
 	
 	/** 180 degrees. */
 	public static final int DEGREES_180 =
-		DEGREES_1 * 180;
+		0x80000000;
 	
 	/** 225 degrees. */
 	public static final int DEGREES_225 =
-		DEGREES_1 * 225;
+		0xA0000000;
 	
 	/** 270 degrees. */
 	public static final int DEGREES_270 =
-		DEGREES_1 * 270;
+		0xC0000000;
 	
 	/** 315 degrees. */
 	public static final int DEGREES_315 =
-		DEGREES_1 * 315;
+		0xE0000000;
+	
+	/** 90 degree angle mask. */
+	public static final int DEGREES_90_MASK =
+		0x3FFFFFFF;
 	
 	/** The table of unsigned sine values. */
 	private static final char[] _SINE_TABLE;
@@ -100,7 +104,7 @@ public final class BinaryAngle
 	 */
 	public static int cos(int __bam)
 	{
-		return sin(DEGREES_90 - __bam);
+		return sin(__bam + DEGREES_90);
 	}
 	
 	/**
@@ -124,21 +128,29 @@ public final class BinaryAngle
 	 */
 	public static int sin(int __bam)
 	{
+		// Get lower angle bits
 		char[] sinetable = _SINE_TABLE;
+		int nbits = (__bam & DEGREES_90_MASK) >> 15;
+	
+		// 0 - 180
+		if (__bam >= 0)
+			// 0 - 90: Approaches 1
+			if (__bam < DEGREES_90)
+				return sinetable[nbits];
 		
-		// Lower quadrant, negative Y
-		if (__bam < 0)
-			throw new Error("TODO");
-		
-		// Upper quadrant, positive Y
-		else
-			// Left side
-			if (__bam >= DEGREES_90)
-				throw new Error("TODO");
-			
-			// Right side
+			// 90 - 180: Approaches zero
 			else
-				return sinetable[__bam];
+				return FixedPoint.ONE - sinetable[nbits];
+	
+		// 180 - 360
+		else
+			// 180 - 270: Approaches negative 1
+			if (__bam > DEGREES_270)
+				return -sinetable[nbits];
+		
+			// 270 - 360: Approaches zero
+			else
+				return -sinetable[32768 - nbits];
 	}
 	
 	/**
