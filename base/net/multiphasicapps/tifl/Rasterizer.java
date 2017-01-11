@@ -202,7 +202,8 @@ public class Rasterizer
 		int frame = simulation.currentFrame();
 		
 		// Test the unit circle
-		for (int i = 0; i < 360; i++)
+		int n = Math.min(frame, 360);
+		for (int i = 0; i < n; i++)
 		{
 			int bam = BinaryAngle.DEGREES_1 * i;
 			int color;
