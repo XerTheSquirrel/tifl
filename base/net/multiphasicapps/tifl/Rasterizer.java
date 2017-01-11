@@ -215,10 +215,18 @@ public class Rasterizer
 		}
 		
 		// Test the unit circle
-		int bam = BinaryAngle.DEGREES_1 * frame;
-		int x = FixedPoint.fixedToInt(FixedPoint.multiply(BinaryAngle.cos(bam), xwidth >> 1) + (xwidth >> 1));
-		int y = FixedPoint.fixedToInt(FixedPoint.multiply(BinaryAngle.sin(bam), xheight >> 1) + (xheight >> 1));
-		framebuffer[(Math.max(0, Math.min(height - 1, y)) * width) + Math.max(0, Math.min(width - 1, x))] = 0xFF0000;
+		for (int i = 0; i < 360; i++)
+		{
+			int bam = BinaryAngle.DEGREES_1 * i;
+			int x = FixedPoint.fixedToInt(
+				FixedPoint.multiply(BinaryAngle.cos(bam), xwidth >> 2) +
+					(xwidth >> 2));
+			int y = FixedPoint.fixedToInt(
+				FixedPoint.multiply(BinaryAngle.sin(bam), xheight >> 2) +
+					(xheight >> 2));
+			framebuffer[(Math.max(0, Math.min(height - 1, y)) * width) +
+				Math.max(0, Math.min(width - 1, x))] = 0xFF0000;
+		}
 	}
 }
 
