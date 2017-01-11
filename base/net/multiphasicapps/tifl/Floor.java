@@ -18,15 +18,34 @@ package net.multiphasicapps.tifl;
  */
 public class Floor
 {
+	/** The level grid. */
+	protected final Grid grid =
+		new Grid();
+	
 	/**
 	 * Initializes the floor.
 	 *
 	 * @param __id The floor ID.
+	 * @throws IllegalArgumentException If the floor is zero or negative.
 	 * @since 2017/01/11
 	 */
 	public Floor(int __id)
+		throws IllegalArgumentException
 	{
-		throw new Error("TODO");
+		// Check
+		if (__id <= 0)
+			throw new IllegalArgumentException();
+	}
+	
+	/**
+	 * Returns the level grid.
+	 *
+	 * @return The level grid.
+	 * @since 2017/01/11
+	 */
+	public Grid grid()
+	{
+		return this.grid;
 	}
 }
 

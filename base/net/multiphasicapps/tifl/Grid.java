@@ -29,9 +29,18 @@ public class Grid
 		64;
 	
 	/** The level data. */
-	protected final byte[] grid =
-		new byte[GRID_SIZE * GRID_SIZE];
+	protected final char[] grid =
+		new char[GRID_SIZE * GRID_SIZE];
 	
-	
+	/**
+	 * Returns the raw level grid data.
+	 *
+	 * @return The raw level grid data.
+	 * @since 2017/01/11
+	 */
+	public char[] grid()
+	{
+		return this.grid;
+	}
 }
 
