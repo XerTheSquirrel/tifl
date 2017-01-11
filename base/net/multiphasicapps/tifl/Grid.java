@@ -20,5 +20,18 @@ package net.multiphasicapps.tifl;
  */
 public class Grid
 {
+	/** The size of blocks in pixels. */
+	public static final int BLOCK_SIZE =
+		64;
+	
+	/** The number of blocks within the level. */
+	public static final int GRID_SIZE =
+		64;
+	
+	/** The level data. */
+	protected final byte[] grid =
+		new byte[GRID_SIZE * GRID_SIZE];
+	
+	
 }
 

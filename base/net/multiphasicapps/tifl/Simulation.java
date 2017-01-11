@@ -37,6 +37,9 @@ public class Simulation
 	/** The current game frame. */
 	private volatile int _frame;
 	
+	/** The current level. */
+	private volatile int _onfloor;
+	
 	/**
 	 * Returns the current game frame.
 	 *
@@ -70,6 +73,10 @@ public class Simulation
 		int frame = this._frame;
 		try
 		{
+			// If no floor is set, move to the next floor
+			Floor floor = this._floor;
+			if (floor == null)
+				floor = __nextFloor();
 		}
 		
 		// Always update the game frame.
@@ -77,6 +84,25 @@ public class Simulation
 		{
 			this._frame = frame + 1;
 		}
+	}
+	
+	/**
+	 * Moves to the next floor.
+	 *
+	 * @return The next floor.
+	 * @since 2017/01/11
+	 */
+	private Floor __nextFloor()
+	{
+		// Get the next floor
+		int nextfloor = ++this._onfloor;
+		
+		// Set it up
+		Floor rv = new Floor(nextfloor);
+		
+		// Return it
+		this._floor = rv;
+		return rv;
 	}
 }
 

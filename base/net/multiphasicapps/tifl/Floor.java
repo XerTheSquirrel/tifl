@@ -18,5 +18,15 @@ package net.multiphasicapps.tifl;
  */
 public class Floor
 {
+	/**
+	 * Initializes the floor.
+	 *
+	 * @param __id The floor ID.
+	 * @since 2017/01/11
+	 */
+	public Floor(int __id)
+	{
+		throw new Error("TODO");
+	}
 }
 
