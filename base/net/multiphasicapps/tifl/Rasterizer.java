@@ -55,7 +55,7 @@ public class Rasterizer
 	public Rasterizer(int __w, int __h)
 		throws IllegalArgumentException
 	{
-		this(new FrameBufferProvider()
+		this(new FramebufferProvider()
 			{
 				/**
 				 * {@inheritDoc}
@@ -77,7 +77,7 @@ public class Rasterizer
 	 * @throws NullPointerException On null arguments.
 	 * @since 2017/01/11
 	 */
-	public Rasterizer(FrameBufferProvider __fbp)
+	public Rasterizer(FramebufferProvider __fbp)
 		throws NullPointerException
 	{
 		this(__fbp, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -94,7 +94,7 @@ public class Rasterizer
 	 * @throws NullPointerException On null arguments.
 	 * @since 2017/01/11
 	 */
-	public Rasterizer(FrameBufferProvider __fbp, int __w, int __h)
+	public Rasterizer(FramebufferProvider __fbp, int __w, int __h)
 		throws IllegalArgumentException, NullPointerException
 	{
 		// Check
@@ -108,7 +108,21 @@ public class Rasterizer
 		this.height = __h;
 		
 		// Setup framebuffer
-		this.framebuffer = __fbp.createFramebuffer(__w, __h);
+		int[] framebuffer = __fbp.createFramebuffer(__w, __h);
+		this.framebuffer = framebuffer;
+		
+		// Initialize framebuffer with something, to see how it works
+		double br = 255.0 / __w, at = 0.0;
+		for (int i = 0, p = (__w * __h); i < p; i++)
+		{
+			int bid = ((int)at) & 0xFF;
+			framebuffer[i] = (bid << 16) | (bid << 8) | (bid);
+			
+			// Switch directions?
+			at += br;
+			if (((i + 1) % __w) == 0)
+				br = -br;
+		}
 	}
 	
 	/**

@@ -31,7 +31,7 @@ import net.multiphasicapps.tifl.Rasterizer;
  */
 public class RenderPanel
 	extends JPanel
-	implements FramebufferProvider;
+	implements FramebufferProvider
 {
 	/** Rasterizer for the game. */
 	protected final Rasterizer rasterizer;
@@ -40,7 +40,7 @@ public class RenderPanel
 	protected final BufferedImage rasterimage;
 	
 	/** The raster size. */
-	protected final rasterwidth, rasterheight;
+	protected final int rasterwidth, rasterheight;
 	
 	/**
 	 * Initializes the render panel.
@@ -82,8 +82,9 @@ public class RenderPanel
 		setPreferredSize(use);
 		
 		// Data is drawn directly onto this buffered image
-		if (true)
-			throw new Error("TODO");
+		BufferedImage bi = new BufferedImage(bw, bh,
+			BufferedImage.TYPE_INT_RGB);
+		this.rasterimage = bi;
 		
 		// Setup rasterizer
 		Rasterizer rasterizer = new Rasterizer(this, bw, bh);
@@ -99,7 +100,8 @@ public class RenderPanel
 	@Override
 	public int[] createFramebuffer(int __w, int __h)
 	{
-		throw new Error("TODO");
+		return ((DataBufferInt)this.rasterimage.getRaster().getDataBuffer()).
+			getData();
 	}
 	
 	/**
@@ -110,6 +112,9 @@ public class RenderPanel
 	protected void paintComponent(Graphics __g)
 	{
 		super.paintComponent(__g);
+		
+		// Draw the game image
+		__g.drawImage(this.rasterimage, 0, 0, getWidth(), getHeight(), null);
 	}
 }
 
