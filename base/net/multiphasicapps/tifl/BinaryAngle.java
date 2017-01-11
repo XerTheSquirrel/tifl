@@ -64,7 +64,7 @@ public final class BinaryAngle
 	static
 	{
 		// Load the sine table
-		char[] sine = new char[12867];
+		char[] sine = new char[32768];
 		try (DataInputStream dis = new DataInputStream(
 			BinaryAngle.class.getResourceAsStream("sinetable")))
 		{
@@ -92,6 +92,18 @@ public final class BinaryAngle
 	}
 	
 	/**
+	 * Returns the cosine of the given BAM.
+	 *
+	 * @param __bam The BAM to get the cosine for.
+	 * @return The cosine of the given BAM, in fixed radians.
+	 * @since 2017/01/11
+	 */
+	public static int cos(int __bam)
+	{
+		return sin(DEGREES_90 - __bam);
+	}
+	
+	/**
 	 * Converts degrees to bams.
 	 *
 	 * @param __degs The degrees to convert.
@@ -104,15 +116,41 @@ public final class BinaryAngle
 	}
 	
 	/**
+	 * Returns the sine of the given BAM.
+	 *
+	 * @param __bam The BAM to get the sine for.
+	 * @return The sine of the given BAM, in fixed radians.
+	 * @since 2017/01/11
+	 */
+	public static int sin(int __bam)
+	{
+		char[] sinetable = _SINE_TABLE;
+		
+		// Lower quadrant, negative Y
+		if (__bam < 0)
+			throw new Error("TODO");
+		
+		// Upper quadrant, positive Y
+		else
+			// Left side
+			if (__bam >= DEGREES_90)
+				throw new Error("TODO");
+			
+			// Right side
+			else
+				return sinetable[__bam];
+	}
+	
+	/**
 	 * Returns the tangent of the given BAM.
 	 *
 	 * @param __bam The BAM to get the tangent for.
-	 * @return The tangent of the given BAM.
+	 * @return The tangent of the given BAM, in fixed radians.
 	 * @since 2017/01/11
 	 */
 	public static int tan(int __bam)
 	{
-		throw new Error("TODO");
+		return FixedPoint.divide(sin(__bam), cos(__bam));
 	}
 }
 
