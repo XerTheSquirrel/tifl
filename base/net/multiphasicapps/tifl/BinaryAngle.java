@@ -132,8 +132,18 @@ public final class BinaryAngle
 		char[] sinetable = _SINE_TABLE;
 		int nbits = (__bam & DEGREES_90_MASK) >> 15;
 	
+		// 180 - 360
+		if (__bam < 0)
+			// 180 - 270: Approaches negative 1
+			if (__bam > DEGREES_270)
+				return -sinetable[nbits];
+		
+			// 270 - 360: Approaches zero
+			else
+				return -sinetable[32768 - nbits];
+		
 		// 0 - 180
-		if (__bam >= 0)
+		else
 			// 0 - 90: Approaches 1
 			if (__bam < DEGREES_90)
 				return sinetable[nbits];
@@ -142,15 +152,6 @@ public final class BinaryAngle
 			else
 				return FixedPoint.ONE - sinetable[nbits];
 	
-		// 180 - 360
-		else
-			// 180 - 270: Approaches negative 1
-			if (__bam > DEGREES_270)
-				return -sinetable[nbits];
-		
-			// 270 - 360: Approaches zero
-			else
-				return -sinetable[32768 - nbits];
 	}
 	
 	/**

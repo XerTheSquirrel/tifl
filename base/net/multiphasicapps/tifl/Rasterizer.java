@@ -201,19 +201,6 @@ public class Rasterizer
 		int xwidth = this.xwidth, xheight = this.xheight;
 		int frame = simulation.currentFrame();
 		
-		// Initialize framebuffer with something, to see how it works
-		double br = 255.0 / width, at = 0.0;
-		for (int i = 0, p = (width * height); i < p; i++)
-		{
-			int bid = (((int)at) + frame) & 0xFF;
-			framebuffer[i] = (bid << 16) | (bid << 8) | (bid);
-			
-			// Switch directions?
-			at += br;
-			if (((i + 1) % width) == 0)
-				br = -br;
-		}
-		
 		// Test the unit circle
 		for (int i = 0; i < 360; i++)
 		{
