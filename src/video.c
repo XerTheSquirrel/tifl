@@ -98,6 +98,10 @@ void VideoDraw(void)
 		destrect.h = bwh;
 	}
 	
+	// Center the display
+	destrect.x = (winw >> 1) - (destrect.w >> 1);
+	destrect.y = (winh >> 1) - (destrect.h >> 1);
+	
 	// Unlock
 	SDL_UnlockSurface(rendersurface);
 	
