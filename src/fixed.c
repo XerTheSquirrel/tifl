@@ -84,6 +84,11 @@ fixedtype AngleCos(const angletype a_An)
 	return AngleSin(a_An + ANG90);
 }
 
+fixedtype AngleTan(const angletype a_An)
+{
+	return FixedDiv(AngleSin(a_An), AngleCos(a_An));
+}
+
 /* AngleDiv() -- Angle divisor */
 static inline uint32_t AngleDiv(const int32_t a_N, const int32_t a_D)
 {

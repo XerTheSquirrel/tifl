@@ -22,6 +22,8 @@
 /** The distance to the projection plane. */
 static fixedtype PROJECTION_PLANE_DISTANCE;
 
+static fixedtype ANGLE_BETWEEN_RAYS;
+
 /** The game window. */
 static SDL_Window* gamewindow;
 
@@ -53,9 +55,9 @@ int VideoInit(void)
 	SDL_SetSurfaceBlendMode(rendersurface, SDL_BLENDMODE_NONE);
 	
 	// Initialize some variables
-#if 0
-	PROJECTION_PLANE_DISTANCE = FIXED_C(HALF_SCREEN_WIDTH) / (FIELD_OF_VIEW_ANGLE >> 1)
-#endif
+	PROJECTION_PLANE_DISTANCE = FixedDiv(FIXED_C(HALF_SCREEN_WIDTH),
+		AngleTan(FIELD_OF_VIEW_ANGLE >> 1));
+	ANGLE_BETWEEN_RAYS = FIELD_OF_VIEW_ANGLE / BASIC_SCREEN_WIDTH;
 	
 	// Ok
 	return 0;

@@ -63,6 +63,7 @@ typedef uint32_t angletype;
 
 fixedtype AngleSin(const angletype a_An);
 fixedtype AngleCos(const angletype a_An);
+fixedtype AngleTan(const angletype a_An);
 
 angletype LineToAngle(const int32_t a_X1, const int32_t a_Y1,
 	const int32_t a_X2, const int32_t a_Y2);
