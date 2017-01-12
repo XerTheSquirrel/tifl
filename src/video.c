@@ -12,6 +12,7 @@
 
 #include "global.h"
 #include "video.h"
+#include "floor.h"
 
 /** The game window. */
 static SDL_Window* gamewindow;

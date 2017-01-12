@@ -8,38 +8,13 @@
 // See license.mkd for licensing and copyright information.
 // ---------------------------------------------------------------------------
 
-#ifndef TIFL_GLOBAL_H
-#define TIFL_GLOBAL_H
+#include <SDL_stdinc.h>
 
-#include <stdint.h>
+#include "entity.h"
 
-/** The number of frames per second in the game. */
-#define GAME_FRAMES_PER_SECOND 20
+/** Global entity data. */
+Entity entities[MAX_ENTITIES];
 
-/** Milliseconds per game frame. */
-#define MILLISECONDS_PER_FRAME 50
-
-/**
- * Boolean type.
- *
- * @since 2017/01/12
- */
-typedef enum
-{
-	false,
-	true
-} boolean;
-
-/** Angle type (BAM). */
-typedef uint32_t angletype;
-
-/**
- * Kills the program.
- *
- * @param format Formatted text.
- * @since 2017/01/12
- */
-void Die(const char* format, ...);
-
-#endif
+/** The player entity. */
+Entity* playerentity = NULL;
 

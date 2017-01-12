@@ -15,6 +15,8 @@
 
 #include "global.h"
 #include "video.h"
+#include "entity.h"
+#include "floor.h"
 
 void Die(const char* format, ...)
 {
@@ -57,12 +59,16 @@ void loop()
 				return;
 		}
 		
+		// If the current floor is finished, go to the next floor
+		if (IsFloorFinished())
+			FloorNext();
+		
 		// Mark end
 		leavetime = SDL_GetTicks();
 		difference = MILLISECONDS_PER_FRAME - (leavetime - entertime);
 		
 		// Enough time available to render the game?
-		//if (difference > 0 && difference <= MILLISECONDS_PER_FRAME)
+		if (difference > 0 && difference <= MILLISECONDS_PER_FRAME)
 			VideoDraw();
 		
 		// Can still sleep?
