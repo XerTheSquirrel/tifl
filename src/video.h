@@ -26,6 +26,13 @@
 int VideoInit(void);
 
 /**
+ * Draws the game.
+ *
+ * @since 2017/01/12
+ */
+void VideoDraw(void);
+
+/**
  * Reads the next event.
  *
  * @param out The output event.

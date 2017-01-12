@@ -60,7 +60,15 @@ void loop()
 		
 		// Mark end
 		leavetime = SDL_GetTicks();
-		difference =  - (leavetime - entertime);
+		difference = MILLISECONDS_PER_FRAME - (leavetime - entertime);
+		
+		// Enough time available to render the game?
+		if (difference > 0 && difference < MILLISECONDS_PER_FRAME)
+			VideoDraw();
+		
+		// Can still sleep?
+		leavetime = SDL_GetTicks();
+		difference = MILLISECONDS_PER_FRAME - (leavetime - entertime);
 		if (difference > 0 && difference < MILLISECONDS_PER_FRAME)
 			SDL_Delay(difference);
 	}
