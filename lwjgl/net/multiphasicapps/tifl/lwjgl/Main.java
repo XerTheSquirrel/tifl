@@ -10,6 +10,7 @@
 
 package net.multiphasicapps.tifl.lwjgl;
 
+import net.multiphasicapps.tifl.Simulation;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -22,6 +23,9 @@ import org.lwjgl.opengl.DisplayMode;
 public class Main
 	implements AutoCloseable, Runnable
 {
+	/** The current simulation. */
+	private volatile Simulation _simulation;
+	
 	/**
 	 * Instance of the main program.
 	 *
@@ -78,10 +82,6 @@ public class Main
 		{
 			main.run();
 		}
-		
-		GameFrame gf = new GameFrame(__args);
-		gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gf.setVisible(true);
 	}
 }
 

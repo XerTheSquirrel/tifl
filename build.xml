@@ -9,12 +9,8 @@
 		<mkdir dir="${out}" />
 		<mkdir dir="${out}/base" />
 		<javac srcdir="${root}/base" destdir="${out}/base"
-			includeantruntime="false" debug="true">
-			<compilerarg value="-source" />
-			<compilerarg value="1.7" />
-			<compilerarg value="-target" />
-			<compilerarg value="1.7" />
-			<compilerarg value="-g" />
+			includeantruntime="false" debug="true"
+			target="1.7" source="1.7">
 		</javac>
 	</target>
 	
@@ -43,13 +39,8 @@
 		<mkdir dir="${out}" />
 		<mkdir dir="${out}/lwjgl" />
 		<javac srcdir="${root}/lwjgl" destdir="${out}/lwjgl"
-			classpath="${out}/tifl-base.jar:lwjgl.jar"
+			classpath="${out}/tifl-base.jar:${tifl.lwjglpath}/lwjgl.jar"
 			includeantruntime="false" debug="true">
-			<compilerarg value="-source" />
-			<compilerarg value="1.7" />
-			<compilerarg value="-target" />
-			<compilerarg value="1.7" />
-			<compilerarg value="-g" />
 		</javac>
 	</target>
 	
