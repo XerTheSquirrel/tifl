@@ -11,7 +11,8 @@
 
 SDL_CONFIG=sdl2-config
 
-CFLAGS  := $(CFLAGS) $(shell $(SDL_CONFIG) --cflags)
+CFLAGS  := $(CFLAGS) $(shell $(SDL_CONFIG) --cflags) -g3 -O0 \
+	-Werror=implicit-function-declaration
 LDFLAGS := $(LDFLAGS) $(shell $(SDL_CONFIG) --libs)
 
 .PHONY: all
@@ -21,8 +22,11 @@ all:			tifl
 __objects := $(foreach __c,$(wildcard src/*.c),$(basename $(__c)).o)
 
 tifl:			$(__objects)
-				$(CC) -o $@ $< $(LDFLAGS)
+				$(CC) -o $@ $^ $(LDFLAGS)
 
 %.o:			src/%.c
 				$(CC) -o $@ -c $< $(CFLAGS)
+
+clean:			
+				rm -f -- $(__objects) tifl
 
