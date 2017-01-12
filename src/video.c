@@ -74,14 +74,20 @@ void VideoDraw(void)
 	// Most displays now are 1:1 so just perform basic aspect correction
 	destrect.x = 0;
 	destrect.y = 0;
-	double scalew = (double)winw / (double)BASIC_SCREEN_WIDTH,
-		scaleh = (double)winh / (double)BASIC_SCREEN_HEIGHT;
+	int scalew = winw / BASIC_SCREEN_WIDTH,
+		scaleh = winh / BASIC_SCREEN_HEIGHT;
+	
+	// Force positive scale
+	if (scalew <= 0)
+		scalew = 1;
+	if (scaleh <= 0)
+		scaleh = 1;
 	
 	// Scale by width and height values
-	bww = (int)(scalew * BASIC_SCREEN_WIDTH);
-	bwh = (int)(scalew * BASIC_SCREEN_HEIGHT);
-	bhw = (int)(scaleh * BASIC_SCREEN_WIDTH);
-	bhh = (int)(scaleh * BASIC_SCREEN_HEIGHT);
+	bww = (scalew * BASIC_SCREEN_WIDTH);
+	bwh = (scalew * BASIC_SCREEN_HEIGHT);
+	bhw = (scaleh * BASIC_SCREEN_WIDTH);
+	bhh = (scaleh * BASIC_SCREEN_HEIGHT);
 	
 	// Scale by height if the width exceeds the buffer size
 	// Or the height exceeds the buffer size
