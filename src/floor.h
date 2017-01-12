@@ -29,11 +29,8 @@
  */
 typedef enum FloorType
 {
-	/** Grass. */
-	FLOORTYPE_FLOOR_GRASS,
-	
-	/** Start of wall types. */
-	FLOORTYPE_START_WALLS,
+	/** Nothing. */
+	FLOORTYPE_NOTHING,
 	
 	/** Wood. */
 	FLOORTYPE_WALL_WOOD,
@@ -58,6 +55,12 @@ extern FloorTile floordata[FLOOR_SIZE][FLOOR_SIZE];
 
 /** The current floor the game is on. */
 extern int onfloor;
+
+/** The color of the floor. */
+extern int floorcolor;
+
+/** The color of the ceiling. */
+extern int ceilingcolor;
 
 /**
  * Checks if the current floor is finished.

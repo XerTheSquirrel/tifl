@@ -16,6 +16,7 @@
 
 #define BASIC_SCREEN_WIDTH	320
 #define BASIC_SCREEN_HEIGHT	240
+#define HALF_SCREEN_HEIGHT 120
 
 /**
  * Initializes the video system.

@@ -13,11 +13,13 @@
 #include "floor.h"
 #include "entity.h"
 
-/** Was the floor finished? */
 boolean floorwasfinished;
 
-/** The current floor the game is on. */
 int onfloor = -1;
+
+int floorcolor = 0xFF0000;
+
+int ceilingcolor = 0x0000FF;
 
 /** Floor data. */
 FloorTile floordata[FLOOR_SIZE][FLOOR_SIZE];

@@ -9,10 +9,12 @@
 // ---------------------------------------------------------------------------
 
 #include <SDL.h>
+#include <SDL_stdinc.h>
 
 #include "global.h"
 #include "video.h"
 #include "floor.h"
+#include "entity.h"
 
 /** The game window. */
 static SDL_Window* gamewindow;
@@ -48,6 +50,43 @@ int VideoInit(void)
 	return 0;
 }
 
+void DrawLevel(uint32_t* pixels)
+{
+	int x, y;
+	uint32_t* dp;
+	uint32_t color, maskaway;
+	
+	// Draw nothing if there is no player
+	if (playerentity == NULL)
+	{
+		pixels[0] = 0xFF0000;
+		return;
+	}
+	
+	// Draw the background ceiling
+	dp = pixels;
+	maskaway = 0xFFFFFF;
+	color = ceilingcolor;
+	for (y = 0; y < HALF_SCREEN_HEIGHT; y++)
+	{
+		for (x = 0; x < BASIC_SCREEN_WIDTH; x++)
+			*(dp++) = color;
+		maskaway -= 0x020202;
+		color = (ceilingcolor & maskaway);
+	}
+	
+	// Draw the background floor
+	maskaway = 0x0F0F0F;
+	color = floorcolor & maskaway;
+	for (y = HALF_SCREEN_HEIGHT; y < BASIC_SCREEN_HEIGHT; y++)
+	{
+		for (x = 0; x < BASIC_SCREEN_WIDTH; x++)
+			*(dp++) = color;
+		maskaway += 0x020202;
+		color = (floorcolor & maskaway);
+	}
+}
+
 void VideoDraw(void)
 {
 	SDL_Rect destrect;
@@ -66,10 +105,8 @@ void VideoDraw(void)
 	SDL_LockSurface(rendersurface);
 	pixels = (uint32_t*)rendersurface->pixels;
 	
-	// Base draw of pixel data
-	x = (q += 1);
-	for (int i = 0; i < 320 * 240; i++)
-		pixels[i] = x + (i * 2);
+	// Draw the level
+	DrawLevel(pixels);
 	
 	// Need target window size for scaling
 	SDL_GetWindowSize(gamewindow, &winw, &winh);

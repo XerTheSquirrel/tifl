@@ -46,6 +46,7 @@ void loop()
 	Event event;
 	uint32_t entertime, leavetime, difference;
 	
+	// Start
 	for (uint32_t frameid = 0;; frameid++)
 	{
 		// Mark start
@@ -96,6 +97,9 @@ int main(int argc, char** argv)
 	// Initialize video
 	if (VideoInit() != 0)
 		Die("Failed to initialize video.");
+	
+	// Implicitly start the next floor
+	FloorNext();
 	
 	// Enter game loop
 	loop();
