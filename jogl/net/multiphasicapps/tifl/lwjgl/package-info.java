@@ -8,28 +8,11 @@
 // See license.mkd for licensing and copyright information.
 // ---------------------------------------------------------------------------
 
-package net.multiphasicapps.tifl.swing;
-
-import javax.swing.JFrame;
-
 /**
- * Main entry point for the Swing interface.
+ * This package contains the Swing interface.
  *
  * @since 2017/01/11
  */
-public class Main
-{
-	/**
-	 * Main entry point.
-	 *
-	 * @param __args Program arguments.
-	 * @since 2017/01/11
-	 */
-	public static void main(String... __args)
-	{
-		GameFrame gf = new GameFrame(__args);
-		gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gf.setVisible(true);
-	}
-}
+
+package net.multiphasicapps.tifl.lwjgl;
 

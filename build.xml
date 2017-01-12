@@ -38,12 +38,12 @@
 		<delete dir="${out}/tifl-base.jar" />
 	</target>
 	
-	<!-- Swing classes -->
-	<target name="swing-classes" depends="base-jar">
+	<!-- lwjgl classes -->
+	<target name="lwjgl-classes" depends="base-jar">
 		<mkdir dir="${out}" />
-		<mkdir dir="${out}/swing" />
-		<javac srcdir="${root}/swing" destdir="${out}/swing"
-			classpath="${out}/tifl-base.jar"
+		<mkdir dir="${out}/lwjgl" />
+		<javac srcdir="${root}/lwjgl" destdir="${out}/lwjgl"
+			classpath="${out}/tifl-base.jar:lwjgl.jar"
 			includeantruntime="false" debug="true">
 			<compilerarg value="-source" />
 			<compilerarg value="1.7" />
@@ -53,39 +53,39 @@
 		</javac>
 	</target>
 	
-	<!-- Swing JAR -->
-	<target name="swing-jar" depends="swing-classes">
+	<!-- lwjgl JAR -->
+	<target name="lwjgl-jar" depends="lwjgl-classes">
 		<mkdir dir="${out}" />
-		<jar destfile="${out}/tifl-swing.jar"
+		<jar destfile="${out}/tifl-lwjgl.jar"
 			filesetmanifest="merge"
 			indexMetaInf="true"
 			level="9">
-			<fileset dir="${out}/swing" />
-			<fileset dir="${root}/swing">
+			<fileset dir="${out}/lwjgl" />
+			<fileset dir="${root}/lwjgl">
 				<exclude name="**/*.java" />
 			</fileset>
 		</jar>
 	</target>
 	
-	<!-- Swing clean -->
-	<target name="swing-clean">
-		<delete dir="${out}/swing" />
-		<delete dir="${out}/tifl-swing.jar" />
+	<!-- lwjgl clean -->
+	<target name="lwjgl-clean">
+		<delete dir="${out}/lwjgl" />
+		<delete dir="${out}/tifl-lwjgl.jar" />
 	</target>
 	
 	<!-- Default JAR -->
-	<target name="jar" depends="base-jar,swing-jar">
+	<target name="jar" depends="base-jar,lwjgl-jar">
 		<jar destfile="${user.dir}/tifl.jar"
 			filesetmanifest="merge"
 			indexMetaInf="true"
 			level="9">
 			<zipgroupfileset dir="${out}" includes="tifl-base.jar" />
-			<zipgroupfileset dir="${out}" includes="tifl-swing.jar" />
+			<zipgroupfileset dir="${out}" includes="tifl-lwjgl.jar" />
 		</jar>
 	</target>
 	
 	<!-- Default clean -->
-	<target name="clean" depends="swing-clean,base-clean">
+	<target name="clean" depends="lwjgl-clean,base-clean">
 		<delete dir="${out}" />
 	</target>
 	
