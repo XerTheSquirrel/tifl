@@ -44,13 +44,12 @@ void loop()
 	Event event;
 	uint32_t entertime, leavetime, difference;
 	
-	for (;;)
+	for (uint32_t frameid = 0;; frameid++)
 	{
 		// Mark start
 		entertime = SDL_GetTicks();
 		
 		// Handle input game events
-		SDL_memset(&event, 0, sizeof(event));
 		while (NextEvent(&event) == true)
 		{
 			// Quit?
@@ -63,13 +62,13 @@ void loop()
 		difference = MILLISECONDS_PER_FRAME - (leavetime - entertime);
 		
 		// Enough time available to render the game?
-		if (difference > 0 && difference < MILLISECONDS_PER_FRAME)
+		//if (difference > 0 && difference <= MILLISECONDS_PER_FRAME)
 			VideoDraw();
 		
 		// Can still sleep?
 		leavetime = SDL_GetTicks();
 		difference = MILLISECONDS_PER_FRAME - (leavetime - entertime);
-		if (difference > 0 && difference < MILLISECONDS_PER_FRAME)
+		if (difference > 0 && difference <= MILLISECONDS_PER_FRAME)
 			SDL_Delay(difference);
 	}
 }

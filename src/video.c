@@ -16,9 +16,6 @@
 /** The game window. */
 static SDL_Window* gamewindow;
 
-/** The game surface. */
-static SDL_Surface* gamesurface;
-
 /** The actual render surface which is of a fixed format. */
 static SDL_Surface* rendersurface;
 
@@ -37,14 +34,14 @@ int VideoInit(void)
 	if (gamewindow == NULL)
 		Die("Could not create the main window.");
 	
-	// Need the game surface
-	gamesurface = SDL_GetWindowSurface(gamewindow);
-	
 	// For simplicity, use a surface with the given format.
 	rendersurface = SDL_CreateRGBSurfaceWithFormat(0, BASIC_SCREEN_WIDTH,
 		BASIC_SCREEN_HEIGHT, 32, SDL_PIXELFORMAT_ARGB32);
 	if (rendersurface == NULL)
 		Die("Could not create the backrendered surface.");
+	
+	// Forego blending
+	SDL_SetSurfaceBlendMode(rendersurface, SDL_BLENDMODE_NONE);
 	
 	// Ok
 	return 0;
@@ -52,9 +49,15 @@ int VideoInit(void)
 
 void VideoDraw(void)
 {
-	SDL_Rect dest;
+	SDL_Rect destrect;
 	uint32_t* pixels;
-	int i;
+	int i, winw, winh;
+	SDL_Surface* gamesurface;
+	int bww, bwh, bhw, bhh;
+	
+	// If the window size changes, the surface is invalidated.
+	gamesurface = SDL_GetWindowSurface(gamewindow);
+	SDL_SetSurfaceBlendMode(gamesurface, SDL_BLENDMODE_NONE);
 	
 	// Lock
 	SDL_LockSurface(rendersurface);
@@ -62,22 +65,44 @@ void VideoDraw(void)
 	
 	// Base draw of pixel data
 	for (int i = 0; i < 320 * 240; i++)
-		pixels[i] = 0xFF000000 | (i * 2);
+		pixels[i] = /*0xFF000000 |*/ (i * 2);
 	
 	// Need target window size for scaling
-	dest.x = 0;
-	dest.y = 0;
-	SDL_GetWindowSize(gamewindow, &dest.w, &dest.h);
+	SDL_GetWindowSize(gamewindow, &winw, &winh);
 	
-	// Lock the target surface
-	SDL_LockSurface(gamesurface);
+	// Scale it evenly, from 320x240 to the window size with bars.
+	// Most displays now are 1:1 so just perform basic aspect correction
+	destrect.x = 0;
+	destrect.y = 0;
+	double scalew = (double)winw / (double)BASIC_SCREEN_WIDTH,
+		scaleh = (double)winh / (double)BASIC_SCREEN_HEIGHT;
 	
-	// Blit it to the actual surface
-	SDL_BlitScaled(rendersurface, NULL, gamesurface, &dest);
+	// Scale by width and height values
+	bww = (int)(scalew * BASIC_SCREEN_WIDTH);
+	bwh = (int)(scalew * BASIC_SCREEN_HEIGHT);
+	bhw = (int)(scaleh * BASIC_SCREEN_WIDTH);
+	bhh = (int)(scaleh * BASIC_SCREEN_HEIGHT);
+	
+	// Scale by height if the width exceeds the buffer size
+	// Or the height exceeds the buffer size
+	if (bww > winw || bwh > winh)
+	{
+		destrect.w = bhw;
+		destrect.h = bhh;
+	}
+	
+	// Otherwise by width
+	else
+	{
+		destrect.w = bww;
+		destrect.h = bwh;
+	}
 	
 	// Unlock
 	SDL_UnlockSurface(rendersurface);
-	SDL_UnlockSurface(gamesurface);
+	
+	// Blit it to the actual surface
+	SDL_BlitScaled(rendersurface, NULL, gamesurface, &destrect);
 	
 	// Update drawing
 	SDL_UpdateWindowSurface(gamewindow);
@@ -88,8 +113,12 @@ boolean NextEvent(Event* out)
 	SDL_Event event;
 	
 	// Get next event
+	SDL_memset(&event, 0, sizeof(event));
 	if (SDL_PollEvent(&event) < 1)
 		return false;
+	
+	// Clear event
+	SDL_memset(out, 0, sizeof(*out));
 	
 	// Depends on the event type
 	switch (event.type)
