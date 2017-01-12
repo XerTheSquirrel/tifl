@@ -16,6 +16,12 @@
 #include "floor.h"
 #include "entity.h"
 
+/** The field of view angle. */
+#define FIELD_OF_VIEW_ANGLE ANG60
+
+/** The distance to the projection plane. */
+static fixedtype PROJECTION_PLANE_DISTANCE;
+
 /** The game window. */
 static SDL_Window* gamewindow;
 
@@ -45,6 +51,11 @@ int VideoInit(void)
 	
 	// Forego blending
 	SDL_SetSurfaceBlendMode(rendersurface, SDL_BLENDMODE_NONE);
+	
+	// Initialize some variables
+#if 0
+	PROJECTION_PLANE_DISTANCE = FIXED_C(HALF_SCREEN_WIDTH) / (FIELD_OF_VIEW_ANGLE >> 1)
+#endif
 	
 	// Ok
 	return 0;
