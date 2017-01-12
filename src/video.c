@@ -21,8 +21,9 @@ static SDL_Surface* gamesurface;
 
 int VideoInit(void)
 {
-	// Initialize video
-	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0)
+	// Initialize video and event handling parts
+	if (SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK |
+		SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER) != 0)
 		Die("Could not initialize SDL video.");
 	
 	// Setup game window
@@ -39,5 +40,30 @@ int VideoInit(void)
 	
 	// Ok
 	return 0;
+}
+
+boolean NextEvent(Event* out)
+{
+	SDL_Event event;
+	
+	// Get next event
+	if (SDL_PollEvent(&event) < 1)
+		return false;
+	
+	// Depends on the event type
+	switch (event.type)
+	{
+			// Quit
+		case SDL_QUIT:
+			out->type = EVENTTYPE_QUIT;
+			break;
+		
+			// Unknown, ignore
+		default:
+			return false;
+	}
+	
+	// Event made
+	return true;
 }
 

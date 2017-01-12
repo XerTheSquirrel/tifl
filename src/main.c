@@ -41,6 +41,7 @@ void Die(const char* format, ...)
  */
 void loop()
 {
+	Event event;
 	uint32_t entertime, leavetime, difference;
 	
 	for (;;)
@@ -49,6 +50,13 @@ void loop()
 		entertime = SDL_GetTicks();
 		
 		// Handle input game events
+		SDL_memset(&event, 0, sizeof(event));
+		while (NextEvent(&event) == true)
+		{
+			// Quit?
+			if (event.type == EVENTTYPE_QUIT)
+				return;
+		}
 		
 		// Mark end
 		leavetime = SDL_GetTicks();

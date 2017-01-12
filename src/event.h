@@ -8,31 +8,41 @@
 // See license.mkd for licensing and copyright information.
 // ---------------------------------------------------------------------------
 
-#ifndef TIFL_VIDEO_H
-#define TIFL_VIDEO_H
-
-#include "global.h"
-#include "event.h"
-
-#define BASIC_SCREEN_WIDTH	320
-#define BASIC_SCREEN_HEIGHT	240
+#ifndef TIFL_EVENT_H
+#define TIFL_EVENT_H
 
 /**
- * Initializes the video system.
+ * This represents the event type.
  *
- * @return Zero on success, otherwise failure.
  * @since 2017/01/12
  */
-int VideoInit(void);
+typedef enum EventType
+{
+	/** Quit the game. */
+	EVENTTYPE_QUIT,
+	
+	/** Number of event types. */
+	NUM_EVENTTYPE
+} EventType;
 
 /**
- * Reads the next event.
+ * This represents a game event.
  *
- * @param out The output event.
- * @return True if an event was read.
  * @since 2017/01/12
  */
-boolean NextEvent(Event* out);
+typedef struct Event
+{
+	/** The type of event this is. */
+	EventType type;
+	
+	/** The player the event is for. */
+	int player;
+	
+	/** Event data. */
+	union
+	{
+	} data;
+} Event;
 
 #endif
 
