@@ -82,3 +82,8 @@ void FloorNext()
 	floorwasfinished = false;
 }
 
+void TraceTile(fixedtype x, fixedtype y, FloorTile** hittile,
+	fixedtype* raydistance)
+{
+}
+

@@ -19,9 +19,13 @@
 /** The field of view angle. */
 #define FIELD_OF_VIEW_ANGLE ANG60
 
+/** The half field of view angle. */
+#define HALF_FIELD_OF_VIEW ANG30
+
 /** The distance to the projection plane. */
 static fixedtype PROJECTION_PLANE_DISTANCE;
 
+/** The angle between each projection ray. */
 static fixedtype ANGLE_BETWEEN_RAYS;
 
 /** The game window. */
@@ -68,6 +72,10 @@ void DrawLevel(uint32_t* pixels)
 	int x, y;
 	uint32_t* dp;
 	uint32_t color, maskaway;
+	fixedtype px, py;
+	fixedtype raydistance;
+	angletype traceangle;
+	FloorTile* hittile;
 	
 	// Draw nothing if there is no player
 	if (playerentity == NULL)
@@ -97,6 +105,22 @@ void DrawLevel(uint32_t* pixels)
 			*(dp++) = color;
 		maskaway += 0x020202;
 		color = (floorcolor & maskaway);
+	}
+	
+	// Project any walls in view
+	traceangle = playerentity->angle - HALF_FIELD_OF_VIEW;
+	px = playerentity->x;
+	py = playerentity->y;
+	for (int i = 0; i < BASIC_SCREEN_WIDTH; i++,
+		traceangle += ANGLE_BETWEEN_RAYS)
+	{
+		// Trace ray
+		hittile = NULL;
+		TraceTile(x, y, &hittile, &raydistance);
+		
+		// Not hit
+		if (hittile == NULL)
+			continue;
 	}
 }
 

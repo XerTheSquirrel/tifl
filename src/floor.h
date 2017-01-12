@@ -77,5 +77,16 @@ boolean IsFloorFinished();
  */
 void FloorNext();
 
+/**
+ * Traces a ray to the given tile.
+ *
+ * @param x The starting X position.
+ * @param y The starting Y position.
+ * @param hittile The tile that was hit.
+ * @param raydistance The distance to the tile.
+ */
+void TraceTile(fixedtype x, fixedtype y, FloorTile** hittile,
+	fixedtype* raydistance);
+
 #endif
 
