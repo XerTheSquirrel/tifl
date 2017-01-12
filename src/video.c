@@ -51,9 +51,11 @@ void VideoDraw(void)
 {
 	SDL_Rect destrect;
 	uint32_t* pixels;
-	int i, winw, winh;
+	int i, winw, winh, x;
 	SDL_Surface* gamesurface;
 	int bww, bwh, bhw, bhh;
+	
+	static int q;
 	
 	// If the window size changes, the surface is invalidated.
 	gamesurface = SDL_GetWindowSurface(gamewindow);
@@ -64,8 +66,9 @@ void VideoDraw(void)
 	pixels = (uint32_t*)rendersurface->pixels;
 	
 	// Base draw of pixel data
+	x = (q += 1);
 	for (int i = 0; i < 320 * 240; i++)
-		pixels[i] = /*0xFF000000 |*/ (i * 2);
+		pixels[i] = x + (i * 2);
 	
 	// Need target window size for scaling
 	SDL_GetWindowSize(gamewindow, &winw, &winh);
