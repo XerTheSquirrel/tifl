@@ -13,6 +13,9 @@
 
 #include "global.h"
 
+#define BASIC_SCREEN_WIDTH	320
+#define BASIC_SCREEN_HEIGHT	240
+
 /**
  * Initializes the video system.
  *

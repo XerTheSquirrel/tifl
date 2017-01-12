@@ -13,6 +13,12 @@
 
 #include <stdint.h>
 
+/** The number of frames per second in the game. */
+#define GAME_FRAMES_PER_SECOND 20
+
+/** Milliseconds per game frame. */
+#define MILLISECONDS_PER_FRAME 50
+
 /**
  * Boolean type.
  *

@@ -35,6 +35,30 @@ void Die(const char* format, ...)
 }
 
 /**
+ * The game loop.
+ *
+ * @since 2017/01/12
+ */
+void loop()
+{
+	uint32_t entertime, leavetime, difference;
+	
+	for (;;)
+	{
+		// Mark start
+		entertime = SDL_GetTicks();
+		
+		// Handle input game events
+		
+		// Mark end
+		leavetime = SDL_GetTicks();
+		difference =  - (leavetime - entertime);
+		if (difference > 0 && difference < MILLISECONDS_PER_FRAME)
+			SDL_Delay(difference);
+	}
+}
+
+/**
  * Main entry point.
  *
  * @param argc Argument count.
@@ -45,13 +69,17 @@ void Die(const char* format, ...)
 int main(int argc, char** argv)
 {
 	// Initialize events
-	if (SDL_Init(SDL_INIT_EVENTS) != 0)
-		Die("Failed to initialize event handler.");
+	if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_TIMER) != 0)
+		Die("Failed to initialize event handler and timer.");
 	
 	// Initialize video
 	if (VideoInit() != 0)
 		Die("Failed to initialize video.");
 	
+	// Enter game loop
+	loop();
+	
+	// Done
 	return 0;
 }
 
