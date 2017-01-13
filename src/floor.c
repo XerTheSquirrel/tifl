@@ -96,7 +96,7 @@ void FloorNext()
 void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 	fixedtype* raydistance, boolean* horizhit)
 {
-	fixedtype travx, travy, dx, dy;
+	fixedtype travx, travy, dx, dy, cx, cy;
 	int idx, idy, tracers;
 	FloorTile* tile;
 	
