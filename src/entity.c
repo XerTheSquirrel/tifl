@@ -20,7 +20,16 @@ Entity* playerentity = NULL;
 
 void WalkEntity(Entity* entity, fixedtype relx, fixedtype rely)
 {
-	entity->x += relx;
-	entity->y += rely;
+	fixedtype newx, newy;
+	
+	// Determine next position based on movement
+	newx = entity->x + FixedMul(relx, AngleCos(entity->angle + ANG90)) +
+		FixedMul(rely, AngleCos(entity->angle));
+	newy = entity->y + FixedMul(relx, AngleSin(entity->angle + ANG90)) +
+		FixedMul(rely, AngleSin(entity->angle));
+	
+	// New position is OK, use it
+	entity->x = newx;
+	entity->y = newy;
 }
 
