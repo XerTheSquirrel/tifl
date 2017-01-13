@@ -22,7 +22,7 @@
 #define PLAYER_TURN_ANGLE 0x02d82d80
 
 /** The speed the player moves at. */
-#define PLAYER_MOVE_SPEED (1 << (FIXEDSHIFT - 1))
+#define PLAYER_MOVE_SPEED ((1 << (FIXEDSHIFT - 1)) - (1 << (FIXEDSHIFT - 3)))
 
 void Die(const char* format, ...)
 {
