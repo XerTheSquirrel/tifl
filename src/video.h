@@ -36,13 +36,11 @@ int VideoInit(void);
 void VideoDraw(void);
 
 /**
- * Reads the next event.
+ * Pumps input events and such.
  *
- * @param out The output event.
- * @return True if an event was read.
  * @since 2017/01/12
  */
-boolean NextEvent(Event* out);
+void PumpEvents();
 
 #endif
 

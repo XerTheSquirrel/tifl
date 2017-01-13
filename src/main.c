@@ -43,7 +43,6 @@ void Die(const char* format, ...)
  */
 void loop()
 {
-	Event event;
 	uint32_t entertime, leavetime, difference;
 	
 	// Start
@@ -56,15 +55,12 @@ void loop()
 		if (IsFloorFinished())
 			FloorNext();
 		
-		// Handle input game events
-		while (NextEvent(&event) == true)
-		{
-			// Quit?
-			if (event.type == EVENTTYPE_QUIT)
-				return;
-			
-			
-		}
+		// Pump game events
+		PumpEvents();
+		
+		// Quitting?
+		if (gamekeydown[EVENTTYPE_QUIT])
+			return;
 		
 		// Mark end
 		leavetime = SDL_GetTicks();

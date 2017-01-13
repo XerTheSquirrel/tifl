@@ -18,6 +18,9 @@
  */
 typedef enum EventType
 {
+	/** No event. */
+	EVENTYPE_NONE,	
+	
 	/** Quit the game. */
 	EVENTTYPE_QUIT,
 	
@@ -31,21 +34,8 @@ typedef enum EventType
 	NUM_EVENTTYPE
 } EventType;
 
-/**
- * This represents a game event.
- *
- * @since 2017/01/12
- */
-typedef struct Event
-{
-	/** The type of event this is. */
-	EventType type;
-	
-	/** Event data. */
-	union
-	{
-	} data;
-} Event;
+/** Keys which are held down. */
+extern boolean gamekeydown[NUM_EVENTTYPE];
 
 #endif
 

@@ -22,6 +22,8 @@
 /** The half field of view angle. */
 #define HALF_FIELD_OF_VIEW ANG30
 
+boolean gamekeydown[NUM_EVENTTYPE];
+
 /** The distance to the projection plane. */
 static fixedtype PROJECTION_PLANE_DISTANCE;
 
@@ -36,6 +38,9 @@ static SDL_Surface* rendersurface;
 
 int VideoInit(void)
 {
+	// Clear keys
+	SDL_memset(gamekeydown, 0, sizeof(gamekeydown));	
+	
 	// Initialize video and event handling parts
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK |
 		SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER) != 0)
@@ -228,32 +233,25 @@ void VideoDraw(void)
 	SDL_UpdateWindowSurface(gamewindow);
 }
 
-boolean NextEvent(Event* out)
+void PumpEvents()
 {
 	SDL_Event event;
 	
 	// Get next event
-	SDL_memset(&event, 0, sizeof(event));
-	if (SDL_PollEvent(&event) < 1)
-		return false;
-	
-	// Clear event
-	SDL_memset(out, 0, sizeof(*out));
-	
-	// Depends on the event type
-	switch (event.type)
+	while (SDL_PollEvent(&event) >= 1)
 	{
-			// Quit
-		case SDL_QUIT:
-			out->type = EVENTTYPE_QUIT;
-			break;
+		// Depends on the event type
+		switch (event.type)
+		{
+				// Quit
+			case SDL_QUIT:
+				gamekeydown[EVENTTYPE_QUIT] = true;
+				break;
 		
-			// Unknown, ignore
-		default:
-			return false;
+				// Unknown, ignore
+			default:
+				break;
+		}
 	}
-	
-	// Event made
-	return true;
 }
 
