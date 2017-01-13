@@ -21,6 +21,12 @@ typedef enum EventType
 	/** Quit the game. */
 	EVENTTYPE_QUIT,
 	
+	/** Turn left. */
+	EVENTTYPE_TURN_LEFT,
+	
+	/** Turn right. */
+	EVENTTYPE_TURN_RIGHT,
+	
 	/** Number of event types. */
 	NUM_EVENTTYPE
 } EventType;
@@ -34,9 +40,6 @@ typedef struct Event
 {
 	/** The type of event this is. */
 	EventType type;
-	
-	/** The player the event is for. */
-	int player;
 	
 	/** Event data. */
 	union

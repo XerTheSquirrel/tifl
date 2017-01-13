@@ -52,17 +52,19 @@ void loop()
 		// Mark start
 		entertime = SDL_GetTicks();
 		
+		// If the current floor is finished, go to the next floor
+		if (IsFloorFinished())
+			FloorNext();
+		
 		// Handle input game events
 		while (NextEvent(&event) == true)
 		{
 			// Quit?
 			if (event.type == EVENTTYPE_QUIT)
 				return;
+			
+			
 		}
-		
-		// If the current floor is finished, go to the next floor
-		if (IsFloorFinished())
-			FloorNext();
 		
 		// Mark end
 		leavetime = SDL_GetTicks();

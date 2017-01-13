@@ -74,7 +74,7 @@ void DrawLevel(uint32_t* pixels)
 	uint32_t color, maskaway;
 	fixedtype px, py;
 	fixedtype raydistance;
-	angletype traceangle, baseangle;
+	angletype traceangle, baseangle, diffangle;
 	FloorTile* hittile;
 	boolean horizhit;
 	
@@ -111,10 +111,11 @@ void DrawLevel(uint32_t* pixels)
 	// Project any walls in view
 	baseangle = playerentity->angle - HALF_FIELD_OF_VIEW;
 	traceangle = baseangle;
+	diffangle = 0;
 	px = playerentity->x;
 	py = playerentity->y;
 	for (int i = 0; i < BASIC_SCREEN_WIDTH; i++,
-		traceangle += ANGLE_BETWEEN_RAYS)
+		traceangle += ANGLE_BETWEEN_RAYS, diffangle += ANGLE_BETWEEN_RAYS)
 	{
 		// Trace ray
 		TraceTile(px, py, traceangle, &hittile, &raydistance, &horizhit);
