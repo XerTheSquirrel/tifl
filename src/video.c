@@ -235,7 +235,13 @@ void VideoDraw(void)
 
 void PumpEvents()
 {
+	static int activekeyforcommand[NUM_EVENTTYPE];
+	
 	SDL_Event event;
+	EventType eventtype;
+	int sym;
+	int* activekey;
+	boolean* downstate;
 	
 	// Get next event
 	while (SDL_PollEvent(&event) >= 1)
@@ -246,6 +252,56 @@ void PumpEvents()
 				// Quit
 			case SDL_QUIT:
 				gamekeydown[EVENTTYPE_QUIT] = true;
+				break;
+				
+				// Key up/down
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:
+				// Depending on the key, choose an action
+				eventtype = EVENTTYPE_NONE;
+				switch ((sym = event.key.keysym.sym))
+				{
+						// Turn left
+					case SDLK_LEFT:
+						eventtype = EVENTTYPE_TURN_LEFT;
+						break;
+						
+						// Turn right
+					case SDLK_RIGHT:
+						eventtype = EVENTTYPE_TURN_RIGHT;
+						break;
+					
+						// Unknown
+					default:
+						break;
+				}
+				
+				// No event to trigger
+				if (eventtype == EVENTTYPE_NONE)
+					continue;
+				
+				activekey = &activekeyforcommand[eventtype];
+				downstate = &gamekeydown[eventtype];
+				
+				// Only release a key if it is the one that was pressed down
+				if (event.type == SDL_KEYUP)
+				{
+					if (*downstate == true && *activekey == sym)
+					{
+						*activekey = 0;
+						*downstate = false;
+					}
+				}
+				
+				// Otherwise press the key if it is not active
+				else
+				{
+					if (*downstate == false && *activekey == 0)
+					{
+						*activekey = sym;
+						*downstate = true;
+					}
+				}
 				break;
 		
 				// Unknown, ignore

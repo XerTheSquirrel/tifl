@@ -18,6 +18,9 @@
 #include "entity.h"
 #include "floor.h"
 
+/** The angle the player turns at. */
+#define TURN_ANGLE 0x02d82d80
+
 void Die(const char* format, ...)
 {
 #define DIE_SIZE 512
@@ -61,6 +64,18 @@ void loop()
 		// Quitting?
 		if (gamekeydown[EVENTTYPE_QUIT])
 			return;
+		
+		// Player interaction
+		if (playerentity != NULL)
+		{
+			// Turn left?
+			if (gamekeydown[EVENTTYPE_TURN_LEFT])
+				playerentity->angle -= TURN_ANGLE;
+			
+			// Turn right?
+			if (gamekeydown[EVENTTYPE_TURN_RIGHT])
+				playerentity->angle += TURN_ANGLE;
+		}
 		
 		// Mark end
 		leavetime = SDL_GetTicks();

@@ -19,7 +19,7 @@
 typedef enum EventType
 {
 	/** No event. */
-	EVENTYPE_NONE,	
+	EVENTTYPE_NONE,	
 	
 	/** Quit the game. */
 	EVENTTYPE_QUIT,
