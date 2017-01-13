@@ -56,7 +56,7 @@ int VideoInit(void)
 	
 	// For simplicity, use a surface with the given format.
 	rendersurface = SDL_CreateRGBSurfaceWithFormat(0, BASIC_SCREEN_WIDTH,
-		BASIC_SCREEN_HEIGHT, 32, SDL_PIXELFORMAT_ARGB32);
+		BASIC_SCREEN_HEIGHT, 32, SDL_PIXELFORMAT_ARGB8888);
 	if (rendersurface == NULL)
 		Die("Could not create the backrendered surface.");
 	
