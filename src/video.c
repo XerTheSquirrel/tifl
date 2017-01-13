@@ -74,7 +74,7 @@ void DrawLevel(uint32_t* pixels)
 	uint32_t color, maskaway;
 	fixedtype px, py;
 	fixedtype raydistance;
-	angletype traceangle;
+	angletype traceangle, baseangle;
 	FloorTile* hittile;
 	boolean horizhit;
 	
@@ -109,7 +109,8 @@ void DrawLevel(uint32_t* pixels)
 	}
 	
 	// Project any walls in view
-	traceangle = playerentity->angle - HALF_FIELD_OF_VIEW;
+	baseangle = playerentity->angle - HALF_FIELD_OF_VIEW;
+	traceangle = baseangle;
 	px = playerentity->x;
 	py = playerentity->y;
 	for (int i = 0; i < BASIC_SCREEN_WIDTH; i++,
@@ -121,6 +122,9 @@ void DrawLevel(uint32_t* pixels)
 		// Not hit
 		if (hittile == NULL)
 			continue;
+		
+		// Correct the ray angle due to the distortion
+		raydistance = FixedMul(raydistance, AngleCos(baseangle - traceangle));
 		
 		// Determine slice position
 		idist = (raydistance >> FIXEDSHIFT);
