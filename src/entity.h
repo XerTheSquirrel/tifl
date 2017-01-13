@@ -56,5 +56,16 @@ extern Entity entities[MAX_ENTITIES];
 /** The player entity. */
 extern Entity* playerentity;
 
+/**
+ * Walks the given entity in the given direction.
+ *
+ * The movement is based on the angle the entity is facing.
+ *
+ * @param entity The entity to walk.
+ * @param relx The forward facing x movement (left/right).
+ * @param rely The forward facing y movement (forwards/backwards).
+ */
+void WalkEntity(Entity* entity, fixedtype relx, fixedtype rely);
+
 #endif
 

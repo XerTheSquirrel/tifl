@@ -263,13 +263,13 @@ void PumpEvents()
 				{
 						// Turn left
 					case SDLK_LEFT:
-					case SDLK_a:
+					case SDLK_q:
 						eventtype = EVENTTYPE_TURN_LEFT;
 						break;
 						
 						// Turn right
 					case SDLK_RIGHT:
-					case SDLK_d:
+					case SDLK_e:
 						eventtype = EVENTTYPE_TURN_RIGHT;
 						break;
 						
@@ -289,6 +289,20 @@ void PumpEvents()
 					case SDLK_LALT:
 					case SDLK_RALT:
 						eventtype = EVENTTYPE_STRAFE_MODE;
+						break;
+						
+						// Strafe left
+					case SDLK_a:
+					case SDLK_TAB:
+					case SDLK_COMMA:
+						eventtype = EVENTTYPE_STRAFE_LEFT;
+						break;
+						
+						// Strafe right
+					case SDLK_d:
+					case SDLK_BACKSPACE:
+					case SDLK_PERIOD:
+						eventtype = EVENTTYPE_STRAFE_RIGHT;
 						break;
 						
 						// Unknown

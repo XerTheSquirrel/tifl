@@ -18,3 +18,9 @@ Entity entities[MAX_ENTITIES];
 /** The player entity. */
 Entity* playerentity = NULL;
 
+void WalkEntity(Entity* entity, fixedtype relx, fixedtype rely)
+{
+	entity->x += relx;
+	entity->y += rely;
+}
+

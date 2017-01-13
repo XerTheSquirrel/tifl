@@ -19,7 +19,10 @@
 #include "floor.h"
 
 /** The angle the player turns at. */
-#define TURN_ANGLE 0x02d82d80
+#define PLAYER_TURN_ANGLE 0x02d82d80
+
+/** The speed the player moves at. */
+#define PLAYER_MOVE_SPEED (1 << (FIXEDSHIFT - 1))
 
 void Die(const char* format, ...)
 {
@@ -47,6 +50,7 @@ void Die(const char* format, ...)
 void loop()
 {
 	uint32_t entertime, leavetime, difference;
+	boolean strafing;
 	
 	// Start
 	for (uint32_t frameid = 0;; frameid++)
@@ -68,13 +72,29 @@ void loop()
 		// Player interaction
 		if (playerentity != NULL)
 		{
-			// Turn left?
-			if (gamekeydown[EVENTTYPE_TURN_LEFT])
-				playerentity->angle -= TURN_ANGLE;
+			strafing = gamekeydown[EVENTTYPE_STRAFE_MODE];
 			
-			// Turn right?
-			if (gamekeydown[EVENTTYPE_TURN_RIGHT])
-				playerentity->angle += TURN_ANGLE;
+			// Turn/strafe left?
+			if (!strafing && gamekeydown[EVENTTYPE_TURN_LEFT])
+				playerentity->angle -= PLAYER_TURN_ANGLE;
+			else if ((strafing && gamekeydown[EVENTTYPE_TURN_LEFT]) ||
+				gamekeydown[EVENTTYPE_STRAFE_LEFT])
+				WalkEntity(playerentity, -PLAYER_MOVE_SPEED, 0);
+			
+			// Turn/strafe right?
+			if (!strafing && gamekeydown[EVENTTYPE_TURN_RIGHT])
+				playerentity->angle += PLAYER_TURN_ANGLE;
+			else if ((strafing && gamekeydown[EVENTTYPE_TURN_RIGHT]) ||
+				gamekeydown[EVENTTYPE_STRAFE_RIGHT])
+				WalkEntity(playerentity, PLAYER_MOVE_SPEED, 0);
+			
+			// Walk forward?
+			if (gamekeydown[EVENTTYPE_WALK_FORWARD])
+				WalkEntity(playerentity, 0, PLAYER_MOVE_SPEED);
+			
+			// Walk backward?
+			if (gamekeydown[EVENTTYPE_WALK_BACKWARD])
+				WalkEntity(playerentity, 0, -PLAYER_MOVE_SPEED);
 		}
 		
 		// Mark end

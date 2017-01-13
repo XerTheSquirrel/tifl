@@ -30,6 +30,12 @@ typedef enum EventType
 	/** Turn right. */
 	EVENTTYPE_TURN_RIGHT,
 	
+	/** Strafe left. */
+	EVENTTYPE_STRAFE_LEFT,
+	
+	/** Strafe right. */
+	EVENTTYPE_STRAFE_RIGHT,
+	
 	/** Walk forward. */
 	EVENTTYPE_WALK_FORWARD,
 	
