@@ -32,7 +32,7 @@ boolean IsFloorFinished()
 void FloorNext()
 {
 	Entity player, *entity;
-	int i;
+	int i, x, y;
 	
 	// Go to the next floor
 	onfloor = (onfloor + 1) % FLOOR_LEVELS;
@@ -50,6 +50,17 @@ void FloorNext()
 	SDL_memset(entities, 0, sizeof(entities));
 	
 	// Load new map tile data
+	// For now just make a border around the level
+	for (x = 0; x < FLOOR_SIZE; x++)
+	{
+		floordata[x][0].type = FLOORTYPE_GREEN;
+		floordata[x][FLOOR_SIZE - 1].type = FLOORTYPE_GREEN;
+	}
+	for (y = 0; y < FLOOR_SIZE; y++)
+	{
+		floordata[0][y].type = FLOORTYPE_GREEN;
+		floordata[FLOOR_SIZE - 1][y].type = FLOORTYPE_GREEN;
+	}
 	
 	// Load in entities
 	
@@ -66,8 +77,8 @@ void FloorNext()
 			
 			// However, if this point was reached then the level has no
 			// player start, force one to exist
-			entity->x = 0;
-			entity->y = 0;
+			entity->x = FLOOR_SIZE << (FIXEDSHIFT - 1);
+			entity->y = FLOOR_SIZE << (FIXEDSHIFT - 1);
 			entity->type = ENTITYTYPE_PLAYER_START;
 		}
 		
@@ -82,8 +93,50 @@ void FloorNext()
 	floorwasfinished = false;
 }
 
-void TraceTile(fixedtype x, fixedtype y, FloorTile** hittile,
-	fixedtype* raydistance)
+void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
+	fixedtype* raydistance, boolean* horizhit)
 {
+	fixedtype travx, travy, dx, dy;
+	int idx, idy, tracers;
+	FloorTile* tile;
+	
+	// Clear trace target
+	*hittile = NULL;
+	*raydistance = 0;
+	*horizhit = false;
+	
+	// Determine the traversal direction in unit circles
+	travx = AngleCos(angle);
+	travy = AngleSin(angle);
+	
+	// Traverse tiles in this given direction
+	// Also do not trace so many blocks that exceed the level size!
+	tracers = 0;
+	for (dx = x, dy = y; tracers < 90; dx += travx, dy += travy, tracers++)
+	{
+		// Get tile coordinates
+		idx = (dx >> FIXEDSHIFT);
+		idy = (dy >> FIXEDSHIFT);
+		
+		// If the tile is outside of the level bounds, do nothing
+		if (idx < 0 || idx >= FLOOR_SIZE || idy < 0 || idy >= FLOOR_SIZE)
+			continue;
+		
+		// Get tile
+		tile = &floordata[idx][idy];
+		
+		// Can never hit nothing
+		if (tile->type == FLOORTYPE_NOTHING)
+			continue;
+		
+		// Set as hit
+		*hittile = tile;
+		
+		// Calculate distance to wall
+		*raydistance = OctoDist(x, y, dx, dy);
+		
+		// Stop
+		return;
+	}
 }
 

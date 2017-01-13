@@ -69,13 +69,14 @@ int VideoInit(void)
 
 void DrawLevel(uint32_t* pixels)
 {
-	int x, y;
+	int x, y, idist, q, baseq, endq;
 	uint32_t* dp;
 	uint32_t color, maskaway;
 	fixedtype px, py;
 	fixedtype raydistance;
 	angletype traceangle;
 	FloorTile* hittile;
+	boolean horizhit;
 	
 	// Draw nothing if there is no player
 	if (playerentity == NULL)
@@ -115,13 +116,31 @@ void DrawLevel(uint32_t* pixels)
 		traceangle += ANGLE_BETWEEN_RAYS)
 	{
 		// Trace ray
-		hittile = NULL;
-		TraceTile(x, y, &hittile, &raydistance);
+		TraceTile(px, py, traceangle, &hittile, &raydistance, &horizhit);
 		
 		// Not hit
 		if (hittile == NULL)
 			continue;
+		
+		// Determine slice position
+		idist = (raydistance >> FIXEDSHIFT);
+		baseq = (HALF_SCREEN_HEIGHT >> 1) - (idist >> 1);
+		endq = q + idist;
+		
+		// Never exceed vertical bounds
+		if (baseq < 0)
+			baseq = 0;
+		if (endq >= BASIC_SCREEN_HEIGHT)
+			endq = BASIC_SCREEN_HEIGHT - 1;
+		
+		// Draw slice
+		for (q = baseq; q < endq; q++)
+			pixels[(q * BASIC_SCREEN_WIDTH) + i] =
+				(horizhit ? 0x007F00 : 0x00FF00);
 	}
+	
+	// Rotate the player some
+	playerentity->angle += ANG1;
 }
 
 void VideoDraw(void)

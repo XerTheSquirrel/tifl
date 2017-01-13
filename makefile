@@ -20,11 +20,12 @@ all:			tifl
 				
 
 __objects := $(foreach __c,$(wildcard src/*.c),$(basename $(__c)).o)
+__headers := $(wildcard src/*.h)
 
 tifl:			$(__objects)
 				$(CC) -o $@ $^ $(LDFLAGS)
 
-%.o:			src/%.c
+%.o:			src/%.c $(__headers)
 				$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:			

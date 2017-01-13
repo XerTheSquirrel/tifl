@@ -32,8 +32,8 @@ typedef enum FloorType
 	/** Nothing. */
 	FLOORTYPE_NOTHING,
 	
-	/** Wood. */
-	FLOORTYPE_WALL_WOOD,
+	/** Green. */
+	FLOORTYPE_GREEN,
 	
 	/** The number of floor types. */
 	NUM_FLOORTYPE
@@ -84,9 +84,10 @@ void FloorNext();
  * @param y The starting Y position.
  * @param hittile The tile that was hit.
  * @param raydistance The distance to the tile.
+ * @param horizhit Was the wall hit on the horizontal side?
  */
-void TraceTile(fixedtype x, fixedtype y, FloorTile** hittile,
-	fixedtype* raydistance);
+void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
+	fixedtype* raydistance, boolean* horizhit);
 
 #endif
 
