@@ -69,7 +69,7 @@ int VideoInit(void)
 
 void DrawLevel(uint32_t* pixels)
 {
-	int x, y, idist, q, baseq, endq;
+	int x, y, idist, q, baseq, endq, slicez;
 	uint32_t* dp;
 	uint32_t color, maskaway;
 	fixedtype px, py;
@@ -124,18 +124,29 @@ void DrawLevel(uint32_t* pixels)
 			continue;
 		
 		// Correct the ray angle due to the distortion
-		raydistance = FixedMul(raydistance, AngleCos(baseangle - traceangle));
+		//raydistance = FixedMul(raydistance, AngleCos(baseangle - traceangle));
 		
-		// Determine slice position
-		idist = (raydistance >> FIXEDSHIFT);
-		baseq = (HALF_SCREEN_HEIGHT >> 1) - (idist >> 1);
-		endq = q + idist;
+		// Determine slice size
+		slicez = FixedMul(FixedDiv((64 << FIXEDSHIFT), raydistance),
+			PROJECTION_PLANE_DISTANCE) >> (FIXEDSHIFT + 3);
+		
+		// Where to start drawing this slice?
+		baseq = (BASIC_SCREEN_HEIGHT >> 1) - (slicez >> 1);
+		endq = baseq + slicez;
+		
+		// Make sure they are in order
+		if (baseq > endq)
+		{
+			q = endq;
+			endq = baseq;
+			endq = q;
+		}
 		
 		// Never exceed vertical bounds
 		if (baseq < 0)
 			baseq = 0;
-		if (endq >= BASIC_SCREEN_HEIGHT)
-			endq = BASIC_SCREEN_HEIGHT - 1;
+		if (endq > BASIC_SCREEN_HEIGHT)
+			endq = BASIC_SCREEN_HEIGHT;
 		
 		// Draw slice
 		for (q = baseq; q < endq; q++)

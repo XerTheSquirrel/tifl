@@ -135,6 +135,8 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 		// Calculate distance to wall
 		*raydistance = OctoDist(x, y, dx, dy);
 		
+		*horizhit = (((idx + idy) & 1) == 0);
+		
 		// Stop
 		return;
 	}
