@@ -96,7 +96,7 @@ void FloorNext()
 void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 	fixedtype* raydistance, boolean* horizhit)
 {
-	fixedtype travx, travy, dx, dy, cx, cy;
+	fixedtype travx, travy, dx, dy, cx, cy, dist;
 	int idx, idy, tracers;
 	FloorTile* tile;
 	
@@ -133,7 +133,10 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 		*hittile = tile;
 		
 		// Calculate distance to wall
-		*raydistance = FixedMul(OctoDist(x, y, dx, dy), FIXED_C(64));
+		dist = FixedMul(OctoDist(x, y, dx, dy), FIXED_C(64));
+		if (dist <= 0)
+			dist = 1;
+		*raydistance = dist;
 		
 		*horizhit = (((idx + idy) & 1) == 0);
 		
