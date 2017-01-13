@@ -134,7 +134,7 @@ void DrawLevel(uint32_t* pixels)
 		
 		// Determine slice size
 		slicez = FixedMul(FixedDiv((64 << FIXEDSHIFT), raydistance),
-			PROJECTION_PLANE_DISTANCE) >> (FIXEDSHIFT + 3);
+			PROJECTION_PLANE_DISTANCE) >> (FIXEDSHIFT);
 		
 		// Where to start drawing this slice?
 		baseq = (BASIC_SCREEN_HEIGHT >> 1) - (slicez >> 1);
