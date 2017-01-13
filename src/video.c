@@ -124,7 +124,7 @@ void DrawLevel(uint32_t* pixels)
 			continue;
 		
 		// Correct the ray angle due to the distortion
-		//raydistance = FixedMul(raydistance, AngleCos(baseangle - traceangle));
+		//raydistance = FixedMul(raydistance, AngleCos(traceangle - baseangle));
 		
 		// Determine slice size
 		slicez = FixedMul(FixedDiv((64 << FIXEDSHIFT), raydistance),
@@ -153,9 +153,6 @@ void DrawLevel(uint32_t* pixels)
 			pixels[(q * BASIC_SCREEN_WIDTH) + i] =
 				(horizhit ? 0x007F00 : 0x00FF00);
 	}
-	
-	// Rotate the player some
-	playerentity->angle += ANG1;
 }
 
 void VideoDraw(void)
