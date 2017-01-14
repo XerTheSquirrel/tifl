@@ -159,6 +159,7 @@ void DrawLevel(uint32_t* pixels)
 		
 		// Correct the ray angle due to the distortion
 		//raydistance = FixedMul(raydistance, AngleCos(traceangle - baseangle));
+		//raydistance = FixedMul(raydistance, AngleCos(traceangle + baseangle + HALF_FIELD_OF_VIEW));
 		
 		// Determine slice size
 		slicez = FixedMul(FixedDiv((64 << FIXEDSHIFT), raydistance),

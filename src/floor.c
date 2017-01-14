@@ -93,6 +93,12 @@ void FloorNext()
 	floorwasfinished = false;
 }
 
+static fixedtype Distance(fixedtype x1, fixedtype y1, fixedtype x2,
+	fixedtype y2)
+{
+	return OctoDist(x1, y1, x2, y2);
+}
+
 void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 	fixedtype* raydistance, boolean* horizhit)
 {
@@ -146,14 +152,11 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 		hdist = vdist = 0;
 		hhit = vhit = NULL;
 		
-#if 0
 		// Check collision between vertical grid lines
 		if (idx != indx)
 		{
-			// y = mx + b
-			// In this case, since the collision is horizontal, this means
-			// that we just want the y position for when the line is hit
-			cy = FixedMul(linem, indx << FIXEDSHIFT) + lineb;
+			// Check vertical collision
+			cx = FixedDiv(((indy << FIXEDSHIFT) - lineb), linem);
 			
 			// Tile must be in range
 			qi = cy >> FIXEDSHIFT;
@@ -164,19 +167,17 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 				if (tile->type != FLOORTYPE_NOTHING)
 				{
 					vhit = tile;
-					vdist = FixedMul(OctoDist(x, y, indx << FIXEDSHIFT, cy),
+					vdist = FixedMul(Distance(x, y, indx << FIXEDSHIFT, cy),
 						FIXED_C(64));
 				}
 			}
 		}
-#endif
 		
 		// Check horizontal collision if y index changed
 		if (idy != indy)
 		{
-			// Check against horizontal lines, so the opposite is used
-			// (y - b) / m = x;
-			cx = FixedDiv(((indy << FIXEDSHIFT) - lineb), linem);
+			// Check against horizontal lines
+			cx = FixedMul(linem, indx << FIXEDSHIFT) + lineb;
 			
 			// Must be in range
 			qi = cx >> FIXEDSHIFT;
@@ -187,7 +188,7 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 				if (tile->type != FLOORTYPE_NOTHING)
 				{
 					hhit = tile;
-					hdist = FixedMul(OctoDist(x, y, cx, indy << FIXEDSHIFT),
+					hdist = FixedMul(Distance(x, y, cx, indy << FIXEDSHIFT),
 						FIXED_C(64));
 				}
 			}
@@ -205,8 +206,8 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 		// Hit horizontal
 		if (hhit != NULL)
 		{
-			*raydistance = hdist;
 			*horizhit = true;
+			*raydistance = hdist;
 			*hittile = hhit;
 			
 			// Stop
@@ -216,8 +217,8 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 		// Hit vertical
 		else if (vhit != NULL)
 		{
-			*raydistance = vdist;
 			*horizhit = false;
+			*raydistance = vdist;
 			*hittile = vhit;
 			
 			// Stop

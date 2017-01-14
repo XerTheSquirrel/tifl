@@ -13,7 +13,7 @@ SDL_CONFIG=sdl2-config
 
 CFLAGS  := $(CFLAGS) $(shell $(SDL_CONFIG) --cflags) -g3 -O0 \
 	-Werror=implicit-function-declaration
-LDFLAGS := $(LDFLAGS) $(shell $(SDL_CONFIG) --libs)
+LDFLAGS := $(LDFLAGS) $(shell $(SDL_CONFIG) --libs) -lm
 
 .PHONY: all
 all:			tifl
