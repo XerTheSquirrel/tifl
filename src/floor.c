@@ -97,7 +97,7 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 	fixedtype* raydistance, boolean* horizhit)
 {
 	fixedtype travx, travy, dx, dy, cx, cy, dist, ndx, ndy;
-	int idx, idy, tracers, indx, indy, qi;
+	int idx, idy, tracers, indx, indy, qi, ildx, ildy;
 	fixedtype hdist, vdist, riserun;
 	FloorTile* tile, *hhit, *vhit;
 	boolean dovert, dohorz;
@@ -116,12 +116,13 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 	dovert = (travx != 0);
 	
 	// Rise over run for line intercept (slope)
-	if (!dovert)
+	if (dovert)
 		riserun = travy / travx;
 	
 	// Traverse tiles in this given direction
 	// Also do not trace so many blocks that exceed the level size!
 	tracers = 0;
+	ildx = (x >> FIXEDSHIFT), ildy = (y >> FIXEDSHIFT);
 	for (dx = x, dy = y; tracers < 90; dx += travx, dy += travy, tracers++)
 	{
 #if 1
@@ -148,7 +149,7 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 		hhit = vhit = NULL;
 		
 		// Check vertical collision if x index changed
-		if (dovert && idx != indx)
+		if (idx != indx)
 		{
 			// y = mx + b
 			// In this case, since the collision is horizontal, this means
@@ -186,7 +187,7 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 				if (tile->type != FLOORTYPE_NOTHING)
 				{
 					hhit = tile;
-					hdist = FixedMul(OctoDist(x, y, cx, indx << FIXEDSHIFT),
+					hdist = FixedMul(OctoDist(x, y, cx, indy << FIXEDSHIFT),
 						FIXED_C(64));
 				}
 			}
@@ -207,6 +208,9 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 			*raydistance = hdist;
 			*horizhit = true;
 			*hittile = hhit;
+			
+			// Stop
+			return;
 		}
 		
 		// Hit vertical
@@ -215,6 +219,9 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 			*raydistance = vdist;
 			*horizhit = false;
 			*hittile = vhit;
+			
+			// Stop
+			return;
 		}
 #else	
 		// Get tile coordinates
@@ -242,10 +249,10 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 		*raydistance = dist;
 		
 		*horizhit = (((idx + idy) & 1) == 0);
-#endif
 		
 		// Stop
 		return;
+#endif
 	}
 }
 
