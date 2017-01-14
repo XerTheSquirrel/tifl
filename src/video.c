@@ -289,48 +289,33 @@ void PumpEvents()
 				eventtype = EVENTTYPE_NONE;
 				switch ((sym = event.key.keysym.sym))
 				{
-						// Turn left
+						// Walk left
 					case SDLK_LEFT:
 					case SDLK_q:
-						eventtype = EVENTTYPE_TURN_LEFT;
+						eventtype = EVENTTYPE_WALK_LEFT;
 						break;
 						
-						// Turn right
+						// Walk right
 					case SDLK_RIGHT:
 					case SDLK_e:
-						eventtype = EVENTTYPE_TURN_RIGHT;
+						eventtype = EVENTTYPE_WALK_RIGHT;
 						break;
 						
-						// Walk forward
+						// Jump
 					case SDLK_UP:
+					case SDLK_SPACE:
 					case SDLK_w:
-						eventtype = EVENTTYPE_WALK_FORWARD;
+						eventtype = EVENTTYPE_JUMP;
 						break;
 						
-						// Walk backward
-					case SDLK_DOWN:
-					case SDLK_s:
-						eventtype = EVENTTYPE_WALK_BACKWARD;
-						break;
-						
-						// Strafe mode?
+						// Attack
+					case SDLK_LCTRL:
+					case SDLK_RCTRL:
 					case SDLK_LALT:
 					case SDLK_RALT:
-						eventtype = EVENTTYPE_STRAFE_MODE;
-						break;
-						
-						// Strafe left
-					case SDLK_a:
 					case SDLK_TAB:
-					case SDLK_COMMA:
-						eventtype = EVENTTYPE_STRAFE_LEFT;
-						break;
-						
-						// Strafe right
-					case SDLK_d:
 					case SDLK_BACKSPACE:
-					case SDLK_PERIOD:
-						eventtype = EVENTTYPE_STRAFE_RIGHT;
+						eventtype = EVENTTYPE_ATTACK;
 						break;
 						
 						// Unknown
