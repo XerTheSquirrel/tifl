@@ -15,14 +15,14 @@
 
 #include "global.h"
 #include "video.h"
+#include "level.h"
 #include "entity.h"
-#include "floor.h"
-
-/** The angle the player turns at. */
-#define PLAYER_TURN_ANGLE 0x02d82d80
 
 /** The speed the player moves at. */
-#define PLAYER_MOVE_SPEED 21845
+#define PLAYER_MOVE_SPEED 52428
+
+/** The player jump height. */
+#define PLAYER_JUMP_SPEED (PLAYER_MOVE_SPEED * 4)
 
 void Die(const char* format, ...)
 {
@@ -50,17 +50,12 @@ void Die(const char* format, ...)
 void loop()
 {
 	uint32_t entertime, leavetime, difference;
-	boolean strafing;
 	
 	// Start
 	for (uint32_t frameid = 0;; frameid++)
 	{
 		// Mark start
 		entertime = SDL_GetTicks();
-		
-		// If the current floor is finished, go to the next floor
-		if (IsFloorFinished())
-			FloorNext();
 		
 		// Pump game events
 		PumpEvents();
@@ -69,32 +64,24 @@ void loop()
 		if (gamekeydown[EVENTTYPE_QUIT])
 			return;
 		
+		// Respawn the player if he has no entity
+		if (playerentity == NULL)
+			RespawnPlayer();
+		
 		// Player interaction
 		if (playerentity != NULL)
 		{
-			strafing = gamekeydown[EVENTTYPE_STRAFE_MODE];
-			
-			// Turn/strafe left?
-			if (!strafing && gamekeydown[EVENTTYPE_TURN_LEFT])
-				playerentity->angle -= PLAYER_TURN_ANGLE;
-			else if ((strafing && gamekeydown[EVENTTYPE_TURN_LEFT]) ||
-				gamekeydown[EVENTTYPE_STRAFE_LEFT])
+			// Walk left
+			if (gamekeydown[EVENTTYPE_WALK_LEFT])
 				WalkEntity(playerentity, -PLAYER_MOVE_SPEED, 0);
-			
-			// Turn/strafe right?
-			if (!strafing && gamekeydown[EVENTTYPE_TURN_RIGHT])
-				playerentity->angle += PLAYER_TURN_ANGLE;
-			else if ((strafing && gamekeydown[EVENTTYPE_TURN_RIGHT]) ||
-				gamekeydown[EVENTTYPE_STRAFE_RIGHT])
+				
+			// Walk right
+			if (gamekeydown[EVENTTYPE_WALK_RIGHT])
 				WalkEntity(playerentity, PLAYER_MOVE_SPEED, 0);
 			
-			// Walk forward?
-			if (gamekeydown[EVENTTYPE_WALK_FORWARD])
-				WalkEntity(playerentity, 0, PLAYER_MOVE_SPEED);
-			
-			// Walk backward?
-			if (gamekeydown[EVENTTYPE_WALK_BACKWARD])
-				WalkEntity(playerentity, 0, -PLAYER_MOVE_SPEED);
+			// Jump
+			if (gamekeydown[EVENTTYPE_JUMP])
+				WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED);
 		}
 		
 		// Mark end
@@ -131,8 +118,9 @@ int main(int argc, char** argv)
 	if (VideoInit() != 0)
 		Die("Failed to initialize video.");
 	
-	// Implicitly start the next floor
-	FloorNext();
+	// Setup level and respawn the player
+	InitializeLevel(0);
+	RespawnPlayer();
 	
 	// Enter game loop
 	loop();

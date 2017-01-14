@@ -5,8 +5,8 @@
  * Copyright (C) 2017-2017 Multi-Phasic Applications
    <http://multiphasicapps.net/>
 
-**Trouble In Furry Land** is a first person shooter where you run around in a
-level and turn feral creatures back into their anthropomorphic form.
+**Trouble In Furry Land** is a side scroller where you run around turn feral
+creatures back into their anthropomorphic form.
 
 ## Licenses
 

@@ -23,12 +23,29 @@ typedef enum EntityType
 	/** Nothing. */
 	ENTITYTYPE_NOTHING,
 	
-	/** Player start position. */
-	ENTITYTYPE_PLAYER_START,
+	/** The player. */
+	ENTITYTYPE_PLAYER,
 	
 	/** The number of entity types. */
 	NUM_ENTITYTYPES
 } EntityType;
+
+/**
+ * The direction the entity is facing.
+ *
+ * @since 2017/01/14
+ */
+typedef enum facetype
+{
+	/** Facing left. */
+	FACETYPE_LEFT,
+	
+	/** Facing right. */
+	FACETYPE_RIGHT,
+	
+	/** The number of face types. */
+	NUM_FACETYPES
+} facetype;
 
 /**
  * Entity data.
@@ -44,7 +61,7 @@ typedef struct Entity
 	int32_t x, y;
 	
 	/** The angle the entity is facing. */
-	angletype angle;
+	facetype angle;
 } Entity;
 
 /** Maximum number of entities. */
@@ -62,8 +79,8 @@ extern Entity* playerentity;
  * The movement is based on the angle the entity is facing.
  *
  * @param entity The entity to walk.
- * @param relx The forward facing x movement (left/right).
- * @param rely The forward facing y movement (forwards/backwards).
+ * @param relx The x movement.
+ * @param rely The y movement.
  */
 void WalkEntity(Entity* entity, fixedtype relx, fixedtype rely);
 

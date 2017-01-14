@@ -13,22 +13,10 @@
 
 #include "global.h"
 #include "video.h"
-#include "floor.h"
 #include "entity.h"
-
-/** The field of view angle. */
-#define FIELD_OF_VIEW_ANGLE ANG60
-
-/** The half field of view angle. */
-#define HALF_FIELD_OF_VIEW ANG30
+#include "level.h"
 
 boolean gamekeydown[NUM_EVENTTYPE];
-
-/** The distance to the projection plane. */
-static fixedtype PROJECTION_PLANE_DISTANCE;
-
-/** The angle between each projection ray. */
-static fixedtype ANGLE_BETWEEN_RAYS;
 
 /** The game window. */
 static SDL_Window* gamewindow;
@@ -63,25 +51,13 @@ int VideoInit(void)
 	// Forego blending
 	SDL_SetSurfaceBlendMode(rendersurface, SDL_BLENDMODE_NONE);
 	
-	// Initialize some variables
-	PROJECTION_PLANE_DISTANCE = FixedDiv(FIXED_C(HALF_SCREEN_WIDTH),
-		AngleTan(FIELD_OF_VIEW_ANGLE >> 1));
-	ANGLE_BETWEEN_RAYS = FIELD_OF_VIEW_ANGLE / BASIC_SCREEN_WIDTH;
-	
 	// Ok
 	return 0;
 }
 
 void DrawLevel(uint32_t* pixels)
 {
-	int x, y, idist, q, baseq, endq, slicez;
-	uint32_t* dp;
-	uint32_t color, maskaway;
-	fixedtype px, py;
-	fixedtype raydistance;
-	angletype traceangle, baseangle, diffangle;
-	FloorTile* hittile;
-	boolean horizhit;
+	fixedtype vx, xi;
 	
 	// Draw nothing if there is no player
 	if (playerentity == NULL)
@@ -90,103 +66,8 @@ void DrawLevel(uint32_t* pixels)
 		return;
 	}
 	
-	// Draw the background ceiling
-	dp = pixels;
-	maskaway = 0xFFFFFF;
-	color = ceilingcolor;
-	for (y = 0; y < HALF_SCREEN_HEIGHT; y++)
-	{
-		for (x = 0; x < BASIC_SCREEN_WIDTH; x++)
-			*(dp++) = color;
-		maskaway -= 0x020202;
-		color = (ceilingcolor & maskaway);
-	}
-	
-	// Draw the background floor
-	maskaway = 0x0F0F0F;
-	color = floorcolor & maskaway;
-	for (y = HALF_SCREEN_HEIGHT; y < BASIC_SCREEN_HEIGHT; y++)
-	{
-		for (x = 0; x < BASIC_SCREEN_WIDTH; x++)
-			*(dp++) = color;
-		maskaway += 0x020202;
-		color = (floorcolor & maskaway);
-	}
-	
-	// Project any walls in view
-	baseangle = playerentity->angle - HALF_FIELD_OF_VIEW;
-	traceangle = baseangle;
-	diffangle = 0;
-	px = playerentity->x;
-	py = playerentity->y;
-	for (int i = 0; i < BASIC_SCREEN_WIDTH; i++,
-		traceangle += ANGLE_BETWEEN_RAYS, diffangle += ANGLE_BETWEEN_RAYS)
-	{
-		// Trace ray
-		TraceTile(px, py, traceangle, &hittile, &raydistance, &horizhit);
-		
-		// Not hit
-		if (hittile == NULL)
-			continue;
-		
-		// Determine color
-		switch (hittile->type)
-		{
-			case FLOORTYPE_RED:
-				color = 0xFF0000;
-				break;
-				
-			case FLOORTYPE_GREEN:
-				color = 0x00FF00;
-				break;
-				
-			case FLOORTYPE_YELLOW:
-				color = 0xFFFF00;
-				break;
-				
-			case FLOORTYPE_BLUE:
-				color = 0x0000FF;
-				break;
-				
-			default:
-				color = 0;
-				break;
-		}
-		
-		// If horizontal line was hit, cut color
-		if (horizhit)
-			color &= 0xF0F0F0;
-		
-		// Correct the ray angle due to the distortion
-		//raydistance = FixedMul(raydistance, AngleCos(traceangle - baseangle));
-		//raydistance = FixedMul(raydistance, AngleCos(traceangle + baseangle + HALF_FIELD_OF_VIEW));
-		
-		// Determine slice size
-		slicez = FixedMul(FixedDiv((64 << FIXEDSHIFT), raydistance),
-			PROJECTION_PLANE_DISTANCE) >> (FIXEDSHIFT);
-		
-		// Where to start drawing this slice?
-		baseq = (BASIC_SCREEN_HEIGHT >> 1) - (slicez >> 1);
-		endq = baseq + slicez;
-		
-		// Make sure they are in order
-		if (baseq > endq)
-		{
-			q = endq;
-			endq = baseq;
-			endq = q;
-		}
-		
-		// Never exceed vertical bounds
-		if (baseq < 0)
-			baseq = 0;
-		if (endq > BASIC_SCREEN_HEIGHT)
-			endq = BASIC_SCREEN_HEIGHT;
-		
-		// Draw slice
-		for (q = baseq; q < endq; q++)
-			pixels[(q * BASIC_SCREEN_WIDTH) + i] = color;
-	}
+	// Determine the scroll offset of the game, based on the player position
+	vx = playerentity->x;
 }
 
 void VideoDraw(void)

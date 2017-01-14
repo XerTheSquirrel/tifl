@@ -11,5 +11,66 @@
 #ifndef TIFL_LEVEL_H
 #define TIFL_LEVEL_H
 
+/** The size of tiles. */
+#define TILE_SIZE 8
+
+/** The view width. */
+#define VIEW_WIDTH 40
+
+/** The width of the level. */
+#define LEVEL_WIDTH (VIEW_WIDTH * 4)
+
+/** The height of levels. */
+#define LEVEL_HEIGHT 30
+
+/**
+ * The type of tile in a level.
+ *
+ * @since 2017/01/14
+ */
+typedef enum TileType
+{
+	/** Air. */
+	TILETYPE_AIR,
+	
+	/** Grass. */
+	TILETYPE_GRASS,
+	
+	/** The number of tiles used. */
+	NUM_TILETYPES,
+} TileType;
+
+/**
+ * A single tile within a level.
+ *
+ * @since 2017/01/14
+ */
+typedef struct LevelTile
+{
+	/** The type of tile used here. */
+	TileType type;
+} LevelTile;
+
+/** Tiles within the level. */
+extern LevelTile leveldata[LEVEL_WIDTH][LEVEL_HEIGHT];
+
+/** The current level number. */
+extern int currentlevelnum;
+
+/**
+ * Initializes a new level.
+ *
+ * @param levelnum The level number to use.
+ * @since 2017/01/14
+ */
+void InitializeLevel(int levelnum);
+
+/**
+ * Respawns the player.
+ *
+ * @since 2017/01/14
+ */
+void RespawnPlayer();
+
 #endif
 
