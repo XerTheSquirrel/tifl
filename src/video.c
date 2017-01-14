@@ -129,6 +129,34 @@ void DrawLevel(uint32_t* pixels)
 		if (hittile == NULL)
 			continue;
 		
+		// Determine color
+		switch (hittile->type)
+		{
+			case FLOORTYPE_RED:
+				color = 0xFF0000;
+				break;
+				
+			case FLOORTYPE_GREEN:
+				color = 0x00FF00;
+				break;
+				
+			case FLOORTYPE_YELLOW:
+				color = 0xFFFF00;
+				break;
+				
+			case FLOORTYPE_BLUE:
+				color = 0x0000FF;
+				break;
+				
+			default:
+				color = 0;
+				break;
+		}
+		
+		// If horizontal line was hit, cut color
+		if (horizhit)
+			color &= 0xF0F0F0;
+		
 		// Correct the ray angle due to the distortion
 		//raydistance = FixedMul(raydistance, AngleCos(traceangle - baseangle));
 		
@@ -156,8 +184,7 @@ void DrawLevel(uint32_t* pixels)
 		
 		// Draw slice
 		for (q = baseq; q < endq; q++)
-			pixels[(q * BASIC_SCREEN_WIDTH) + i] =
-				(horizhit ? 0x007F00 : 0x00FF00);
+			pixels[(q * BASIC_SCREEN_WIDTH) + i] = color;
 	}
 }
 

@@ -32,8 +32,17 @@ typedef enum FloorType
 	/** Nothing. */
 	FLOORTYPE_NOTHING,
 	
+	/** Red. */
+	FLOORTYPE_RED,
+	
 	/** Green. */
 	FLOORTYPE_GREEN,
+	
+	/** Yellow. */
+	FLOORTYPE_YELLOW,
+	
+	/** Blue. */
+	FLOORTYPE_BLUE,
 	
 	/** The number of floor types. */
 	NUM_FLOORTYPE

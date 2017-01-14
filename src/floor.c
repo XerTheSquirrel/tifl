@@ -53,12 +53,12 @@ void FloorNext()
 	// For now just make a border around the level
 	for (x = 0; x < FLOOR_SIZE; x++)
 	{
-		floordata[x][0].type = FLOORTYPE_GREEN;
-		floordata[x][FLOOR_SIZE - 1].type = FLOORTYPE_GREEN;
+		floordata[x][0].type = FLOORTYPE_RED;
+		floordata[x][FLOOR_SIZE - 1].type = FLOORTYPE_YELLOW;
 	}
 	for (y = 0; y < FLOOR_SIZE; y++)
 	{
-		floordata[0][y].type = FLOORTYPE_GREEN;
+		floordata[0][y].type = FLOORTYPE_BLUE;
 		floordata[FLOOR_SIZE - 1][y].type = FLOORTYPE_GREEN;
 	}
 	
@@ -146,6 +146,7 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 		hdist = vdist = 0;
 		hhit = vhit = NULL;
 		
+#if 0
 		// Check collision between vertical grid lines
 		if (idx != indx)
 		{
@@ -168,6 +169,7 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 				}
 			}
 		}
+#endif
 		
 		// Check horizontal collision if y index changed
 		if (idy != indy)
