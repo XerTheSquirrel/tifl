@@ -97,8 +97,8 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 	fixedtype* raydistance, boolean* horizhit)
 {
 	fixedtype travx, travy, dx, dy, cx, cy, dist, ndx, ndy;
-	int idx, idy, tracers, indx, indy, qi, ildx, ildy;
-	fixedtype hdist, vdist, riserun;
+	int idx, idy, tracers, indx, indy, qi;
+	fixedtype hdist, vdist, linem, lineb;
 	FloorTile* tile, *hhit, *vhit;
 	boolean dovert, dohorz;
 	
@@ -115,17 +115,15 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 	dohorz = (travy != 0);
 	dovert = (travx != 0);
 	
-	// Rise over run for line intercept (slope)
-	if (dovert)
-		riserun = travy / travx;
+	// For line intercept
+	linem = travy / travx;
+	lineb = y - FixedMul(linem, x);
 	
 	// Traverse tiles in this given direction
 	// Also do not trace so many blocks that exceed the level size!
 	tracers = 0;
-	ildx = (x >> FIXEDSHIFT), ildy = (y >> FIXEDSHIFT);
 	for (dx = x, dy = y; tracers < 90; dx += travx, dy += travy, tracers++)
 	{
-#if 1
 		// Offset from current block
 		ndx = dx + travx;
 		ndy = dy + travy;
@@ -148,13 +146,13 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 		hdist = vdist = 0;
 		hhit = vhit = NULL;
 		
-		// Check vertical collision if x index changed
+		// Check collision between vertical grid lines
 		if (idx != indx)
 		{
 			// y = mx + b
 			// In this case, since the collision is horizontal, this means
 			// that we just want the y position for when the line is hit
-			cy = FixedMul(riserun, ndx) + x;
+			cy = FixedMul(linem, indx << FIXEDSHIFT) + lineb;
 			
 			// Tile must be in range
 			qi = cy >> FIXEDSHIFT;
@@ -172,11 +170,11 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 		}
 		
 		// Check horizontal collision if y index changed
-		if (dohorz && idy != indy)
+		if (idy != indy)
 		{
 			// Check against horizontal lines, so the opposite is used
 			// (y - b) / m = x;
-			cx = FixedDiv((ndy - y), riserun);
+			cx = FixedDiv(((indy << FIXEDSHIFT) - lineb), linem);
 			
 			// Must be in range
 			qi = cx >> FIXEDSHIFT;
@@ -223,36 +221,6 @@ void TraceTile(fixedtype x, fixedtype y, angletype angle, FloorTile** hittile,
 			// Stop
 			return;
 		}
-#else	
-		// Get tile coordinates
-		idx = (dx >> FIXEDSHIFT);
-		idy = (dy >> FIXEDSHIFT);
-		
-		// If the tile is outside of the level bounds, do nothing
-		if (idx < 0 || idx >= FLOOR_SIZE || idy < 0 || idy >= FLOOR_SIZE)
-			continue;
-		
-		// Get tile
-		tile = &floordata[idx][idy];
-		
-		// Can never hit nothing
-		if (tile->type == FLOORTYPE_NOTHING)
-			continue;
-		
-		// Set as hit
-		*hittile = tile;
-		
-		// Calculate distance to wall
-		dist = FixedMul(OctoDist(x, y, dx, dy), FIXED_C(64));
-		if (dist <= 0)
-			dist = 1;
-		*raydistance = dist;
-		
-		*horizhit = (((idx + idy) & 1) == 0);
-		
-		// Stop
-		return;
-#endif
 	}
 }
 
