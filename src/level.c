@@ -120,7 +120,7 @@ void InitializeLevel(int levelnum)
 {
 	int x, y, i, n, absln, q, v, gz, ngls;
 	Entity oldplayer;
-	boolean docloud, doground, doplatform;
+	boolean docloud, doground, doplatform, startblock;
 	
 	// Remember the old player information
 	if (playerentity != NULL)
@@ -150,9 +150,10 @@ void InitializeLevel(int levelnum)
 	for (x = 0; x < LEVEL_WIDTH; x++)
 	{
 		// Is there clouds and/or ground here?
+		startblock = (x == 0 || x == (LEVEL_WIDTH - 1));
 		docloud = ((NextRandom() & 1) != 0);
-		doground = ((NextRandom() & 0xFF) < 192);
-		doplatform = ((NextRandom() & 0xFF) < 64);
+		doground = startblock || ((NextRandom() & 0xFF) < 192);
+		doplatform = !startblock && ((NextRandom() & 0xFF) < 64);
 		
 		// Draw clouds at the higher heights
 		if (docloud)
@@ -163,7 +164,7 @@ void InitializeLevel(int levelnum)
 		if (doground)
 		{
 			// Place ground
-			for (y = 0; y < gz; y++)
+			for (y = 0; y < (startblock ? 1 : gz); y++)
 				PlaceTile(x, y, TILETYPE_GRASS);
 			
 			// Change the ground Z height?

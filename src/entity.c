@@ -118,11 +118,12 @@ static void TraceLine(int x1, int y1, int x2, int y2, LevelTile** hitx,
 
 void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 {
-	int32_t px, py, groundy, downy, newx, newy, movx;
+	int32_t px, py, groundy, downy, newx, newy, movx, usex;
 	LevelTile* lground, *rground;
-	LevelTile* lohit, *hihit;
+	LevelTile* lohit, *hihit, *check;
 	boolean onground;
 	TileInfo* tinfo;
+	int di, dx, dy, i, hx, hy;
 	
 	// Entity position
 	px = entity->x;
@@ -166,7 +167,44 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	// Otherwise do not run into the wall
 	else
 	{
+		// Guessed placement
+		usex = newx;
 		
+		for (i = 0; i < 2; i++)
+		{
+			// Get hit block
+			check = (i == 0 ? lohit : hihit);
+			if (check == NULL)
+				continue;
+			
+			// Determine position of the block
+			di = check - leveldata;
+			dx = (di % LEVEL_WIDTH);
+			dy = (di / LEVEL_WIDTH);
+			
+			// Hit right side
+			if ((dx * TILE_SIZE) < px)
+			{
+				newx = (dx * (TILE_SIZE + 1));
+				
+				// Use if closer
+				if (newx > usex)
+					usex = newx;
+			}
+			
+			// Hit left side
+			else
+			{
+				newx = (dx * (TILE_SIZE));
+				
+				// Use if closer
+				if (newx < usex)
+					usex = newx;
+			}
+		}
+		
+		// Use that instead
+		entity->x = usex;
 	}
 	
 	// If standing on the ground, stand on it completely
