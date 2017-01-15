@@ -38,7 +38,7 @@
 #define ANTHROBOLT_SPEED 16
 
 /** The number of frames to be stunned after firing the anthrogun. */
-#define ANTHROGUN_PLAYER_STUN 3
+#define ANTHROGUN_PLAYER_STUN 2
 
 void Die(const char* format, ...)
 {
@@ -187,13 +187,13 @@ void loop()
 				WalkEntity(playerentity, PLAYER_MOVE_SPEED, 0, true);
 			
 			// Rocket
-			if (gamekeydown[EVENTTYPE_ROCKET])
+			if (gamekeydown[EVENTTYPE_ROCKET] && playerentity->stun <= 0)
 				if (playerentity->y >= WEAK_ROCKET_BOOST_HEIGHT)
-					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_BARE, true);
+					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_BARE, false);
 				else if (playerentity->y >= HALF_LEVEL_HEIGHT_PIXELS)
-					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_WEAK, true);
+					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_WEAK, false);
 				else
-					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED, true);
+					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED, false);
 			
 			// Attack
 			if (gamekeydown[EVENTTYPE_ATTACK])
