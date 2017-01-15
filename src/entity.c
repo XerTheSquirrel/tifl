@@ -21,7 +21,22 @@ Entity* playerentity = NULL;
 void WalkEntity(Entity* entity, fixedtype relx, fixedtype rely,
 	boolean impulse)
 {
-	entity->x += relx;
-	entity->y += rely;
+	fixedtype newx, newy;
+	int i;
+	boolean onground;
+	
+	// Impulsed, check if it is on the ground
+	if (impulse)
+	{
+		i = FixedDiv(entity->y, FIXED_TILE_SIZE);
+	}
+	
+	// Target X and Y position
+	newx = entity->x + relx;
+	newy = entity->y + rely;
+	
+	// Move is OK
+	entity->x = newx;
+	entity->y = newy;
 }
 
