@@ -17,6 +17,12 @@
 /** The maximum number of holes in the level. */
 #define MAX_LEVEL_HOLES ((LEVEL_WIDTH - 8) / 4)
 
+/** Maximum ground height. */
+#define MAX_GROUND_HEIGHT 7
+
+/** The height where clouds are. */
+#define CLOUD_HEIGHT (LEVEL_HEIGHT - 4)
+
 LevelTile leveldata[LEVEL_WIDTH * LEVEL_HEIGHT];
 
 int currentlevelnum = 0;
@@ -41,6 +47,12 @@ const TileInfo tileinfo[NUM_TILETYPES] =
 	{
 		0x66AA111,
 		true
+	},
+	
+	// Cloud
+	{
+		0xFEDEFA,
+		false
 	}
 };
 
@@ -80,10 +92,35 @@ void InternalRespawnPlayer(Entity* oldplayer)
 	playerentity->type = ENTITYTYPE_PLAYER;
 }
 
+/**
+ * Places the tile at the given position.
+ *
+ * @param x The x position of the tile.
+ * @param y The y position of the tile.
+ * @param type The type of tile to place.
+ * @return The tile that was touched.
+ * @since 2017/01/15
+ */
+static LevelTile* PlaceTile(int x, int y, TileType type)
+{
+	LevelTile* mod;
+	
+	// Out of bounds?
+	if (x < 0 || y < 0 || x >= LEVEL_WIDTH || y >= LEVEL_HEIGHT)
+		return NULL;
+	
+	// In bounds
+	mod = &leveldata[(y * LEVEL_WIDTH) + x];
+	mod->type = type;
+	
+	return mod;
+}
+
 void InitializeLevel(int levelnum)
 {
-	int x, i, n, absln, q, v;
+	int x, y, i, n, absln, q, v, gz, ngls;
 	Entity oldplayer;
+	boolean docloud, doground, doplatform;
 	
 	// Remember the old player information
 	if (playerentity != NULL)
@@ -107,51 +144,52 @@ void InitializeLevel(int levelnum)
 	// Seed the RNG
 	SeedRandom(levelnum);
 	
-	// Add base floor to the level
+	// Go through the level and add things to it based on the seed
+	ngls = 4;
+	gz = 1;
 	for (x = 0; x < LEVEL_WIDTH; x++)
-		leveldata[x].type = TILETYPE_GRASS;
-	
-	// Cut holes in the floor
-	n = ((absln / 2) & 0xF);
-	if (n > MAX_LEVEL_HOLES)
-		n = MAX_LEVEL_HOLES;
-	else if (n < 8)
-		n = 8;
-	q = (n * levelnum * 37) + absln * 31;
-	if (q < 0)
-		q = -q;
-	while (n > 0)
 	{
-		// Remove count
-		n--;
+		// Is there clouds and/or ground here?
+		docloud = ((NextRandom() & 1) != 0);
+		doground = ((NextRandom() & 0xFF) < 192);
+		doplatform = ((NextRandom() & 0xFF) < 64);
 		
-		// Determine where to place the hole
-		x = 4 + (q % (LEVEL_WIDTH - 4));
-		q *= ((x & 1) == 0) ? 37 : 31;
-		if (q < 0)
-			q = -q;
+		// Draw clouds at the higher heights
+		if (docloud)
+			PlaceTile(x, CLOUD_HEIGHT + y + (NextRandom() & 1),
+				TILETYPE_CLOUD);
 		
-		// Clear it out
-		for (;;)
+		// Drawing the ground?
+		if (doground)
 		{
-			// Fill the level with more gaps
-			if (leveldata[x].type == TILETYPE_AIR)
-				if ((++x) < (LEVEL_WIDTH - 4))
-					continue;
-				else
-					break;
+			// Place ground
+			for (y = 0; y < gz; y++)
+				PlaceTile(x, y, TILETYPE_GRASS);
 			
-			// Make air
-			leveldata[x].type = TILETYPE_AIR;
-			leveldata[x + 1].type = TILETYPE_AIR;
-			break;
+			// Change the ground Z height?
+			if ((--ngls) == 0)
+			{
+				// Change breadth
+				ngls = 1 + (NextRandom() & 3);
+				
+				// Increase or decrease height
+				if (NextRandom() & 1)
+					gz++;
+				else
+					gz--;
+				
+				// Cap
+				if (gz < 1)
+					gz = 1;
+				else if (gz >= MAX_GROUND_HEIGHT)
+					gz = MAX_GROUND_HEIGHT;
+			}
 		}
-	}
-	
-	// Spawn wood over gaps
-	for (x = 0; x < LEVEL_WIDTH; x++)
-	{
 		
+		// Otherwise draw some platforms maybe
+		else if (doplatform)
+		{
+		}
 	}
 	
 	// Spawn furries
