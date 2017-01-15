@@ -196,11 +196,20 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 		dx = (di % LEVEL_WIDTH);
 		dy = (di / LEVEL_WIDTH);
 		
-		fprintf(stderr, "Ram di=%d dx=%d dy=%d\n", di, dx, dy);
+		// Pixel positions of the block
+		hx = dx * TILE_SIZE;
+		hy = hx + TILE_SIZE;
 		
+		// Running into it from the right side
+		if (relx < 0)
+			usex = hy;
+		
+		// Otherwise from the left
+		else
+			usex = hx - TILE_SIZE;
 		
 		// Use that instead
-		//entity->x = usex;
+		entity->x = usex;
 	}
 	
 	// If standing on the ground, stand on it completely
