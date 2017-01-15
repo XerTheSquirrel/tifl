@@ -60,6 +60,21 @@ void DrawSolid(uint32_t* pixels, int color, int x, int y, int w, int h)
 	uint32_t* pp;
 	int ey, i;
 	
+	// Off the left side?
+	if (x < 0)
+	{
+		w = (w + x);
+		x = 0;
+	}
+	
+	// Off the right side?
+	else if (x + w >= BASIC_SCREEN_WIDTH)
+		w = BASIC_SCREEN_WIDTH - x;
+	
+	// Nothing to draw?
+	if (w <= 0)
+		return;
+	
 	for (ey = y + h; y < ey; y++)
 	{
 		pp = &pixels[(y * BASIC_SCREEN_WIDTH) + x];
@@ -72,7 +87,7 @@ void DrawSolid(uint32_t* pixels, int color, int x, int y, int w, int h)
 void DrawLevel(uint32_t* pixels)
 {
 	fixedtype vx, ve, xi;
-	int x, y, bx, by, i;
+	int x, y, bx, by, i, color;
 	LevelTile* tile;
 	Entity* entity;
 	const TileInfo* tinfo;
@@ -119,7 +134,13 @@ void DrawLevel(uint32_t* pixels)
 			tile = &leveldata[x][y];
 			tinfo = &tileinfo[tile->type];
 			
-			DrawSolid(pixels, tinfo->color, bx, by, TILE_SIZE, TILE_SIZE);
+			// Lighten slightly for some tiles
+			color = tinfo->color;
+			if ((x + y) & 1)
+				color |= 0x0F0F0F;
+			
+			// Draw tile
+			DrawSolid(pixels, color, bx, by, TILE_SIZE, TILE_SIZE);
 		}
 	}
 	

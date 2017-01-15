@@ -13,6 +13,9 @@
 #include "level.h"
 #include "entity.h"
 
+/** The maximum number of holes in the level. */
+#define MAX_LEVEL_HOLES (LEVEL_WIDTH - 8)
+
 LevelTile leveldata[LEVEL_WIDTH][LEVEL_HEIGHT];
 
 int currentlevelnum;
@@ -26,7 +29,7 @@ const TileInfo tileinfo[NUM_TILETYPES] =
 	
 	// Grass
 	{
-		0x00FF00
+		0x22DD66
 	}
 };
 
@@ -62,7 +65,7 @@ void InternalRespawnPlayer(Entity* oldplayer)
 
 void InitializeLevel(int levelnum)
 {
-	int x;
+	int x, i, n, absln, q, v;
 	Entity oldplayer;
 	
 	// Remember the old player information
@@ -78,10 +81,36 @@ void InitializeLevel(int levelnum)
 	
 	// Set new level number
 	currentlevelnum = levelnum;
+	if (levelnum < 0)
+		absln = -levelnum;
+	else
+		absln = levelnum;
 	
-	// Add floor to the level
+	// Add base floor to the level
 	for (x = 0; x < LEVEL_WIDTH; x++)
 		leveldata[x][0].type = TILETYPE_GRASS;
+	
+	// Cut holes in the floor
+	n = ((absln / 2) & 0xF);
+	if (n > MAX_LEVEL_HOLES)
+		n = MAX_LEVEL_HOLES;
+	else if (n < 8)
+		n = 8;
+	q = (n * levelnum) + absln;
+	if (q < 0)
+		q = -q;
+	while (n > 0)
+	{
+		// Remove count
+		n--;
+		
+		// Determine where to place the hole
+		x = 4 + (q % (LEVEL_WIDTH - 4));
+		q *= ((x & 1) == 0) ? 37 : 31;
+		
+		// Clear it out
+		leveldata[x][0].type = TILETYPE_AIR;
+	}
 	
 	// Spawn furries
 	
