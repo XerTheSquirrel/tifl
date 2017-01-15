@@ -15,6 +15,8 @@
 
 #include "player1.xpm"
 #include "player2.xpm"
+#include "zap1.xpm"
+#include "zap2.xpm"
 
 /** Global entity data. */
 Entity entities[MAX_ENTITIES];
@@ -33,7 +35,17 @@ EntityInfo entityinfo[NUM_ENTITYTYPES] =
 		{
 			player1_xpm,
 			player2_xpm
-		}
+		},
+		true
+	},
+	
+	// Anthrobolt
+	{
+		{
+			zap1_xpm,
+			zap2_xpm
+		},
+		false
 	}
 };
 
@@ -238,6 +250,10 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 			entity->angle = FACETYPE_LEFT;
 	}
 	
+	// If this is an impulse and it is stunned, do nothing
+	if (impulse && entity->stun)
+		return;
+	
 	// Entity position
 	px = entity->x;
 	py = entity->y;
@@ -381,5 +397,18 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	
 	// If standing on the ground, stand on it completely
 	entity->y = (onground && rely <= 0 ? groundy : newy);
+}
+
+Entity* BlankEntity()
+{
+	int i;
+	
+	// Find the next empty entity
+	for (i = 0; MAX_ENTITIES; i++)
+		if (entities[i].type == ENTITYTYPE_NOTHING)
+			return &entities[i];
+	
+	// None found
+	return NULL;
 }
 

@@ -27,6 +27,9 @@ typedef enum EntityType
 	/** The player. */
 	ENTITYTYPE_PLAYER,
 	
+	/** Player attack. */
+	ENTITYTYPE_ANTHROBOLT,
+	
 	/** The number of entity types. */
 	NUM_ENTITYTYPES
 } EntityType;
@@ -57,6 +60,9 @@ typedef struct EntityInfo
 {
 	/** XPM images. */
 	char** xpm[2];
+	
+	/** Is this thing affected by gravity? */
+	boolean feelsgravity;
 
 	/** Raw pixel data. */
 	uint32_t pixels[2][TILE_SIZE * TILE_SIZE];
@@ -77,6 +83,9 @@ typedef struct Entity
 	
 	/** The angle the entity is facing. */
 	facetype angle;
+	
+	/** Impulse stun time. */
+	int32_t stun;
 } Entity;
 
 /** Maximum number of entities. */
@@ -110,6 +119,14 @@ void LoadSprites();
  */
 void WalkEntity(Entity* entity, int32_t relx, int32_t rely,
 	boolean impulse);
+
+/**
+ * Returns a blank entity.
+ *
+ * @return The blank entity or {@code NULL} if none remain.
+ * @since 2017/01/15
+ */
+Entity* BlankEntity();
 
 #endif
 

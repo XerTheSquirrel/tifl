@@ -34,6 +34,12 @@
 /** Gravity force. */
 #define GRAVITY_FORCE 8
 
+/** The sped the anthrobolt moves at. */
+#define ANTHROBOLT_SPEED 16
+
+/** The number of frames to be stunned after firing the anthrogun. */
+#define ANTHROGUN_PLAYER_STUN 3
+
 void Die(const char* format, ...)
 {
 #define DIE_SIZE 512
@@ -50,6 +56,94 @@ void Die(const char* format, ...)
 	fprintf(stderr, "%s\n", format);
 	abort();
 #undef DIE_SIZE
+}
+
+static void RunEntities()
+{
+	int i;
+	Entity* entity;
+	EntityInfo* info;
+	
+	for (i = 0; i < MAX_ENTITIES; i++)
+	{
+		entity = &entities[i];
+		
+		// Ignore nothing
+		if (entity->type == ENTITYTYPE_NOTHING)
+			continue;
+		
+		// Get into
+		info = &entityinfo[entity->type];
+		
+		// Decrease stun, if stunned
+		if (entity->stun > 0)
+			entity->stun--;
+		
+		// Push down if it feels gravity
+		if (info->feelsgravity)
+			WalkEntity(&entities[i], 0, -GRAVITY_FORCE, false);
+		
+		// Non-player actions
+		if (entity != playerentity)
+		{
+			// Remove if it falls off the level
+			if (entity->x < 0 || entity->x >= LEVEL_WIDTH_PIXELS ||
+				entity->y < -TILE_SIZE || entity->y >= LEVEL_HEIGHT)
+			{
+				entity->type = ENTITYTYPE_NOTHING;
+				continue;
+			}
+			
+			// Run AI action for it
+			switch (entity->type)
+			{
+					// Anthrobolt, continues moving in the direction it is
+					// facing
+				case ENTITYTYPE_ANTHROBOLT:
+					WalkEntity(entity, (entity->angle == FACETYPE_RIGHT ?
+						ANTHROBOLT_SPEED : -ANTHROBOLT_SPEED), 0, false);
+					break;
+				
+					// Unknown, do nothing
+				default:
+					break;
+			}
+		}
+	}
+}
+
+static void SpawnPlayerAttack()
+{
+	Entity* entity;
+	
+	// Do not attack if dead
+	if (playerentity == NULL)
+		return;
+	
+	// If the player is stunned, cannot fire
+	if (playerentity->stun > 0)
+		return;
+	
+	// Get next entity to use, if possible
+	entity = BlankEntity();
+	if (entity == NULL)
+		return;
+	
+	// Set information
+	entity->type = ENTITYTYPE_ANTHROBOLT;
+	
+	// The bolt is aimed at the same angle as the player and spawns right
+	// in front of them
+	entity->angle = playerentity->angle;
+	entity->y = playerentity->y;
+	if (entity->angle == FACETYPE_RIGHT)
+		entity->x = playerentity->x + TILE_SIZE;
+	else
+		entity->x = playerentity->x - TILE_SIZE;
+	
+	// Stun the player for a bit to prevent super rapid fire and movement
+	// when firing
+	playerentity->stun = ANTHROGUN_PLAYER_STUN;
 }
 
 /**
@@ -94,18 +188,19 @@ void loop()
 			// Rocket
 			if (gamekeydown[EVENTTYPE_ROCKET])
 				if (playerentity->y >= WEAK_ROCKET_BOOST_HEIGHT)
-					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_BARE, false);
+					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_BARE, true);
 				else if (playerentity->y >= HALF_LEVEL_HEIGHT_PIXELS)
-					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_WEAK, false);
+					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_WEAK, true);
 				else
-					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED, false);
+					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED, true);
+			
+			// Attack
+			if (gamekeydown[EVENTTYPE_ATTACK])
+				SpawnPlayerAttack();
 		}
 		
-		// Push all entities down due to gravity
-		for (i = 0; i < MAX_ENTITIES; i++)
-			if (entities[i].type != ENTITYTYPE_NOTHING)
-				if (true)
-					WalkEntity(&entities[i], 0, -GRAVITY_FORCE, false);
+		// Interact with all entities
+		RunEntities();
 		
 		// Player feel off the screen on the bottom, so respawn them
 		if (playerentity != NULL && playerentity->y < -(TILE_SIZE * 4))
