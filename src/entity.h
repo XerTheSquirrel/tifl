@@ -86,6 +86,9 @@ typedef struct Entity
 	
 	/** Impulse stun time. */
 	int32_t stun;
+	
+	/** Amount of pain the object is in. */
+	int32_t pain;
 } Entity;
 
 /** Maximum number of entities. */

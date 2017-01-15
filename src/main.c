@@ -80,7 +80,8 @@ static void RunEntities()
 			entity->stun--;
 		
 		// Push down if it feels gravity
-		if (info->feelsgravity)
+		// Or if it is stunned, it cannot fly properly
+		if (info->feelsgravity || entity->stun)
 			WalkEntity(&entities[i], 0, -GRAVITY_FORCE, false);
 		
 		// Non-player actions

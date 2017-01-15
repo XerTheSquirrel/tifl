@@ -18,6 +18,9 @@
 #include "zap1.xpm"
 #include "zap2.xpm"
 
+/** How long the anthrogun stuns for. */
+#define ANTHROGUN_HITSTUN 2
+
 /** Global entity data. */
 Entity entities[MAX_ENTITIES];
 
@@ -232,14 +235,78 @@ static void TraceLine(int x1, int y1, int x2, int y2, LevelTile** hitx,
 	}
 }
 
+/**
+ * Called when an entity hits another entity or a tie.
+ *
+ * @param source The source object.
+ * @param hitentity The entity that was hit, may be {@code NULL}.
+ * @param hittile The hit tile, may be {@code NULL}.
+ * @param tx The X position of the tile.
+ * @param ty The y position of the tile.
+ * @since 2017/01/15
+ */
+void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
+	int32_t tx, int32_t ty)
+{
+	int32_t xx, yy;
+	
+	// Depends on the type
+	switch (source->type)
+	{
+			// Anthrobolt
+		case ENTITYTYPE_ANTHROBOLT:
+			// Remove bolt
+			source->type = ENTITYTYPE_NOTHING;
+			
+			// Stun, deferal, and bump object
+			if (hitentity != NULL && hitentity == playerentity)
+			{
+				// Hit bolt where the entity is
+				xx = hitentity->x;
+				yy = source->y;
+				
+				// Never replace a longer stun
+				if (hitentity->stun < ANTHROGUN_HITSTUN)
+					hitentity->stun = ANTHROGUN_HITSTUN;
+				
+				// Increase the object's pain
+				hitentity->pain++;
+				
+				// Push the object
+				WalkEntity(hitentity, (source->angle == FACETYPE_RIGHT ?
+					TILE_SIZE : -TILE_SIZE), 0, false);
+			}
+			
+			// If it hit a tile, destroy it
+			if (hittile)
+			{
+				xx = tx * TILE_SIZE;
+				yy = ty * TILE_SIZE;
+			}
+			
+			// Spawn an explosion
+			break;
+		
+			// Unknown
+		default:
+			break;
+	}
+}
+
 void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 {
-	int32_t px, py, groundy, downy, newx, newy, movx, usex;
+	int32_t px, py, groundy, downy, newx, newy, movx, usex, di, dx, dy, i, hx,
+		hy, hittx, hitty;
 	LevelTile* lground, *rground;
 	LevelTile* lohit, *hihit, *check, *ramwall;
 	boolean onground, leftgsolid, rightgsolid, cliffside;
 	TileInfo* tinfo;
-	int di, dx, dy, i, hx, hy;
+	LevelTile* hitsometile = NULL;
+	Entity* hitsomeentity = NULL;
+	
+	// If this is an impulse and it is stunned, do nothing
+	if (impulse && entity->stun)
+		return;
 	
 	// If impulse, change facing direction
 	if (impulse && relx != 0)
@@ -249,10 +316,6 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 		else if (relx < 0)
 			entity->angle = FACETYPE_LEFT;
 	}
-	
-	// If this is an impulse and it is stunned, do nothing
-	if (impulse && entity->stun)
-		return;
 	
 	// Entity position
 	px = entity->x;
@@ -326,6 +389,11 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 		
 			// Do not go past it
 			newy = (dy - 1) * TILE_SIZE;
+			
+			// Report that it was hit
+			hitsometile = ramwall;
+			hittx = di % LEVEL_WIDTH;
+			hitty = dy;
 		}
 	}
 	
@@ -392,11 +460,20 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 		
 			// Use that instead
 			entity->x = usex;
+			
+			// Report that it was hit
+			hitsometile = ramwall;
+			hittx = dx;
+			hitty = di / LEVEL_WIDTH;
 		}
 	}
 	
 	// If standing on the ground, stand on it completely
 	entity->y = (onground && rely <= 0 ? groundy : newy);
+	
+	// Register a single hit only
+	if (hitsometile != NULL || hitsomeentity != NULL)
+		HitSomething(entity, hitsomeentity, hitsometile, hittx, hitty);
 }
 
 Entity* BlankEntity()
