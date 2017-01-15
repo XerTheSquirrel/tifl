@@ -73,15 +73,15 @@ void loop()
 		{
 			// Walk left
 			if (gamekeydown[EVENTTYPE_WALK_LEFT])
-				WalkEntity(playerentity, -PLAYER_MOVE_SPEED, 0);
+				WalkEntity(playerentity, -PLAYER_MOVE_SPEED, 0, true);
 				
 			// Walk right
 			if (gamekeydown[EVENTTYPE_WALK_RIGHT])
-				WalkEntity(playerentity, PLAYER_MOVE_SPEED, 0);
+				WalkEntity(playerentity, PLAYER_MOVE_SPEED, 0, true);
 			
 			// Jump
 			if (gamekeydown[EVENTTYPE_JUMP])
-				WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED);
+				WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED, true);
 		}
 		
 		// Mark end

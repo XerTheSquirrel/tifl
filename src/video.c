@@ -55,6 +55,20 @@ int VideoInit(void)
 	return 0;
 }
 
+void DrawSolid(uint32_t* pixels, int color, int x, int y, int w, int h)
+{
+	uint32_t* pp;
+	int ey, i;
+	
+	for (ey = y + h; y < ey; y++)
+	{
+		pp = &pixels[(y * BASIC_SCREEN_WIDTH) + x];
+		
+		for (i = 0; i < w; i++)
+			*(pp++) = color;
+	}
+}
+
 void DrawLevel(uint32_t* pixels)
 {
 	fixedtype vx, ve, xi;
@@ -105,7 +119,7 @@ void DrawLevel(uint32_t* pixels)
 			tile = &leveldata[x][y];
 			tinfo = &tileinfo[tile->type];
 			
-			pixels[(by * BASIC_SCREEN_WIDTH) + bx] = tinfo->color;
+			DrawSolid(pixels, tinfo->color, bx, by, TILE_SIZE, TILE_SIZE);
 		}
 	}
 	
@@ -123,7 +137,7 @@ void DrawLevel(uint32_t* pixels)
 		by = BASIC_SCREEN_HEIGHT - (entity->y >> FIXEDSHIFT);
 		
 		// Draw it
-		pixels[(by * BASIC_SCREEN_WIDTH) + bx] = 0xFF000;
+		DrawSolid(pixels, 0xFF0000, bx, by, TILE_SIZE, TILE_SIZE);
 	}
 }
 
