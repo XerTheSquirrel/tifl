@@ -58,14 +58,10 @@ const TileInfo tileinfo[NUM_TILETYPES] =
 
 void InternalRespawnPlayer(Entity* oldplayer)
 {
+	int groundy;
+	
 	// Always use the last entity for the player
 	playerentity = &entities[MAX_ENTITIES - 1];
-	
-	// Keep the old player Y height, assuming it is safe to do so
-	if (oldplayer == NULL || oldplayer->y <= TILE_SIZE)
-		playerentity->y = TILE_SIZE;
-	else
-		playerentity->y = oldplayer->y;
 	
 	// Start in the center of level zero
 	if (currentlevelnum == 0 && currentlevelnum == lastlevelnum)
@@ -87,6 +83,13 @@ void InternalRespawnPlayer(Entity* oldplayer)
 		playerentity->x = RIGHT_SIDE_TRANSITION - TILE_SIZE;
 		playerentity->angle = FACETYPE_LEFT;
 	}
+	
+	// Keep the player height, but never place underground
+	groundy = GroundHeight(playerentity->x);
+	if (oldplayer == NULL || oldplayer->y <= groundy)
+		playerentity->y = groundy;
+	else
+		playerentity->y = oldplayer->y;
 	
 	// Set player type
 	playerentity->type = ENTITYTYPE_PLAYER;
@@ -204,5 +207,23 @@ void InitializeLevel(int levelnum)
 void RespawnPlayer()
 {
 	InternalRespawnPlayer(NULL);
+}
+
+int32_t GroundHeight(int32_t x)
+{
+	int y;
+	
+	// No ground possible.
+	x /= TILE_SIZE;
+	if (x < 0 || x >= LEVEL_WIDTH)
+		return -1;
+	
+	// Find ground
+	for (y = LEVEL_HEIGHT - 1; y >= 0; y--)
+		if (tileinfo[leveldata[(y * LEVEL_WIDTH) + x].type].issolid)
+			return (y + 1) * TILE_SIZE;
+	
+	// No ground
+	return -1;
 }
 

@@ -119,5 +119,14 @@ void InitializeLevel(int levelnum);
  */
 void RespawnPlayer();
 
+/**
+ * Returns the height of the ground at the given coordinate.
+ *
+ * @param The coordinate to get the ground height for, a negative value is
+ * returned if there is no ground.
+ * @since 2017/01/15
+ */
+int32_t GroundHeight(int32_t x);
+
 #endif
 
