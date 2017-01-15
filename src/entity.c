@@ -121,7 +121,7 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	int32_t px, py, groundy, downy, newx, newy, movx, usex;
 	LevelTile* lground, *rground;
 	LevelTile* lohit, *hihit, *check, *ramwall;
-	boolean onground;
+	boolean onground, leftgsolid, rightgsolid, cliffside;
 	TileInfo* tinfo;
 	int di, dx, dy, i, hx, hy;
 	
@@ -144,8 +144,16 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	TraceLine(px, py, px, py - downy, NULL, &lground);
 	TraceLine(px + (TILE_SIZE - 1), py, px + (TILE_SIZE - 1), py - downy, NULL,
 		&rground);
-	onground = ((lground != NULL && tileinfo[lground->type].issolid) ||
-		(rground != NULL && tileinfo[rground->type].issolid));
+	
+	// Either side can be solid
+	leftgsolid = (lground != NULL && tileinfo[lground->type].issolid);
+	rightgsolid	= (rground != NULL && tileinfo[rground->type].issolid);
+	
+	// On ground if either a solid
+	onground = leftgsolid || rightgsolid;
+	
+	// But could be on the edge of a cliff
+	cliffside = (leftgsolid != rightgsolid);
 	
 	// The height of the ground that is being stood on
 	groundy = -1;
@@ -158,7 +166,8 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 		rely = 0;
 	
 	// If not on the ground make left/right movement weaker
-	if (!onground && impulse)
+	// Or at the edge of a cliff
+	if ((!onground || cliffside) && impulse)
 		relx /= 2;
 	
 	// Trace line to determine if a wall is hit in this direction
