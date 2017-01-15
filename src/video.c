@@ -58,8 +58,10 @@ int VideoInit(void)
 void DrawLevel(uint32_t* pixels)
 {
 	fixedtype vx, ve, xi;
-	int x, y, bx, by;
+	int x, y, bx, by, i;
 	LevelTile* tile;
+	Entity* entity;
+	const TileInfo* tinfo;
 	
 	// Draw nothing if there is no player
 	if (playerentity == NULL)
@@ -101,9 +103,27 @@ void DrawLevel(uint32_t* pixels)
 		for (y = 0; y < LEVEL_HEIGHT; y++, by -= TILE_SIZE)
 		{
 			tile = &leveldata[x][y];
+			tinfo = &tileinfo[tile->type];
 			
-			pixels[(by * BASIC_SCREEN_WIDTH) + bx] = 0x00FF00;
+			pixels[(by * BASIC_SCREEN_WIDTH) + bx] = tinfo->color;
 		}
+	}
+	
+	// Draw entities
+	for (i = 0; i < MAX_ENTITIES; i++)
+	{
+		entity = &entities[i];
+		
+		// Ignore nothing
+		if (entity->type == ENTITYTYPE_NOTHING)
+			continue;
+		
+		// Determine draw position of the entity
+		bx = (entity->x - vx) >> FIXEDSHIFT;
+		by = BASIC_SCREEN_HEIGHT - (entity->y >> FIXEDSHIFT);
+		
+		// Draw it
+		pixels[(by * BASIC_SCREEN_WIDTH) + bx] = 0xFF000;
 	}
 }
 

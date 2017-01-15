@@ -65,7 +65,7 @@ typedef struct Entity
 } Entity;
 
 /** Maximum number of entities. */
-#define MAX_ENTITIES 128
+#define MAX_ENTITIES 64
 
 /** Global entity data. */
 extern Entity entities[MAX_ENTITIES];

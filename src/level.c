@@ -17,10 +17,23 @@ LevelTile leveldata[LEVEL_WIDTH][LEVEL_HEIGHT];
 
 int currentlevelnum;
 
+const TileInfo tileinfo[NUM_TILETYPES] =
+{
+	// Air
+	{
+		0x8888DD
+	},
+	
+	// Grass
+	{
+		0x00FF00
+	}
+};
+
 void InternalRespawnPlayer(Entity* oldplayer)
 {
 	// Always use the last entity for the player
-	playerentity = &entities[MAX_ENTITIES] - 1;
+	playerentity = &entities[MAX_ENTITIES - 1];
 	
 	// Keep the old player Y height, assuming it is safe to do so
 	if (oldplayer == NULL || oldplayer->y <= FIXED_TILE_SIZE)

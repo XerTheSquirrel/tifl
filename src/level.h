@@ -65,6 +65,20 @@ typedef struct LevelTile
 	TileType type;
 } LevelTile;
 
+/**
+ * Tile information structure.
+ *
+ * @since 2017/01/14
+ */
+typedef struct TileInfo
+{
+	/** Basic color used. */
+	uint32_t color;
+} TileInfo;
+
+/** Tile information. */
+extern const TileInfo tileinfo[NUM_TILETYPES];
+
 /** Tiles within the level. */
 extern LevelTile leveldata[LEVEL_WIDTH][LEVEL_HEIGHT];
 
