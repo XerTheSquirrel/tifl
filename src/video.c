@@ -286,7 +286,7 @@ void PumpEvents()
 					case SDLK_UP:
 					case SDLK_SPACE:
 					case SDLK_w:
-						eventtype = EVENTTYPE_JUMP;
+						eventtype = EVENTTYPE_ROCKET;
 						break;
 						
 						// Attack

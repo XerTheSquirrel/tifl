@@ -30,8 +30,8 @@ typedef enum EventType
 	/** Walk right. */
 	EVENTTYPE_WALK_RIGHT,
 	
-	/** Jump. */
-	EVENTTYPE_JUMP,
+	/** Rocket booster. */
+	EVENTTYPE_ROCKET,
 	
 	/** Attack. */
 	EVENTTYPE_ATTACK,

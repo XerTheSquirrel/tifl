@@ -28,6 +28,13 @@
 /** The height of levels. */
 #define LEVEL_HEIGHT 15
 
+/** Half the height in pixels. */
+#define HALF_LEVEL_HEIGHT_PIXELS ((LEVEL_HEIGHT * TILE_SIZE) / 2)
+
+/** The height at which the rocket boost is not as great. */
+#define WEAK_ROCKET_BOOST_HEIGHT (HALF_LEVEL_HEIGHT_PIXELS + \
+	(HALF_LEVEL_HEIGHT_PIXELS / 2))
+
 /** Height of the level in pixels. */
 #define LEVEL_HEIGHT_PIXELS (LEVEL_HEIGHT * TILE_SIZE)
 

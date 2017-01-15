@@ -22,10 +22,16 @@
 #define PLAYER_MOVE_SPEED 8
 
 /** The player jump height. */
-#define PLAYER_JUMP_SPEED (PLAYER_MOVE_SPEED * 2)
+#define PLAYER_JUMP_SPEED (GRAVITY_FORCE * 2)
+
+/** Weaker rocket blast. */
+#define PLAYER_JUMP_SPEED_WEAK ((GRAVITY_FORCE * 2) - (GRAVITY_FORCE / 4))
+
+/** Very weak. */
+#define PLAYER_JUMP_SPEED_BARE (GRAVITY_FORCE + 1)
 
 /** Gravity force. */
-#define GRAVITY_FORCE 12
+#define GRAVITY_FORCE 8
 
 void Die(const char* format, ...)
 {
@@ -84,9 +90,14 @@ void loop()
 			if (gamekeydown[EVENTTYPE_WALK_RIGHT])
 				WalkEntity(playerentity, PLAYER_MOVE_SPEED, 0, true);
 			
-			// Jump
-			if (gamekeydown[EVENTTYPE_JUMP])
-				WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED, false);
+			// Rocket
+			if (gamekeydown[EVENTTYPE_ROCKET])
+				if (playerentity->y >= WEAK_ROCKET_BOOST_HEIGHT)
+					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_BARE, false);
+				else if (playerentity->y >= HALF_LEVEL_HEIGHT_PIXELS)
+					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_WEAK, false);
+				else
+					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED, false);
 		}
 		
 		// Push all entities down due to gravity
