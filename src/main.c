@@ -19,7 +19,7 @@
 #include "entity.h"
 
 /** The speed the player moves at. */
-#define PLAYER_MOVE_SPEED 52428
+#define PLAYER_MOVE_SPEED 209712
 
 /** The player jump height. */
 #define PLAYER_JUMP_SPEED (PLAYER_MOVE_SPEED * 4)
