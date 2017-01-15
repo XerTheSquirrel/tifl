@@ -122,7 +122,7 @@ void DrawLevel(uint32_t* pixels)
 	for (xi = vx; xi < ve; xi += FIXED_TILE_SIZE)
 	{
 		// Actual X tile to draw
-		x = (xi >> FIXEDSHIFT) / TILE_SIZE;
+		x = FixedDiv(xi, FIXED_TILE_SIZE) >> FIXEDSHIFT;
 		
 		// Brush here
 		bx = (xi - vx) >> FIXEDSHIFT;
@@ -156,6 +156,11 @@ void DrawLevel(uint32_t* pixels)
 		// Determine draw position of the entity
 		bx = (entity->x - vx) >> FIXEDSHIFT;
 		by = BASIC_SCREEN_HEIGHT - ((entity->y >> FIXEDSHIFT) + TILE_SIZE);
+		
+		// Off the screen?
+		if (bx <= -TILE_SIZE || by <= -TILE_SIZE ||
+			bx > BASIC_SCREEN_WIDTH || by > BASIC_SCREEN_HEIGHT)
+			continue;
 		
 		// Draw it
 		DrawSolid(pixels, 0xFF0000, bx, by, TILE_SIZE, TILE_SIZE);
