@@ -130,7 +130,7 @@ void DrawLevel(uint32_t* pixels)
 		// Draw column
 		for (y = 0; y < LEVEL_HEIGHT; y++, by -= TILE_SIZE)
 		{
-			tile = &leveldata[x][y];
+			tile = &leveldata[(y * LEVEL_WIDTH) + x];
 			tinfo = &tileinfo[tile->type];
 			
 			// Lighten slightly for some tiles

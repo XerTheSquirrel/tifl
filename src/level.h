@@ -93,7 +93,7 @@ typedef struct TileInfo
 extern const TileInfo tileinfo[NUM_TILETYPES];
 
 /** Tiles within the level. */
-extern LevelTile leveldata[LEVEL_WIDTH][LEVEL_HEIGHT];
+extern LevelTile leveldata[LEVEL_WIDTH * LEVEL_HEIGHT];
 
 /** The current level number. */
 extern int currentlevelnum;

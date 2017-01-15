@@ -60,10 +60,10 @@ static void TraceLine(int x1, int y1, int x2, int y2, LevelTile** hitx,
 		for (at = x1 / TILE_SIZE;; at += vect)
 		{
 			// Out of bounds?
-			if (at >= 0 && at < LEVEL_HEIGHT)
+			if (at >= 0 && at < LEVEL_WIDTH && y >= 0 && y < LEVEL_HEIGHT)
 			{
 				// Get into
-				checktile = &leveldata[at][y];
+				checktile = &leveldata[(y * LEVEL_WIDTH) + at];
 				tinfo = &tileinfo[checktile->type];
 	
 				// Solid tile, stop
@@ -95,10 +95,10 @@ static void TraceLine(int x1, int y1, int x2, int y2, LevelTile** hitx,
 		for (at = y1 / TILE_SIZE;; at += vect)
 		{
 			// Must be in bounds
-			if (at >= 0 && at < LEVEL_HEIGHT)
+			if (at >= 0 && at < LEVEL_HEIGHT && y >= 0 && y < LEVEL_HEIGHT)
 			{
 				// Get into
-				checktile = &leveldata[x][at];
+				checktile = &leveldata[(at * LEVEL_WIDTH) + x];
 				tinfo = &tileinfo[checktile->type];
 		
 				// Solid tile, stop

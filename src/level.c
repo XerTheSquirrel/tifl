@@ -16,7 +16,7 @@
 /** The maximum number of holes in the level. */
 #define MAX_LEVEL_HOLES ((LEVEL_WIDTH - 8) / 4)
 
-LevelTile leveldata[LEVEL_WIDTH][LEVEL_HEIGHT];
+LevelTile leveldata[LEVEL_WIDTH * LEVEL_HEIGHT];
 
 int currentlevelnum = 0;
 
@@ -99,7 +99,7 @@ void InitializeLevel(int levelnum)
 	
 	// Add base floor to the level
 	for (x = 0; x < LEVEL_WIDTH; x++)
-		leveldata[x][0].type = TILETYPE_GRASS;
+		leveldata[x].type = TILETYPE_GRASS;
 	
 	// Cut holes in the floor
 	n = ((absln / 2) & 0xF);
@@ -125,15 +125,15 @@ void InitializeLevel(int levelnum)
 		for (;;)
 		{
 			// Fill the level with more gaps
-			if (leveldata[x][0].type == TILETYPE_AIR)
+			if (leveldata[x].type == TILETYPE_AIR)
 				if ((++x) < (LEVEL_WIDTH - 4))
 					continue;
 				else
 					break;
 			
 			// Make air
-			leveldata[x][0].type = TILETYPE_AIR;
-			leveldata[x + 1][0].type = TILETYPE_AIR;
+			leveldata[x].type = TILETYPE_AIR;
+			leveldata[x + 1].type = TILETYPE_AIR;
 			break;
 		}
 	}
