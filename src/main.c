@@ -137,9 +137,9 @@ static void SpawnPlayerAttack()
 	entity->angle = playerentity->angle;
 	entity->y = playerentity->y;
 	if (entity->angle == FACETYPE_RIGHT)
-		entity->x = playerentity->x + TILE_SIZE;
+		entity->x = playerentity->x + (TILE_SIZE / 4);
 	else
-		entity->x = playerentity->x - TILE_SIZE;
+		entity->x = playerentity->x - (TILE_SIZE / 4);
 	
 	// Stun the player for a bit to prevent super rapid fire and movement
 	// when firing
