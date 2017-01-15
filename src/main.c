@@ -132,6 +132,9 @@ void loop()
 		difference = MILLISECONDS_PER_FRAME - (leavetime - entertime);
 		if (difference > 0 && difference <= MILLISECONDS_PER_FRAME)
 			SDL_Delay(difference);
+		
+		// Frame up
+		currentframe++;
 	}
 }
 
@@ -157,6 +160,7 @@ int main(int argc, char** argv)
 	LoadSprites();
 	
 	// Setup level and respawn the player
+	currentframe = 0;
 	InitializeLevel(0);
 	RespawnPlayer();
 	

@@ -20,6 +20,9 @@
 #define HALF_SCREEN_WIDTH	160
 #define HALF_SCREEN_HEIGHT	120
 
+/** The current game frame. */
+extern int currentframe;
+
 /**
  * Initializes the video system.
  *
