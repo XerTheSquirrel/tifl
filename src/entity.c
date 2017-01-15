@@ -170,6 +170,42 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	if ((!onground || cliffside) && impulse)
 		relx /= 2;
 	
+	// Check if bumping head on a block
+	if (rely > 0)
+	{
+		// Trace up
+		TraceLine(px, py, px, py + (TILE_SIZE + 1), NULL, &lohit);
+		TraceLine(px + (TILE_SIZE - 1), py, px + (TILE_SIZE - 1),
+			py + (TILE_SIZE + 1), NULL, &hihit);
+		
+		// Not bumped into
+		if (lohit == NULL && hihit == NULL)
+			newy = py + rely;
+		else
+		{
+			// Hit lower
+			if (lohit != NULL)
+				ramwall = lohit;
+		
+			// Hit higher
+			else
+				ramwall = hihit;
+		
+			// Get position of the block
+			di = ramwall - leveldata;
+			dy = (di / LEVEL_WIDTH);
+		
+			// Do not go past it
+			newy = dy * (TILE_SIZE - 1);
+			
+			fprintf(stderr, "Bumped %d\n", newy);
+		}
+	}
+	
+	// Not going up
+	else
+		newy = py + rely;
+	
 	// Trace line to determine if a wall is hit in this direction
 	newx = px + relx;
 	movx = (relx < 0 ? newx : newx + (TILE_SIZE - 1));
@@ -211,7 +247,6 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 		// Get position of 
 		di = ramwall - leveldata;
 		dx = (di % LEVEL_WIDTH);
-		dy = (di / LEVEL_WIDTH);
 		
 		// Pixel positions of the block
 		hx = dx * TILE_SIZE;
@@ -230,7 +265,6 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	}
 	
 	// If standing on the ground, stand on it completely
-	newy = py + rely;
 	entity->y = (onground && rely <= 0 ? groundy : newy);
 }
 
