@@ -155,13 +155,19 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	// Trace line to determine if a wall is hit in this direction
 	newx = px + relx;
 	movx = (relx < 0 ? newx : newx + (TILE_SIZE - 1));
-	TraceLine(px, py, px + movx, py, &lohit, NULL);
-	TraceLine(px, py + (TILE_SIZE - 1), px + movx, py + (TILE_SIZE - 1),
+	TraceLine(px, py, movx, py, &lohit, NULL);
+	TraceLine(px, py + (TILE_SIZE - 1), movx, py + (TILE_SIZE - 1),
 		&hihit, NULL);
 	
 	// Move if not bumped into it
 	if (lohit == NULL && hihit == NULL)
 		entity->x = newx;
+	
+	// Otherwise do not run into the wall
+	else
+	{
+		
+	}
 	
 	// If standing on the ground, stand on it completely
 	newy = py + rely;

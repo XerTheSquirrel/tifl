@@ -60,6 +60,9 @@ typedef enum TileType
 	/** Grass. */
 	TILETYPE_GRASS,
 	
+	/** Wood. */
+	TILETYPE_WOOD,
+	
 	/** The number of tiles used. */
 	NUM_TILETYPES,
 } TileType;

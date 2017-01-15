@@ -17,6 +17,7 @@
 #include "video.h"
 #include "level.h"
 #include "entity.h"
+#include "random.h"
 
 /** The speed the player moves at. */
 #define PLAYER_MOVE_SPEED 8

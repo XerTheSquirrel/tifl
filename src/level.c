@@ -12,6 +12,7 @@
 
 #include "level.h"
 #include "entity.h"
+#include "random.h"
 
 /** The maximum number of holes in the level. */
 #define MAX_LEVEL_HOLES ((LEVEL_WIDTH - 8) / 4)
@@ -33,6 +34,12 @@ const TileInfo tileinfo[NUM_TILETYPES] =
 	// Grass
 	{
 		0x22DD66,
+		true
+	},
+	
+	// Wood
+	{
+		0x66AA111,
 		true
 	}
 };
@@ -97,6 +104,9 @@ void InitializeLevel(int levelnum)
 	else
 		absln = levelnum;
 	
+	// Seed the RNG
+	SeedRandom(levelnum);
+	
 	// Add base floor to the level
 	for (x = 0; x < LEVEL_WIDTH; x++)
 		leveldata[x].type = TILETYPE_GRASS;
@@ -136,6 +146,12 @@ void InitializeLevel(int levelnum)
 			leveldata[x + 1].type = TILETYPE_AIR;
 			break;
 		}
+	}
+	
+	// Spawn wood over gaps
+	for (x = 0; x < LEVEL_WIDTH; x++)
+	{
+		
 	}
 	
 	// Spawn furries
