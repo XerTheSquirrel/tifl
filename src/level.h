@@ -14,7 +14,7 @@
 #include "global.h"
 
 /** The size of tiles. */
-#define TILE_SIZE 8
+#define TILE_SIZE 16
 
 /** The view width. */
 #define VIEW_WIDTH 40
@@ -23,7 +23,7 @@
 #define LEVEL_WIDTH (VIEW_WIDTH * 4)
 
 /** The height of levels. */
-#define LEVEL_HEIGHT 30
+#define LEVEL_HEIGHT 15
 
 /** Fixed point tile size. */
 #define FIXED_TILE_SIZE FIXED_C(TILE_SIZE)
