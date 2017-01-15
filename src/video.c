@@ -134,7 +134,7 @@ void DrawLevel(uint32_t* pixels)
 		
 		// Determine draw position of the entity
 		bx = (entity->x - vx) >> FIXEDSHIFT;
-		by = BASIC_SCREEN_HEIGHT - (entity->y >> FIXEDSHIFT);
+		by = BASIC_SCREEN_HEIGHT - ((entity->y >> FIXEDSHIFT) + TILE_SIZE);
 		
 		// Draw it
 		DrawSolid(pixels, 0xFF0000, bx, by, TILE_SIZE, TILE_SIZE);
