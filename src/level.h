@@ -17,7 +17,7 @@
 #define TILE_SIZE 16
 
 /** The view width. */
-#define VIEW_WIDTH 40
+#define VIEW_WIDTH 20
 
 /** The width of the level. */
 #define LEVEL_WIDTH (VIEW_WIDTH * 4)
