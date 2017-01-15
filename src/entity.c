@@ -120,7 +120,7 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 {
 	int32_t px, py, groundy, downy, newx, newy, movx, usex;
 	LevelTile* lground, *rground;
-	LevelTile* lohit, *hihit, *check;
+	LevelTile* lohit, *hihit, *check, *ramwall;
 	boolean onground;
 	TileInfo* tinfo;
 	int di, dx, dy, i, hx, hy;
@@ -167,49 +167,40 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	// Otherwise do not run into the wall
 	else
 	{
-		// Guessed placement
-		usex = newx;
-		
-		for (i = 0; i < 2; i++)
+		// Determine closer wall to ram into
+		if (lohit != NULL && hihit != NULL)
 		{
-			// Get hit block
-			check = (i == 0 ? lohit : hihit);
-			if (check == NULL)
-				continue;
+			// Get positions of both blocks
+			dx = ((lohit - leveldata) % LEVEL_WIDTH);
+			dy = ((hihit - leveldata) % LEVEL_WIDTH);
 			
-			// Determine position of the block
-			di = check - leveldata;
-			dx = (di % LEVEL_WIDTH);
-			dy = (di / LEVEL_WIDTH);
+			// If going left, use block with higher index
+			if (relx < 0)
+				ramwall = (dx > dy ? lohit : hihit);
 			
-			// Hit right side
-			if (relx < 0 && (dx * TILE_SIZE) < px)
-			{
-				fprintf(stderr, "Right di=%d dx=%d dy=%d newx=%d usex=%d\n", di, dx, dy, newx, usex);
-				
-				newx = (dx * (TILE_SIZE + 1));
-				
-				// Use if closer
-				if (newx > usex)
-					usex = newx;
-			}
-			
-			// Hit left side
-			else if (relx > 0)
-			{
-				fprintf(stderr, "Left di=%d dx=%d dy=%d newx=%d usex=%d\n", di, dx, dy, newx, usex);
-				
-				newx = (dx * (TILE_SIZE - 1));
-				
-				// Use if closer
-				if (newx < usex)
-					usex = newx;
-			}
-			
+			// Otherwise right uses lower index
+			else
+				ramwall = (dx < dy ? lohit : hihit);
 		}
 		
+		// Hit lower
+		else if (lohit != NULL)
+			ramwall = lohit;
+		
+		// Hit higher
+		else
+			ramwall = hihit;
+		
+		// Get position of 
+		di = ramwall - leveldata;
+		dx = (di % LEVEL_WIDTH);
+		dy = (di / LEVEL_WIDTH);
+		
+		fprintf(stderr, "Ram di=%d dx=%d dy=%d\n", di, dx, dy);
+		
+		
 		// Use that instead
-		entity->x = usex;
+		//entity->x = usex;
 	}
 	
 	// If standing on the ground, stand on it completely
