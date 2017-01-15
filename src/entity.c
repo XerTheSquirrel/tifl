@@ -183,8 +183,10 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 			dy = (di / LEVEL_WIDTH);
 			
 			// Hit right side
-			if ((dx * TILE_SIZE) < px)
+			if (relx < 0 && (dx * TILE_SIZE) < px)
 			{
+				fprintf(stderr, "Right di=%d dx=%d dy=%d newx=%d usex=%d\n", di, dx, dy, newx, usex);
+				
 				newx = (dx * (TILE_SIZE + 1));
 				
 				// Use if closer
@@ -193,14 +195,17 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 			}
 			
 			// Hit left side
-			else
+			else if (relx > 0)
 			{
+				fprintf(stderr, "Left di=%d dx=%d dy=%d newx=%d usex=%d\n", di, dx, dy, newx, usex);
+				
 				newx = (dx * (TILE_SIZE - 1));
 				
 				// Use if closer
 				if (newx < usex)
 					usex = newx;
 			}
+			
 		}
 		
 		// Use that instead

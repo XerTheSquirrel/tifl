@@ -99,6 +99,8 @@ void loop()
 					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED_WEAK, false);
 				else
 					WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED, false);
+			
+			fprintf(stderr, "px = %d\n", playerentity->x);
 		}
 		
 		// Push all entities down due to gravity
