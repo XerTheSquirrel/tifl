@@ -87,7 +87,8 @@ void DrawSolid(uint32_t* pixels, int color, int x, int y, int w, int h)
 	}
 }
 
-void DrawImageTile(uint32_t* pixels, uint32_t* src, int x, int y)
+void DrawImageTile(uint32_t* pixels, uint32_t* src, int x, int y,
+	facetype face)
 {
 	uint32_t* pp;
 	uint32_t* ss;
@@ -124,10 +125,16 @@ void DrawImageTile(uint32_t* pixels, uint32_t* src, int x, int y)
 			color = *(ss++);
 			
 			// Do not draw transparent areas
-			if (color != 0xFF00FF)
-				*pp = color;
+			if (color == 0xFF00FF)
+				continue;
 			
-			pp++;
+			// Unflipped
+			if (face == FACETYPE_RIGHT)
+				pp[i] = color;
+			
+			// Flipped
+			else
+				pp[(TILE_SIZE - 1) - i] = color;
 		}
 	}
 }
@@ -212,7 +219,7 @@ void DrawLevel(uint32_t* pixels)
 		// Draw it
 		DrawImageTile(pixels,
 			entityinfo[entity->type].pixels[(currentframe >> 2) & 1],
-			bx, by);
+			bx, by, entity->angle);
 	}
 }
 

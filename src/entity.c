@@ -229,6 +229,15 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	TileInfo* tinfo;
 	int di, dx, dy, i, hx, hy;
 	
+	// If impulse, change facing direction
+	if (impulse && relx != 0)
+	{
+		if (relx > 0)
+			entity->angle = FACETYPE_RIGHT;
+		else if (relx < 0)
+			entity->angle = FACETYPE_LEFT;
+	}
+	
 	// Entity position
 	px = entity->x;
 	py = entity->y;

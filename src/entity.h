@@ -38,11 +38,11 @@ typedef enum EntityType
  */
 typedef enum facetype
 {
-	/** Facing left. */
-	FACETYPE_LEFT,
-	
 	/** Facing right. */
 	FACETYPE_RIGHT,
+	
+	/** Facing left. */
+	FACETYPE_LEFT,
 	
 	/** The number of face types. */
 	NUM_FACETYPES
