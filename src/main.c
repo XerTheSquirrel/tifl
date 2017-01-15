@@ -88,7 +88,7 @@ static void RunEntities()
 		{
 			// Remove if it falls off the level
 			if (entity->x < 0 || entity->x >= LEVEL_WIDTH_PIXELS ||
-				entity->y < -TILE_SIZE || entity->y >= LEVEL_HEIGHT)
+				entity->y < -TILE_SIZE || entity->y >= LEVEL_HEIGHT_PIXELS)
 			{
 				entity->type = ENTITYTYPE_NOTHING;
 				continue;
