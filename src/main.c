@@ -19,10 +19,10 @@
 #include "entity.h"
 
 /** The speed the player moves at. */
-#define PLAYER_MOVE_SPEED 209712
+#define PLAYER_MOVE_SPEED 419424
 
 /** The player jump height. */
-#define PLAYER_JUMP_SPEED (PLAYER_MOVE_SPEED * 4)
+#define PLAYER_JUMP_SPEED (PLAYER_MOVE_SPEED)
 
 void Die(const char* format, ...)
 {
