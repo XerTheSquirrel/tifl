@@ -118,13 +118,13 @@ void DrawLevel(uint32_t* pixels)
 	}
 	
 	// Draw the level
-	for (xi = vx; xi < ve; xi += TILE_SIZE)
+	for (xi = vx; xi <= ve; xi += TILE_SIZE)
 	{
 		// Actual X tile to draw
 		x = xi / TILE_SIZE;
 		
 		// Brush here
-		bx = (xi - vx);
+		bx = (xi - vx) - (vx % TILE_SIZE);
 		by = BASIC_SCREEN_HEIGHT - TILE_SIZE;
 		
 		// Draw column

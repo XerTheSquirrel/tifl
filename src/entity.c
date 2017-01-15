@@ -195,7 +195,7 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 			// Hit left side
 			else
 			{
-				newx = (dx * (TILE_SIZE));
+				newx = (dx * (TILE_SIZE - 1));
 				
 				// Use if closer
 				if (newx < usex)
