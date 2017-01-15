@@ -95,7 +95,7 @@ static void TraceLine(int x1, int y1, int x2, int y2, LevelTile** hitx,
 		for (at = y1 / TILE_SIZE;; at += vect)
 		{
 			// Must be in bounds
-			if (at >= 0 && at < LEVEL_HEIGHT && y >= 0 && y < LEVEL_HEIGHT)
+			if (at >= 0 && at < LEVEL_HEIGHT && x >= 0 && x < LEVEL_WIDTH)
 			{
 				// Get into
 				checktile = &leveldata[(at * LEVEL_WIDTH) + x];
