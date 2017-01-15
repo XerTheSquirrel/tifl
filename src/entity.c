@@ -79,7 +79,7 @@ void LoadSprites()
 				code = line[0];
 				
 				// Only support hex colors
-				for (p = &line[xc]; *p; p++)
+				for (p = &line[xp]; *p; p++)
 					if (*p == '#')
 					{
 						// Skip the hash
@@ -97,11 +97,11 @@ void LoadSprites()
 					// Decode hex
 					letter = *p;
 					if (letter >= '0' && letter <= '9')
-						color += letter - '0';
+						color |= letter - '0';
 					else if (letter >= 'a' && letter <= 'f')
-						color += 10 + (letter - 'a');
+						color |= 10 + (letter - 'a');
 					else if (letter >= 'A' && letter <= 'F')
-						color += 10 + (letter - 'A');
+						color |= 10 + (letter - 'A');
 				}
 				
 				// Store it
@@ -117,7 +117,7 @@ void LoadSprites()
 				
 				// Decode characters, but only single character ones
 				for (x = 0; x < xw; x++)
-					*(o++) = colormap[p[x * xc] & 0xFF];
+					*(o++) = colormap[p[x * xp] & 0xFF];
 			}
 		}
 	}
