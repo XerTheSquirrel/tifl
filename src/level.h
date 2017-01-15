@@ -46,6 +46,9 @@
 /** Half the view width in pixels. */
 #define FIXED_HALF_VIEW_WIDTH_PIXELS (FIXED_HALF_VIEW_WIDTH * TILE_SIZE)
 
+/** Transition to the next level. */
+#define RIGHT_SIDE_TRANSITION (FIXED_LEVEL_WIDTH_PIXELS - FIXED_TILE_SIZE)
+
 /**
  * The type of tile in a level.
  *

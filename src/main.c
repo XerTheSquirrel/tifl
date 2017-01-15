@@ -71,6 +71,14 @@ void loop()
 		// Player interaction
 		if (playerentity != NULL)
 		{
+			// If off the left side, lower the level
+			if (playerentity->x < 0)
+				InitializeLevel(currentlevelnum - 1);
+			
+			// Otherwise off the right side, raise the level
+			else if (playerentity->x > RIGHT_SIDE_TRANSITION)
+				InitializeLevel(currentlevelnum + 1);
+			
 			// Walk left
 			if (gamekeydown[EVENTTYPE_WALK_LEFT])
 				WalkEntity(playerentity, -PLAYER_MOVE_SPEED, 0, true);

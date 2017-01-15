@@ -54,8 +54,7 @@ void InternalRespawnPlayer(Entity* oldplayer)
 	// Negative level, starts on right side
 	else
 	{
-		playerentity->x = FIXED_C(LEVEL_WIDTH) -
-			(FIXED_C(TILE_SIZE) + FIXEDONE);
+		playerentity->x = RIGHT_SIDE_TRANSITION - FIXED_TILE_SIZE;
 		playerentity->angle = FACETYPE_LEFT;
 	}
 	
@@ -96,7 +95,7 @@ void InitializeLevel(int levelnum)
 		n = MAX_LEVEL_HOLES;
 	else if (n < 8)
 		n = 8;
-	q = (n * levelnum) + absln;
+	q = (n * levelnum * 37) + absln * 31;
 	if (q < 0)
 		q = -q;
 	while (n > 0)
@@ -107,6 +106,8 @@ void InitializeLevel(int levelnum)
 		// Determine where to place the hole
 		x = 4 + (q % (LEVEL_WIDTH - 4));
 		q *= ((x & 1) == 0) ? 37 : 31;
+		if (q < 0)
+			q = -q;
 		
 		// Clear it out
 		leveldata[x][0].type = TILETYPE_AIR;
