@@ -92,6 +92,7 @@ void DrawImageTile(uint32_t* pixels, uint32_t* src, int x, int y)
 	uint32_t* pp;
 	uint32_t* ss;
 	int w, h, i, ey, b;
+	uint32_t color;
 	
 	// Bounds
 	w = TILE_SIZE;
@@ -122,7 +123,15 @@ void DrawImageTile(uint32_t* pixels, uint32_t* src, int x, int y)
 		ss = &src[b * TILE_SIZE];
 		
 		for (i = 0; i < w; i++)
-			*(pp++) = *(ss++);
+		{
+			color = *(ss++);
+			
+			// Do not draw transparent areas
+			if (color != 0xFF00FF)
+				*pp = color;
+			
+			pp++;
+		}
 	}
 }
 
