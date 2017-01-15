@@ -23,8 +23,8 @@ void InternalRespawnPlayer(Entity* oldplayer)
 	playerentity = &entities[MAX_ENTITIES] - 1;
 	
 	// Keep the old player Y height, assuming it is safe to do so
-	if (oldplayer == NULL || oldplayer->y <= FIXED_C(TILE_SIZE))
-		playerentity->y = FIXED_C(TILE_SIZE);
+	if (oldplayer == NULL || oldplayer->y <= FIXED_TILE_SIZE)
+		playerentity->y = FIXED_TILE_SIZE;
 	else
 		playerentity->y = oldplayer->y;
 	

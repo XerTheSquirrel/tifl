@@ -20,5 +20,7 @@ Entity* playerentity = NULL;
 
 void WalkEntity(Entity* entity, fixedtype relx, fixedtype rely)
 {
+	entity->x += relx;
+	entity->y += rely;
 }
 

@@ -57,7 +57,9 @@ int VideoInit(void)
 
 void DrawLevel(uint32_t* pixels)
 {
-	fixedtype vx, xi;
+	fixedtype vx, ve, xi;
+	int x, y, bx, by;
+	LevelTile* tile;
 	
 	// Draw nothing if there is no player
 	if (playerentity == NULL)
@@ -67,7 +69,42 @@ void DrawLevel(uint32_t* pixels)
 	}
 	
 	// Determine the scroll offset of the game, based on the player position
-	vx = playerentity->x;
+	// Add half the tile size so the screen centers in the middle of the sprite
+	vx = playerentity->x + (FIXED_TILE_SIZE >> 1);
+	
+	// Move the entire screen left so it centers on the player
+	vx -= FIXED_HALF_VIEW_WIDTH;
+	
+	// Never exceed the left side of the level, nothing is there
+	if (vx < 0)
+		vx = 0;
+	
+	// Never exceed the right side of the level either
+	ve = vx + FIXED_VIEW_WIDTH;
+	if (ve >= FIXED_LEVEL_WIDTH)
+	{
+		vx = FIXED_LEVEL_WIDTH - FIXED_VIEW_WIDTH;
+		ve = FIXED_LEVEL_WIDTH;
+	}
+	
+	// Draw the level
+	for (xi = vx; xi < ve; xi += FIXED_TILE_SIZE)
+	{
+		// Actual X tile to draw
+		x = (xi >> FIXEDSHIFT) / TILE_SIZE;
+		
+		// Brush here
+		bx = (xi - vx) >> FIXEDSHIFT;
+		by = BASIC_SCREEN_HEIGHT - TILE_SIZE;
+		
+		// Draw column
+		for (y = 0; y < LEVEL_HEIGHT; y++, by -= TILE_SIZE)
+		{
+			tile = &leveldata[x][y];
+			
+			pixels[(by * BASIC_SCREEN_WIDTH) + bx] = 0x00FF00;
+		}
+	}
 }
 
 void VideoDraw(void)
@@ -87,6 +124,10 @@ void VideoDraw(void)
 	// Lock
 	SDL_LockSurface(rendersurface);
 	pixels = (uint32_t*)rendersurface->pixels;
+	
+	// Clear the view
+	SDL_memset(pixels, 0,
+		sizeof(int32_t) * BASIC_SCREEN_WIDTH * BASIC_SCREEN_HEIGHT);
 	
 	// Draw the level
 	DrawLevel(pixels);

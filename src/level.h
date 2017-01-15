@@ -11,6 +11,8 @@
 #ifndef TIFL_LEVEL_H
 #define TIFL_LEVEL_H
 
+#include "global.h"
+
 /** The size of tiles. */
 #define TILE_SIZE 8
 
@@ -22,6 +24,18 @@
 
 /** The height of levels. */
 #define LEVEL_HEIGHT 30
+
+/** Fixed point tile size. */
+#define FIXED_TILE_SIZE FIXED_C(TILE_SIZE)
+
+/** The width of the level in fixed point. */
+#define FIXED_LEVEL_WIDTH (LEVEL_WIDTH << FIXEDSHIFT)
+
+/** The view width in fixed values. */
+#define FIXED_VIEW_WIDTH FIXED_C(VIEW_WIDTH)
+
+/** Half of the view width. */
+#define FIXED_HALF_VIEW_WIDTH (FIXED_VIEW_WIDTH >> 1)
 
 /**
  * The type of tile in a level.
