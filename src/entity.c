@@ -118,9 +118,9 @@ static void TraceLine(int x1, int y1, int x2, int y2, LevelTile** hitx,
 
 void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 {
-	int newx, newy;
-	int32_t px, py, groundy, downy;
+	int32_t px, py, groundy, downy, newx, newy, movx;
 	LevelTile* lground, *rground;
+	LevelTile* lohit, *hihit;
 	boolean onground;
 	TileInfo* tinfo;
 	
@@ -133,7 +133,7 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	
 	// Trace lines to determine if a solid tile is being stood on
 	TraceLine(px, py, px, py - downy, NULL, &lground);
-	TraceLine(px + TILE_SIZE, py, px + (TILE_SIZE - 1), py - downy, NULL,
+	TraceLine(px + (TILE_SIZE - 1), py, px + (TILE_SIZE - 1), py - downy, NULL,
 		&rground);
 	onground = ((lground != NULL && tileinfo[lground->type].issolid) ||
 		(rground != NULL && tileinfo[rground->type].issolid));
@@ -152,14 +152,19 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	if (!onground && impulse)
 		relx /= 2;
 	
-	// New desired position
+	// Trace line to determine if a wall is hit in this direction
 	newx = px + relx;
-	newy = py + rely;
+	movx = (relx < 0 ? newx : newx + (TILE_SIZE - 1));
+	TraceLine(px, py, px + movx, py, &lohit, NULL);
+	TraceLine(px, py + (TILE_SIZE - 1), px + movx, py + (TILE_SIZE - 1),
+		&hihit, NULL);
 	
-	// Move is OK
-	entity->x = newx;
+	// Move if not bumped into it
+	if (lohit == NULL && hihit == NULL)
+		entity->x = newx;
 	
 	// If standing on the ground, stand on it completely
+	newy = py + rely;
 	entity->y = (onground && rely <= 0 ? groundy : newy);
 }
 
