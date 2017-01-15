@@ -26,12 +26,14 @@ const TileInfo tileinfo[NUM_TILETYPES] =
 {
 	// Air
 	{
-		0x8888DD
+		0x8888DD,
+		false
 	},
 	
 	// Grass
 	{
-		0x22DD66
+		0x22DD66,
+		true
 	}
 };
 

@@ -19,24 +19,148 @@ Entity entities[MAX_ENTITIES];
 /** The player entity. */
 Entity* playerentity = NULL;
 
-void WalkEntity(Entity* entity, int relx, int rely, boolean impulse)
+/**
+ * Traces a line from one point to another and returns the first solid tile
+ * that was hit. Tracing is done only in horizontal and vertical lines.
+ *
+ * All units are in pixels.
+ *
+ * @param x1 Start X.
+ * @param y1 Start Y.
+ * @param x2 End X.
+ * @param y2 End Y.
+ * @param hitx The X tile that was hit.
+ * @param hity The Y tile that was hit.
+ * @since 2017/01/14
+ */
+static void TraceLine(int x1, int y1, int x2, int y2, LevelTile** hitx,
+	LevelTile** hity)
 {
-	int newx, newy;
-	int i;
-	boolean onground;
+	int vect, end, at, x, y;
+	LevelTile* checktile;
+	const TileInfo* tinfo;
+	boolean first;
 	
-	// Impulsed, check if it is on the ground
-	if (impulse)
+	// Base position
+	x = x1 / TILE_SIZE;
+	y = y1 / TILE_SIZE;
+	
+	// Trace X?
+	if (hitx != NULL)
 	{
-		i = entity->y / TILE_SIZE;
+		*hitx = NULL;
+	
+		// Determine vector for X traveral
+		vect = (x1 < x2 ? 1 : -1);
+	
+		// End tile point
+		end = x2 / TILE_SIZE;
+	
+		// Trace X
+		for (at = x1 / TILE_SIZE;; at += vect)
+		{
+			// Out of bounds?
+			if (at < 0 || at >= LEVEL_WIDTH)
+				continue;
+	
+			// Get into
+			checktile = &leveldata[at][y];
+			tinfo = &tileinfo[checktile->type];
+	
+			// Solid tile, stop
+			if (tinfo->issolid)
+			{
+				*hitx = checktile;
+				break;
+			}
+			
+			// Stop?
+			if (at == end)
+				break;
+		}
 	}
 	
-	// Target X and Y position
-	newx = entity->x + relx;
-	newy = entity->y + rely;
+	// Trace Y?
+	if (hity != NULL)
+	{
+		*hity = NULL;
+		
+		// Determine vector for Y traveral
+		vect = (y1 < y2 ? 1 : -1);
+	
+		// End tile point
+		end = y2 / TILE_SIZE;
+	
+		// Trace Y
+		for (at = y1 / TILE_SIZE;; at += vect)
+		{
+			// Out of bounds?
+			if (at < 0 || at >= LEVEL_HEIGHT)
+				continue;
+		
+			// Get into
+			checktile = &leveldata[x][at];
+			tinfo = &tileinfo[checktile->type];
+		
+			// Solid tile, stop
+			if (tinfo->issolid)
+			{
+				*hity = checktile;
+				break;
+			}
+			
+			// Stop?
+			if (at == end)
+				break;
+		}
+	}
+}
+
+void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
+{
+	int newx, newy;
+	int32_t px, py, groundy;
+	LevelTile* lground, *rground;
+	boolean onground;
+	TileInfo* tinfo;
+	
+	// Entity position
+	px = entity->x;
+	py = entity->y;
+	
+	// Trace lines to determine if a solid tile is being stood on
+	TraceLine(px, py, px, py - 1, NULL, &lground);
+	TraceLine(px + TILE_SIZE, py, px + TILE_SIZE, py - 1, NULL,
+		&rground);
+	onground = ((lground != NULL && tileinfo[lground->type].issolid) ||
+		(rground != NULL && tileinfo[rground->type].issolid));
+	
+	// The height of the ground that is being stood on
+	groundy = -1;
+	if (onground)
+		groundy = py - (py % TILE_SIZE);
+	
+	// If on the ground and Y thrust is down, cancel it
+	// Also cancel if it is an impulsed jump and we are not on the ground
+	if ((onground && rely < 0) || (!onground && impulse && rely > 0))
+		rely = 0;
+	
+	// If not on the ground make left/right movement weaker
+	if (!onground && impulse)
+		relx /= 2;
+	
+	// If on the ground, neutralize any down force
+	if (onground)
+		rely = 0;
+	
+	// New desired position
+	newx = px + relx;
+	newy = py + rely;
 	
 	// Move is OK
 	entity->x = newx;
-	entity->y = newy;
+	
+	// If standing on the ground, stand on it completely
+	entity->y = (onground ? groundy : newy);
 }
 

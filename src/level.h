@@ -77,6 +77,9 @@ typedef struct TileInfo
 {
 	/** Basic color used. */
 	uint32_t color;
+	
+	/** Is the tile solid? */
+	boolean issolid;
 } TileInfo;
 
 /** Tile information. */
