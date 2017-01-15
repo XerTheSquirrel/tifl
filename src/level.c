@@ -190,6 +190,8 @@ void InitializeLevel(int levelnum)
 		// Otherwise draw some platforms maybe
 		else if (doplatform)
 		{
+			// Place above the current ground
+			PlaceTile(x, gz + 1 + (NextRandom() & 1), TILETYPE_WOOD);
 		}
 	}
 	
