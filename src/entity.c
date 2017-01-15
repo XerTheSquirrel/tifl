@@ -196,9 +196,7 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 			dy = (di / LEVEL_WIDTH);
 		
 			// Do not go past it
-			newy = dy * (TILE_SIZE - 1);
-			
-			fprintf(stderr, "Bumped %d\n", newy);
+			newy = (dy - 1) * TILE_SIZE;
 		}
 	}
 	
@@ -206,62 +204,66 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	else
 		newy = py + rely;
 	
-	// Trace line to determine if a wall is hit in this direction
-	newx = px + relx;
-	movx = (relx < 0 ? newx : newx + (TILE_SIZE - 1));
-	TraceLine(px, py, movx, py, &lohit, NULL);
-	TraceLine(px, py + (TILE_SIZE - 1), movx, py + (TILE_SIZE - 1),
-		&hihit, NULL);
-	
-	// Move if not bumped into it
-	if (lohit == NULL && hihit == NULL)
-		entity->x = newx;
-	
-	// Otherwise do not run into the wall
-	else
+	// Only check if moving
+	if (relx != 0)
 	{
-		// Determine closer wall to ram into
-		if (lohit != NULL && hihit != NULL)
+		// Trace line to determine if a wall is hit in this direction
+		newx = px + relx;
+		movx = (relx < 0 ? newx : newx + (TILE_SIZE - 1));
+		TraceLine(px, py, movx, py, &lohit, NULL);
+		TraceLine(px, py + (TILE_SIZE - 1), movx, py + (TILE_SIZE - 1),
+			&hihit, NULL);
+	
+		// Move if not bumped into it
+		if (lohit == NULL && hihit == NULL)
+			entity->x = newx;
+	
+		// Otherwise do not run into the wall
+		else
 		{
-			// Get positions of both blocks
-			dx = ((lohit - leveldata) % LEVEL_WIDTH);
-			dy = ((hihit - leveldata) % LEVEL_WIDTH);
+			// Determine closer wall to ram into
+			if (lohit != NULL && hihit != NULL)
+			{
+				// Get positions of both blocks
+				dx = ((lohit - leveldata) % LEVEL_WIDTH);
+				dy = ((hihit - leveldata) % LEVEL_WIDTH);
 			
-			// If going left, use block with higher index
-			if (relx < 0)
-				ramwall = (dx > dy ? lohit : hihit);
+				// If going left, use block with higher index
+				if (relx < 0)
+					ramwall = (dx > dy ? lohit : hihit);
 			
-			// Otherwise right uses lower index
+				// Otherwise right uses lower index
+				else
+					ramwall = (dx < dy ? lohit : hihit);
+			}
+		
+			// Hit lower
+			else if (lohit != NULL)
+				ramwall = lohit;
+		
+			// Hit higher
 			else
-				ramwall = (dx < dy ? lohit : hihit);
+				ramwall = hihit;
+		
+			// Get position of 
+			di = ramwall - leveldata;
+			dx = (di % LEVEL_WIDTH);
+		
+			// Pixel positions of the block
+			hx = dx * TILE_SIZE;
+			hy = hx + TILE_SIZE;
+		
+			// Running into it from the right side
+			if (relx < 0)
+				usex = hy;
+		
+			// Otherwise from the left
+			else
+				usex = hx - TILE_SIZE;
+		
+			// Use that instead
+			entity->x = usex;
 		}
-		
-		// Hit lower
-		else if (lohit != NULL)
-			ramwall = lohit;
-		
-		// Hit higher
-		else
-			ramwall = hihit;
-		
-		// Get position of 
-		di = ramwall - leveldata;
-		dx = (di % LEVEL_WIDTH);
-		
-		// Pixel positions of the block
-		hx = dx * TILE_SIZE;
-		hy = hx + TILE_SIZE;
-		
-		// Running into it from the right side
-		if (relx < 0)
-			usex = hy;
-		
-		// Otherwise from the left
-		else
-			usex = hx - TILE_SIZE;
-		
-		// Use that instead
-		entity->x = usex;
 	}
 	
 	// If standing on the ground, stand on it completely
