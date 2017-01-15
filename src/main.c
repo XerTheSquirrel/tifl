@@ -22,7 +22,7 @@
 #define PLAYER_MOVE_SPEED 8
 
 /** The player jump height. */
-#define PLAYER_JUMP_SPEED (PLAYER_MOVE_SPEED * 4)
+#define PLAYER_JUMP_SPEED (PLAYER_MOVE_SPEED * 2)
 
 /** Gravity force. */
 #define GRAVITY_FORCE 12
@@ -53,9 +53,10 @@ void Die(const char* format, ...)
 void loop()
 {
 	uint32_t entertime, leavetime, difference;
-	int i;
+	int i, rocketcount;
 	
 	// Start
+	rocketcount = 0;
 	for (uint32_t frameid = 0;; frameid++)
 	{
 		// Mark start
@@ -85,7 +86,7 @@ void loop()
 			
 			// Jump
 			if (gamekeydown[EVENTTYPE_JUMP])
-				WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED, true);
+				WalkEntity(playerentity, 0, PLAYER_JUMP_SPEED, false);
 		}
 		
 		// Push all entities down due to gravity

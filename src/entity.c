@@ -149,10 +149,6 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	if (!onground && impulse)
 		relx /= 2;
 	
-	// If on the ground, neutralize any down force
-	if (onground)
-		rely = 0;
-	
 	// New desired position
 	newx = px + relx;
 	newy = py + rely;
@@ -161,6 +157,6 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	entity->x = newx;
 	
 	// If standing on the ground, stand on it completely
-	entity->y = (onground ? groundy : newy);
+	entity->y = (onground && rely <= 0 ? groundy : newy);
 }
 
