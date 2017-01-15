@@ -37,6 +37,15 @@
 /** Half of the view width. */
 #define FIXED_HALF_VIEW_WIDTH (FIXED_VIEW_WIDTH >> 1)
 
+/** The level width in pixels. */
+#define FIXED_LEVEL_WIDTH_PIXELS (FIXED_LEVEL_WIDTH * TILE_SIZE)
+
+/** The view width in pixels. */
+#define FIXED_VIEW_WIDTH_PIXELS (FIXED_VIEW_WIDTH * TILE_SIZE)
+
+/** Half the view width in pixels. */
+#define FIXED_HALF_VIEW_WIDTH_PIXELS (FIXED_HALF_VIEW_WIDTH * TILE_SIZE)
+
 /**
  * The type of tile in a level.
  *

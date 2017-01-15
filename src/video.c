@@ -89,18 +89,18 @@ void DrawLevel(uint32_t* pixels)
 	vx = playerentity->x + (FIXED_TILE_SIZE >> 1);
 	
 	// Move the entire screen left so it centers on the player
-	vx -= FIXED_HALF_VIEW_WIDTH;
+	vx -= FIXED_HALF_VIEW_WIDTH_PIXELS;
 	
 	// Never exceed the left side of the level, nothing is there
 	if (vx < 0)
 		vx = 0;
 	
 	// Never exceed the right side of the level either
-	ve = vx + FIXED_VIEW_WIDTH;
-	if (ve >= FIXED_LEVEL_WIDTH)
+	ve = vx + FIXED_VIEW_WIDTH_PIXELS;
+	if (ve >= FIXED_LEVEL_WIDTH_PIXELS)
 	{
-		vx = FIXED_LEVEL_WIDTH - FIXED_VIEW_WIDTH;
-		ve = FIXED_LEVEL_WIDTH;
+		vx = FIXED_LEVEL_WIDTH_PIXELS - FIXED_VIEW_WIDTH_PIXELS;
+		ve = FIXED_LEVEL_WIDTH_PIXELS;
 	}
 	
 	// Draw the level
