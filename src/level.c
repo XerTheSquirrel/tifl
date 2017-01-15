@@ -55,6 +55,9 @@ void InternalRespawnPlayer(Entity* oldplayer)
 			(FIXED_C(TILE_SIZE) + FIXEDONE);
 		playerentity->angle = FACETYPE_LEFT;
 	}
+	
+	// Set player type
+	playerentity->type = ENTITYTYPE_PLAYER;
 }
 
 void InitializeLevel(int levelnum)
