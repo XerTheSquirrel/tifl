@@ -20,7 +20,7 @@
 #define VIEW_WIDTH 20
 
 /** The width of the level. */
-#define LEVEL_WIDTH (VIEW_WIDTH * 4)
+#define LEVEL_WIDTH (VIEW_WIDTH * 2)
 
 /** The height of levels. */
 #define LEVEL_HEIGHT 15

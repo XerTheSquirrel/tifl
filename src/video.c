@@ -157,9 +157,6 @@ void DrawLevel(uint32_t* pixels)
 		bx = (entity->x - vx) >> FIXEDSHIFT;
 		by = BASIC_SCREEN_HEIGHT - ((entity->y >> FIXEDSHIFT) + TILE_SIZE);
 		
-		fprintf(stderr, "px = %08x, vx = %08x, bx = %d, hv=%08x, lv=%d\n", entity->x,
-			vx, bx, FIXED_HALF_VIEW_WIDTH_PIXELS, currentlevelnum);
-		
 		// Off the screen?
 		if (bx <= -TILE_SIZE || by <= -TILE_SIZE ||
 			bx > BASIC_SCREEN_WIDTH || by > BASIC_SCREEN_HEIGHT)
