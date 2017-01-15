@@ -129,6 +129,14 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	px = entity->x;
 	py = entity->y;
 	
+	// If the entity is below the screen, the only way is down
+	if (py < 0)
+	{
+		relx = 0;
+		if (rely > 0)
+			rely = 0;
+	}
+	
 	// The force going down to detect if landing on the ground
 	downy = -(rely >= 0 ? -1 : rely);
 	
