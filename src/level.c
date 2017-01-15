@@ -153,7 +153,8 @@ void InitializeLevel(int levelnum)
 	for (x = 0; x < LEVEL_WIDTH; x++)
 	{
 		// Is there clouds and/or ground here?
-		startblock = (x == 0 || x >= (LEVEL_WIDTH - 2));
+		startblock = (x == 0 || x >= (LEVEL_WIDTH - 2)) ||
+			(levelnum == 0 && x == (LEVEL_WIDTH >> 1));
 		docloud = ((NextRandom() & 1) != 0);
 		doground = startblock || ((NextRandom() & 0xFF) < 192);
 		doplatform = !startblock && ((NextRandom() & 0xFF) < 64);

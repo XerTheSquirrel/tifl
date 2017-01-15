@@ -14,10 +14,10 @@
 #include "global.h"
 
 /** The size of tiles. */
-#define TILE_SIZE 16
+#define TILE_SIZE 20
 
 /** The view width. */
-#define VIEW_WIDTH 20
+#define VIEW_WIDTH 16
 
 /** The width of the level. */
 #define LEVEL_WIDTH (VIEW_WIDTH * 2)
@@ -26,7 +26,7 @@
 #define LEVEL_WIDTH_PIXELS (LEVEL_WIDTH * TILE_SIZE)
 
 /** The height of levels. */
-#define LEVEL_HEIGHT 15
+#define LEVEL_HEIGHT 12
 
 /** Half the height in pixels. */
 #define HALF_LEVEL_HEIGHT_PIXELS ((LEVEL_HEIGHT * TILE_SIZE) / 2)
@@ -39,7 +39,7 @@
 #define LEVEL_HEIGHT_PIXELS (LEVEL_HEIGHT * TILE_SIZE)
 
 /** The view width in pixels. */
-#define VIEW_WIDTH_PIXELS (VIEW_WIDTH * TILE_SIZE)
+#define VIEW_WIDTH_PIXELS ((VIEW_WIDTH) * TILE_SIZE)
 
 /** Half of the view width in pixels. */
 #define HALF_VIEW_WIDTH_PIXELS (VIEW_WIDTH_PIXELS / 2)
