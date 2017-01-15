@@ -18,7 +18,9 @@
 
 LevelTile leveldata[LEVEL_WIDTH][LEVEL_HEIGHT];
 
-int currentlevelnum;
+int currentlevelnum = 0;
+
+static int lastlevelnum;
 
 const TileInfo tileinfo[NUM_TILETYPES] =
 {
@@ -44,14 +46,21 @@ void InternalRespawnPlayer(Entity* oldplayer)
 	else
 		playerentity->y = oldplayer->y;
 	
-	// Positive level, starts on left side
-	if (currentlevelnum >= 0)
+	// Start in the center of level zero
+	if (currentlevelnum == 0 && currentlevelnum == lastlevelnum)
+	{
+		playerentity->x = FIXED_LEVEL_WIDTH_PIXELS >> 1;
+		playerentity->angle = FACETYPE_RIGHT;
+	}
+	
+	// Came from a lower level
+	else if (currentlevelnum > lastlevelnum)
 	{
 		playerentity->x = FIXEDONE;
 		playerentity->angle = FACETYPE_RIGHT;
 	}
 	
-	// Negative level, starts on right side
+	// Came from a higher level
 	else
 	{
 		playerentity->x = RIGHT_SIDE_TRANSITION - FIXED_TILE_SIZE;
@@ -79,6 +88,7 @@ void InitializeLevel(int levelnum)
 	SDL_memset(leveldata, 0, sizeof(leveldata));
 	
 	// Set new level number
+	lastlevelnum = currentlevelnum;
 	currentlevelnum = levelnum;
 	if (levelnum < 0)
 		absln = -levelnum;
