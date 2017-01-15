@@ -341,12 +341,12 @@ void PumpEvents()
 						
 						// Jump
 					case SDLK_UP:
-					case SDLK_SPACE:
 					case SDLK_w:
 						eventtype = EVENTTYPE_ROCKET;
 						break;
 						
 						// Attack
+					case SDLK_SPACE:
 					case SDLK_LCTRL:
 					case SDLK_RCTRL:
 					case SDLK_LALT:
