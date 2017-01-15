@@ -98,9 +98,6 @@ void DrawImageTile(uint32_t* pixels, uint32_t* src, int x, int y)
 	w = TILE_SIZE;
 	h = TILE_SIZE;
 	
-	// Debug
-	DrawSolid(pixels, 0xFF0000, x, y, TILE_SIZE, TILE_SIZE);
-	
 	// Off the left side?
 	if (x < 0)
 	{
@@ -214,9 +211,7 @@ void DrawLevel(uint32_t* pixels)
 		
 		// Draw it
 		DrawImageTile(pixels,
-			entityinfo[entity->type].pixels[
-				((currentframe + i) % GAME_FRAMES_PER_SECOND) <
-					(GAME_FRAMES_PER_SECOND / 8)],
+			entityinfo[entity->type].pixels[(currentframe >> 2) & 1],
 			bx, by);
 	}
 }
