@@ -44,14 +44,15 @@ void InternalRespawnPlayer(Entity* oldplayer)
 	// Positive level, starts on left side
 	if (currentlevelnum >= 0)
 	{
-		playerentity->x = 0;
+		playerentity->x = FIXEDONE;
 		playerentity->angle = FACETYPE_RIGHT;
 	}
 	
 	// Negative level, starts on right side
 	else
 	{
-		playerentity->x = FIXED_C(LEVEL_WIDTH) - FIXED_C(TILE_SIZE);
+		playerentity->x = FIXED_C(LEVEL_WIDTH) -
+			(FIXED_C(TILE_SIZE) + FIXEDONE);
 		playerentity->angle = FACETYPE_LEFT;
 	}
 }
