@@ -14,7 +14,7 @@
 #include "entity.h"
 
 /** The maximum number of holes in the level. */
-#define MAX_LEVEL_HOLES (LEVEL_WIDTH - 8)
+#define MAX_LEVEL_HOLES ((LEVEL_WIDTH - 8) / 4)
 
 LevelTile leveldata[LEVEL_WIDTH][LEVEL_HEIGHT];
 
@@ -120,7 +120,19 @@ void InitializeLevel(int levelnum)
 			q = -q;
 		
 		// Clear it out
-		leveldata[x][0].type = TILETYPE_AIR;
+		for (;;)
+		{
+			// Fill the level with more gaps
+			if (leveldata[x][0].type == TILETYPE_AIR)
+				if ((++x) < (LEVEL_WIDTH - 4))
+					continue;
+				else
+					break;
+			
+			// Make air
+			leveldata[x][0].type = TILETYPE_AIR;
+			break;
+		}
 	}
 	
 	// Spawn furries
