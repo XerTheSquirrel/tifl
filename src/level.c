@@ -133,6 +133,7 @@ void InitializeLevel(int levelnum)
 			
 			// Make air
 			leveldata[x][0].type = TILETYPE_AIR;
+			leveldata[x + 1][0].type = TILETYPE_AIR;
 			break;
 		}
 	}

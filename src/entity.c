@@ -133,7 +133,7 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	
 	// Trace lines to determine if a solid tile is being stood on
 	TraceLine(px, py, px, py - downy, NULL, &lground);
-	TraceLine(px + TILE_SIZE, py, px + TILE_SIZE, py - downy, NULL,
+	TraceLine(px + TILE_SIZE, py, px + (TILE_SIZE - 1), py - downy, NULL,
 		&rground);
 	onground = ((lground != NULL && tileinfo[lground->type].issolid) ||
 		(rground != NULL && tileinfo[rground->type].issolid));
