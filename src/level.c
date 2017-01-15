@@ -41,29 +41,29 @@ void InternalRespawnPlayer(Entity* oldplayer)
 	playerentity = &entities[MAX_ENTITIES - 1];
 	
 	// Keep the old player Y height, assuming it is safe to do so
-	if (oldplayer == NULL || oldplayer->y <= FIXED_TILE_SIZE)
-		playerentity->y = FIXED_TILE_SIZE;
+	if (oldplayer == NULL || oldplayer->y <= TILE_SIZE)
+		playerentity->y = TILE_SIZE;
 	else
 		playerentity->y = oldplayer->y;
 	
 	// Start in the center of level zero
 	if (currentlevelnum == 0 && currentlevelnum == lastlevelnum)
 	{
-		playerentity->x = FIXED_LEVEL_WIDTH_PIXELS >> 1;
+		playerentity->x = LEVEL_WIDTH_PIXELS >> 1;
 		playerentity->angle = FACETYPE_RIGHT;
 	}
 	
 	// Came from a lower level
 	else if (currentlevelnum > lastlevelnum)
 	{
-		playerentity->x = FIXEDONE;
+		playerentity->x = 1;
 		playerentity->angle = FACETYPE_RIGHT;
 	}
 	
 	// Came from a higher level
 	else
 	{
-		playerentity->x = RIGHT_SIDE_TRANSITION - FIXED_TILE_SIZE;
+		playerentity->x = RIGHT_SIDE_TRANSITION - TILE_SIZE;
 		playerentity->angle = FACETYPE_LEFT;
 	}
 	

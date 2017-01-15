@@ -86,8 +86,7 @@ void DrawSolid(uint32_t* pixels, int color, int x, int y, int w, int h)
 
 void DrawLevel(uint32_t* pixels)
 {
-	fixedtype vx, ve, xi;
-	int x, y, bx, by, i, color;
+	int32_t vx, ve, xi, x, y, bx, by, i, color;
 	LevelTile* tile;
 	Entity* entity;
 	const TileInfo* tinfo;
@@ -101,31 +100,31 @@ void DrawLevel(uint32_t* pixels)
 	
 	// Determine the scroll offset of the game, based on the player position
 	// Add half the tile size so the screen centers in the middle of the sprite
-	vx = playerentity->x + (FIXED_TILE_SIZE >> 1);
+	vx = playerentity->x + (TILE_SIZE >> 1);
 	
 	// Move the entire screen left so it centers on the player
-	vx -= FIXED_HALF_VIEW_WIDTH_PIXELS;
+	vx -= HALF_VIEW_WIDTH_PIXELS;
 	
 	// Never exceed the left side of the level, nothing is there
 	if (vx < 0)
 		vx = 0;
 	
 	// Never exceed the right side of the level either
-	ve = vx + FIXED_VIEW_WIDTH_PIXELS;
-	if (ve >= FIXED_LEVEL_WIDTH_PIXELS)
+	ve = vx + VIEW_WIDTH_PIXELS;
+	if (ve >= LEVEL_WIDTH_PIXELS)
 	{
-		vx = FIXED_LEVEL_WIDTH_PIXELS - FIXED_VIEW_WIDTH_PIXELS;
-		ve = FIXED_LEVEL_WIDTH_PIXELS;
+		vx = LEVEL_WIDTH_PIXELS - VIEW_WIDTH_PIXELS;
+		ve = LEVEL_WIDTH_PIXELS;
 	}
 	
 	// Draw the level
-	for (xi = vx; xi < ve; xi += FIXED_TILE_SIZE)
+	for (xi = vx; xi < ve; xi += TILE_SIZE)
 	{
 		// Actual X tile to draw
-		x = FixedDiv(xi, FIXED_TILE_SIZE) >> FIXEDSHIFT;
+		x = xi / TILE_SIZE;
 		
 		// Brush here
-		bx = (xi - vx) >> FIXEDSHIFT;
+		bx = (xi - vx);
 		by = BASIC_SCREEN_HEIGHT - TILE_SIZE;
 		
 		// Draw column
@@ -154,8 +153,8 @@ void DrawLevel(uint32_t* pixels)
 			continue;
 		
 		// Determine draw position of the entity
-		bx = (entity->x - vx) >> FIXEDSHIFT;
-		by = BASIC_SCREEN_HEIGHT - ((entity->y >> FIXEDSHIFT) + TILE_SIZE);
+		bx = (entity->x - vx);
+		by = BASIC_SCREEN_HEIGHT - ((entity->y) + TILE_SIZE);
 		
 		// Off the screen?
 		if (bx <= -TILE_SIZE || by <= -TILE_SIZE ||

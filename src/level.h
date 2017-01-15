@@ -22,32 +22,23 @@
 /** The width of the level. */
 #define LEVEL_WIDTH (VIEW_WIDTH * 2)
 
+/** The width of the level in pixels. */
+#define LEVEL_WIDTH_PIXELS (LEVEL_WIDTH * TILE_SIZE)
+
 /** The height of levels. */
 #define LEVEL_HEIGHT 15
 
-/** Fixed point tile size. */
-#define FIXED_TILE_SIZE FIXED_C(TILE_SIZE)
-
-/** The width of the level in fixed point. */
-#define FIXED_LEVEL_WIDTH (LEVEL_WIDTH << FIXEDSHIFT)
-
-/** The view width in fixed values. */
-#define FIXED_VIEW_WIDTH FIXED_C(VIEW_WIDTH)
-
-/** Half of the view width. */
-#define FIXED_HALF_VIEW_WIDTH (FIXED_VIEW_WIDTH >> 1)
-
-/** The level width in pixels. */
-#define FIXED_LEVEL_WIDTH_PIXELS (FIXED_LEVEL_WIDTH * TILE_SIZE)
+/** Height of the level in pixels. */
+#define LEVEL_HEIGHT_PIXELS (LEVEL_HEIGHT * TILE_SIZE)
 
 /** The view width in pixels. */
-#define FIXED_VIEW_WIDTH_PIXELS (FIXED_VIEW_WIDTH * TILE_SIZE)
+#define VIEW_WIDTH_PIXELS (VIEW_WIDTH * TILE_SIZE)
 
-/** Half the view width in pixels. */
-#define FIXED_HALF_VIEW_WIDTH_PIXELS (FIXED_HALF_VIEW_WIDTH * TILE_SIZE)
+/** Half of the view width in pixels. */
+#define HALF_VIEW_WIDTH_PIXELS (VIEW_WIDTH_PIXELS / 2)
 
 /** Transition to the next level. */
-#define RIGHT_SIDE_TRANSITION (FIXED_LEVEL_WIDTH_PIXELS - FIXED_TILE_SIZE)
+#define RIGHT_SIDE_TRANSITION (LEVEL_WIDTH_PIXELS - TILE_SIZE)
 
 /**
  * The type of tile in a level.

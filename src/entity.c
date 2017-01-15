@@ -11,6 +11,7 @@
 #include <SDL_stdinc.h>
 
 #include "entity.h"
+#include "level.h"
 
 /** Global entity data. */
 Entity entities[MAX_ENTITIES];
@@ -18,17 +19,16 @@ Entity entities[MAX_ENTITIES];
 /** The player entity. */
 Entity* playerentity = NULL;
 
-void WalkEntity(Entity* entity, fixedtype relx, fixedtype rely,
-	boolean impulse)
+void WalkEntity(Entity* entity, int relx, int rely, boolean impulse)
 {
-	fixedtype newx, newy;
+	int newx, newy;
 	int i;
 	boolean onground;
 	
 	// Impulsed, check if it is on the ground
 	if (impulse)
 	{
-		i = FixedDiv(entity->y, FIXED_TILE_SIZE);
+		i = entity->y / TILE_SIZE;
 	}
 	
 	// Target X and Y position
