@@ -12,6 +12,7 @@
 #define TIFL_ENTITY_H
 
 #include "global.h"
+#include "level.h"
 
 /**
  * The type of entity this is.
@@ -48,6 +49,20 @@ typedef enum facetype
 } facetype;
 
 /**
+ * Entity information.
+ *
+ * @since 2017/01/15
+ */
+typedef struct EntityInfo
+{
+	/** XPM images. */
+	char** xpm[2];
+
+	/** Raw pixel data. */
+	uint32_t pixels[2][TILE_SIZE * TILE_SIZE];
+} EntityInfo;
+
+/**
  * Entity data.
  *
  * @since 2017/01/12
@@ -70,8 +85,18 @@ typedef struct Entity
 /** Global entity data. */
 extern Entity entities[MAX_ENTITIES];
 
+/** Entity information. */
+extern EntityInfo entityinfo[NUM_ENTITYTYPES];
+
 /** The player entity. */
 extern Entity* playerentity;
+
+/**
+ * Loads sprites.
+ *
+ * @since 2017/02/15
+ */
+void LoadSprites();
 
 /**
  * Walks the given entity in the given direction.

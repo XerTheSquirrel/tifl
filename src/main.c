@@ -153,6 +153,9 @@ int main(int argc, char** argv)
 	if (VideoInit() != 0)
 		Die("Failed to initialize video.");
 	
+	// Load sprite data
+	LoadSprites();
+	
 	// Setup level and respawn the player
 	InitializeLevel(0);
 	RespawnPlayer();

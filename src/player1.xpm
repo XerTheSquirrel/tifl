@@ -1,5 +1,5 @@
 /* XPM */
-static char * player3_xpm[] = {
+static char * player1_xpm[] = {
 "20 20 11 1",
 " 	c #FF00FF",
 ".	c #1B1B19",
