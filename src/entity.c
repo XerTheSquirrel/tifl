@@ -119,7 +119,7 @@ static void TraceLine(int x1, int y1, int x2, int y2, LevelTile** hitx,
 void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 {
 	int newx, newy;
-	int32_t px, py, groundy;
+	int32_t px, py, groundy, downy;
 	LevelTile* lground, *rground;
 	boolean onground;
 	TileInfo* tinfo;
@@ -128,9 +128,12 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	px = entity->x;
 	py = entity->y;
 	
+	// The force going down to detect if landing on the ground
+	downy = -(rely >= 0 ? -1 : rely);
+	
 	// Trace lines to determine if a solid tile is being stood on
-	TraceLine(px, py, px, py - 1, NULL, &lground);
-	TraceLine(px + TILE_SIZE, py, px + TILE_SIZE, py - 1, NULL,
+	TraceLine(px, py, px, py - downy, NULL, &lground);
+	TraceLine(px + TILE_SIZE, py, px + TILE_SIZE, py - downy, NULL,
 		&rground);
 	onground = ((lground != NULL && tileinfo[lground->type].issolid) ||
 		(rground != NULL && tileinfo[rground->type].issolid));
