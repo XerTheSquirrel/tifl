@@ -16,6 +16,17 @@
 #include "entity.h"
 #include "level.h"
 
+#include "digit0.xpm"
+#include "digit1.xpm"
+#include "digit2.xpm"
+#include "digit3.xpm"
+#include "digit4.xpm"
+#include "digit5.xpm"
+#include "digit6.xpm"
+#include "digit7.xpm"
+#include "digit8.xpm"
+#include "digit9.xpm"
+
 boolean gamekeydown[NUM_EVENTTYPE];
 
 /** The game window. */
@@ -24,12 +35,34 @@ static SDL_Window* gamewindow;
 /** The actual render surface which is of a fixed format. */
 static SDL_Surface* rendersurface;
 
+static uint32_t digits[10][TILE_SIZE * TILE_SIZE];
+
+static char** xpmdigits[10] =
+{
+	digit0_xpm,
+	digit1_xpm,
+	digit2_xpm,
+	digit3_xpm,
+	digit4_xpm,
+	digit5_xpm,
+	digit6_xpm,
+	digit7_xpm,
+	digit8_xpm,
+	digit9_xpm
+};
+
 int currentframe;
 
 int VideoInit(void)
 {
+	int i;
+	
+	// Load digits
+	for (i = 0; i < 10; i++)
+		LoadXPMData(xpmdigits[i], digits[i]);
+	
 	// Clear keys
-	SDL_memset(gamekeydown, 0, sizeof(gamekeydown));	
+	SDL_memset(gamekeydown, 0, sizeof(gamekeydown));
 	
 	// Initialize video and event handling parts
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK |
@@ -212,6 +245,25 @@ void DrawLevel(uint32_t* pixels)
 		DrawImageTile(pixels,
 			entityinfo[entity->type].pixels[(currentframe >> 2) & 1],
 			bx, by, entity->angle);
+	}
+	
+	// Draw the number of saved ferals
+	bx = BASIC_SCREEN_WIDTH - (TILE_SIZE + 5);
+	by = 5;
+	x = feralssaved;
+	while (x >= 0)
+	{
+		// Get next digit
+		i = (x % 10);
+		x /= 10;
+		
+		// Draw digit
+		DrawImageTile(pixels, digits[i], bx, by, 0);
+		bx -= TILE_SIZE;
+		
+		// Done?
+		if (x == 0)
+			break;
 	}
 }
 

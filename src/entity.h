@@ -118,6 +118,16 @@ extern EntityInfo entityinfo[NUM_ENTITYTYPES];
 /** The player entity. */
 extern Entity* playerentity;
 
+/** The number of ferals saved. */
+extern int32_t feralssaved;
+
+/**
+ * Loads XPM data.
+ *
+ * @since 2017/01/15
+ */
+void LoadXPMData(char** xpmdata, uint32_t* dest);
+
 /**
  * Loads sprites.
  *

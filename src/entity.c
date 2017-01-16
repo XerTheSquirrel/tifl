@@ -36,6 +36,8 @@ Entity entities[MAX_ENTITIES];
 /** The player entity. */
 Entity* playerentity = NULL;
 
+int32_t feralssaved;
+
 EntityInfo entityinfo[NUM_ENTITYTYPES] =
 {
 	// None
@@ -93,13 +95,82 @@ EntityInfo entityinfo[NUM_ENTITYTYPES] =
 	}
 };
 
+void LoadXPMData(char** xpmdata, uint32_t* pixels)
+{
+	int xw, xh, xc, xp, k, l, color, code, x, y;
+	char* line, *p, letter;
+	uint32_t* o;
+	int colormap[256];
+	
+	// Clear the color map
+	for (k = 0; k < 256; k++)
+		colormap[k] = 0xFF00FF;
+
+	// Read image details
+	SDL_sscanf(xpmdata[0], "%d %d %d %d", &xw, &xh, &xc, &xp);
+	
+	// Cap image size
+	if (xw > TILE_SIZE)
+		xw = TILE_SIZE;
+	if (xh > TILE_SIZE)
+		xh = TILE_SIZE;
+	
+	// Read in all color details
+	for (k = 0; k < xc; k++)
+	{
+		line = xpmdata[1 + k];
+		
+		// .	c #1B1B19
+		// Read characters in the color
+		code = line[0];
+		
+		// Only support hex colors
+		for (p = &line[xp]; *p; p++)
+			if (*p == '#')
+			{
+				// Skip the hash
+				p++;
+				break;
+			}
+		
+		// Read in color
+		color = 0;
+		for (; *p; p++)
+		{
+			// Shift up
+			color <<= 4;
+			
+			// Decode hex
+			letter = *p;
+			if (letter >= '0' && letter <= '9')
+				color |= letter - '0';
+			else if (letter >= 'a' && letter <= 'f')
+				color |= 10 + (letter - 'a');
+			else if (letter >= 'A' && letter <= 'F')
+				color |= 10 + (letter - 'A');
+		}
+		
+		// Store it
+		colormap[code] = color;
+	}
+	
+	// Read in image data
+	for (y = 0; y < xh; y++)
+	{
+		// Read color pixels
+		p = xpmdata[1 + xc + y];
+		o = &pixels[y * TILE_SIZE];
+		
+		// Decode characters, but only single character ones
+		for (x = 0; x < xw; x++)
+			*(o++) = colormap[p[x * xp] & 0xFF];
+	}
+}
+
 void LoadSprites()
 {
-	int i, j, xw, xh, xc, xp, k, l, color, code, x, y;
+	int i, j;
 	EntityInfo* info;
-	char** xpmdata, *line, *p, letter;
-	uint32_t* pixels, *o;
-	int colormap[256];
 	
 	// Go through entity types
 	for (i = 1; i < NUM_ENTITYTYPES; i++)
@@ -107,75 +178,7 @@ void LoadSprites()
 		info = &entityinfo[i];
 		
 		for (j = 0; j < 2; j++)
-		{
-			// Get input and output
-			xpmdata = info->xpm[j];
-			pixels = info->pixels[j];
-			
-			// Clear the color map
-			for (k = 0; k < 256; k++)
-				colormap[k] = 0xFF00FF;
-		
-			// Read image details
-			SDL_sscanf(xpmdata[0], "%d %d %d %d", &xw, &xh, &xc, &xp);
-			
-			// Cap image size
-			if (xw > TILE_SIZE)
-				xw = TILE_SIZE;
-			if (xh > TILE_SIZE)
-				xh = TILE_SIZE;
-			
-			// Read in all color details
-			for (k = 0; k < xc; k++)
-			{
-				line = xpmdata[1 + k];
-				
-				// .	c #1B1B19
-				// Read characters in the color
-				code = line[0];
-				
-				// Only support hex colors
-				for (p = &line[xp]; *p; p++)
-					if (*p == '#')
-					{
-						// Skip the hash
-						p++;
-						break;
-					}
-				
-				// Read in color
-				color = 0;
-				for (; *p; p++)
-				{
-					// Shift up
-					color <<= 4;
-					
-					// Decode hex
-					letter = *p;
-					if (letter >= '0' && letter <= '9')
-						color |= letter - '0';
-					else if (letter >= 'a' && letter <= 'f')
-						color |= 10 + (letter - 'a');
-					else if (letter >= 'A' && letter <= 'F')
-						color |= 10 + (letter - 'A');
-				}
-				
-				// Store it
-				colormap[code] = color;
-			}
-			
-			// Read in image data
-			for (y = 0; y < xh; y++)
-			{
-				// Read color pixels
-				p = xpmdata[1 + xc + y];
-				o = &pixels[y * TILE_SIZE];
-				
-				// Decode characters, but only single character ones
-				for (x = 0; x < xw; x++)
-					*(o++) = colormap[p[x * xp] & 0xFF];
-			}
-		}
+			LoadXPMData(info->xpm[j], info->pixels[j]);
 	}
 }
 
