@@ -11,6 +11,8 @@
 #ifndef TIFL_SOUND_H
 #define TIFL_SOUND_H
 
+#include "global.h"
+
 /**
  * Initializes sound, or at least tries to.
  *
