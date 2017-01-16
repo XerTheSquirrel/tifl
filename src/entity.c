@@ -297,9 +297,20 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 	Entity *hurttarget;
 	boolean wasbolt;
 	
+	// Clear hit type if it is nothing
+	if (hitentity != NULL)
+	{
+		// Nothing can hit an anthrobolt, or maybe an object was previously
+		// cleared
+		if (hitentity->type == ENTITYTYPE_NOTHING ||
+			hitentity->type == ENTITYTYPE_ANTHROBOLT)
+			hitentity = NULL;
+	}
+	
 	// Get info on hit object
 	hurttarget = NULL;
-	hitinfo = (hitentity == NULL ? NULL : &entityinfo[hitentity->type]);
+	hitinfo = (hitentity != NULL ?
+		&entityinfo[hitentity->type] : NULL);
 	
 	// Depends on the type
 	wasbolt = false;
