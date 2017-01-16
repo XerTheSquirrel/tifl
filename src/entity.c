@@ -359,13 +359,13 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 {
 	int32_t px, py, groundy, downy, newx, newy, movx, usex, di, dx, dy, i, hx,
-		hy, hittx, hitty;
+		hy, hittx, hitty, ax, ay, bx, by;
 	LevelTile* lground, *rground;
 	LevelTile* lohit, *hihit, *check, *ramwall;
 	boolean onground, leftgsolid, rightgsolid, cliffside;
 	TileInfo* tinfo;
 	LevelTile* hitsometile = NULL;
-	Entity* hitsomeentity = NULL;
+	Entity* hitsomeentity = NULL, *checkent;
 	EntityInfo* einfo;
 	
 	// If this is an impulse and it is stunned, do nothing
@@ -541,6 +541,37 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	
 	// If standing on the ground, stand on it completely
 	entity->y = (onground && rely <= 0 ? groundy : newy);
+	
+	// Check to see if an entity was hit
+	px = entity->x;
+	py = entity->y;
+	dx = px + TILE_SIZE;
+	dy = py + TILE_SIZE;
+	for (i = 0; i < MAX_ENTITIES; i++)
+	{
+		// Ignore nothing
+		checkent = &entities[i];
+		if (checkent->type == ENTITYTYPE_NOTHING)
+			continue;
+		
+		// Ignore self
+		if (checkent == entity)
+			continue;
+		
+		// Get object shape?
+		ax = checkent->x;
+		ay = checkent->y;
+		bx = ax + TILE_SIZE;
+		by = ay + TILE_SIZE;
+		
+		// No chance of collision?
+		if (dx < ax || dy < ay || px >= bx || py >= by)
+			continue;
+		
+		// Hit it
+		hitsomeentity = checkent;
+		break;
+	}
 	
 	// Register a single hit only
 	if (hitsometile != NULL || hitsomeentity != NULL)
