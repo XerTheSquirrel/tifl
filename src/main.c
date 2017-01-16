@@ -49,6 +49,9 @@
 /** Bat fly amount. */
 #define BAT_FLY 2
 
+/** Rabbit jump height. */
+#define RABIT_JUMP 24
+
 void Die(const char* format, ...)
 {
 #define DIE_SIZE 512
@@ -128,6 +131,11 @@ static void RunEntities()
 						BAT_SPEED : -BAT_SPEED),
 						(((entity->x / TILE_SIZE) & 1) ? -BAT_FLY : BAT_FLY),
 						true);
+					break;
+					
+					// Rabbits jump
+				case ENTITYTYPE_BUNNY:
+					WalkEntity(entity, 0, RABIT_JUMP, true);
 					break;
 				
 					// Unknown, do nothing
