@@ -295,17 +295,20 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 	int32_t xx, yy;
 	EntityInfo* hitinfo;
 	Entity *hurttarget;
+	boolean wasbolt;
 	
 	// Get info on hit object
 	hurttarget = NULL;
 	hitinfo = (hitentity == NULL ? NULL : &entityinfo[hitentity->type]);
 	
 	// Depends on the type
+	wasbolt = false;
 	switch (source->type)
 	{
 			// Anthrobolt
 		case ENTITYTYPE_ANTHROBOLT:
 			// Remove bolt
+			wasbolt = true;
 			source->type = ENTITYTYPE_NOTHING;
 			
 			// Stun, deferal, and bump object
@@ -352,7 +355,13 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 	{
 		// Kill it?
 		if ((hurttarget->pain++) >= entityinfo[hurttarget->type].painthreshold)
+		{
 			SDL_memset(hurttarget, 0, sizeof(*hurttarget));
+			
+			// Saved it?
+			if (wasbolt)
+				feralssaved++;
+		}
 	}
 }
 
