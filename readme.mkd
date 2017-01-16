@@ -19,8 +19,8 @@ back while racking in as many points as possible.
 
 ## Repository
 
- * [Online repository](http://multiphasicapps.net/)
-   * SquirrelJME uses `fossil` <http://fossil-scm.org/>.
+ * [Online repository](http://multiphasicapps.net:8080/tifl)
+   * Trouble In Furry Land uses `fossil` <http://fossil-scm.org/>.
    * The repository may be cloned with:
      * `fossil clone -u http://multiphasicapps.net:8080/tifl `
        ` tifl.fossil`
