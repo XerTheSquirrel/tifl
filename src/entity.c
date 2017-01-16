@@ -25,7 +25,10 @@
 #include "cat2.xpm"
 
 /** How long the anthrogun stuns for. */
-#define ANTHROGUN_HITSTUN 2
+#define ANTHROGUN_HITSTUN 20
+
+/** How long hits stun for. */
+#define TOUCH_STUN 2
 
 /** Global entity data. */
 Entity entities[MAX_ENTITIES];
@@ -303,7 +306,7 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 			source->type = ENTITYTYPE_NOTHING;
 			
 			// Stun, deferal, and bump object
-			if (hitentity != NULL && hitentity == playerentity)
+			if (hitentity != NULL && hitentity != playerentity)
 			{
 				// Hit bolt where the entity is
 				xx = hitentity->x;
@@ -312,7 +315,7 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 				// Never replace a longer stun
 				if (hitentity->stun < ANTHROGUN_HITSTUN)
 					hitentity->stun = ANTHROGUN_HITSTUN;
-				
+					
 				// Push the object
 				WalkEntity(hitentity, (source->angle == FACETYPE_RIGHT ?
 					TILE_SIZE : -TILE_SIZE), 0, false);
@@ -320,15 +323,6 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 				// Hurt this one
 				hurttarget = hitentity;
 			}
-			
-			// If it hit a tile, destroy it
-			if (hittile)
-			{
-				xx = tx * TILE_SIZE;
-				yy = ty * TILE_SIZE;
-			}
-			
-			// Spawn an explosion
 			break;
 			
 			// Turn around if ran into a wall or entity
@@ -352,8 +346,11 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 	// Increase the object's pain
 	// If it is hurt too much, remove it
 	if (hurttarget != NULL)
+	{
+		// Kill it?
 		if ((hurttarget->pain++) >= entityinfo[hurttarget->type].painthreshold)
 			SDL_memset(hurttarget, 0, sizeof(*hurttarget));
+	}
 }
 
 void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)

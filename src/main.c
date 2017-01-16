@@ -217,7 +217,8 @@ void loop()
 			return;
 		
 		// Respawn the player if he has no entity
-		if (playerentity == NULL)
+		if (playerentity == NULL ||
+			(playerentity != NULL && playerentity->type == ENTITYTYPE_NOTHING))
 			RespawnPlayer();
 		
 		// Player interaction
