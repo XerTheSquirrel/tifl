@@ -30,8 +30,20 @@ typedef enum EntityType
 	/** Player attack. */
 	ENTITYTYPE_ANTHROBOLT,
 	
+	/** Bat. */
+	ENTITYTYPE_BAT,
+	
+	/** Bunny. */
+	ENTITYTYPE_BUNNY,
+	
+	/** Cat. */
+	ENTITYTYPE_CAT,
+	
 	/** The number of entity types. */
-	NUM_ENTITYTYPES
+	NUM_ENTITYTYPES,
+	
+	/** Start of ferals. */
+	START_FURRIES = ENTITYTYPE_BAT
 } EntityType;
 
 /**
@@ -63,6 +75,9 @@ typedef struct EntityInfo
 	
 	/** Is this thing affected by gravity? */
 	boolean feelsgravity;
+	
+	/** Pain threshold. */
+	int32_t painthreshold;
 
 	/** Raw pixel data. */
 	uint32_t pixels[2][TILE_SIZE * TILE_SIZE];

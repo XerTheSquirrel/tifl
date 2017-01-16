@@ -17,6 +17,12 @@
 #include "player2.xpm"
 #include "zap1.xpm"
 #include "zap2.xpm"
+#include "bat1.xpm"
+#include "bat2.xpm"
+#include "bunny1.xpm"
+#include "bunny2.xpm"
+#include "cat1.xpm"
+#include "cat2.xpm"
 
 /** How long the anthrogun stuns for. */
 #define ANTHROGUN_HITSTUN 2
@@ -39,7 +45,8 @@ EntityInfo entityinfo[NUM_ENTITYTYPES] =
 			player1_xpm,
 			player2_xpm
 		},
-		true
+		true,
+		20
 	},
 	
 	// Anthrobolt
@@ -48,7 +55,38 @@ EntityInfo entityinfo[NUM_ENTITYTYPES] =
 			zap1_xpm,
 			zap2_xpm
 		},
-		false
+		false,
+		1
+	},
+	
+	// Bat
+	{
+		{
+			bat1_xpm,
+			bat2_xpm
+		},
+		false,
+		5
+	},
+	
+	// Bunny
+	{
+		{
+			bunny1_xpm,
+			bunny2_xpm
+		},
+		true,
+		3
+	},
+	
+	// Cat
+	{
+		{
+			cat1_xpm,
+			cat2_xpm
+		},
+		true,
+		10
 	}
 };
 
@@ -249,6 +287,12 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 	int32_t tx, int32_t ty)
 {
 	int32_t xx, yy;
+	EntityInfo* hitinfo;
+	Entity *hurttarget;
+	
+	// Get info on hit object
+	hurttarget = NULL;
+	hitinfo = (hitentity == NULL ? NULL : &entityinfo[hitentity->type]);
 	
 	// Depends on the type
 	switch (source->type)
@@ -269,12 +313,12 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 				if (hitentity->stun < ANTHROGUN_HITSTUN)
 					hitentity->stun = ANTHROGUN_HITSTUN;
 				
-				// Increase the object's pain
-				hitentity->pain++;
-				
 				// Push the object
 				WalkEntity(hitentity, (source->angle == FACETYPE_RIGHT ?
 					TILE_SIZE : -TILE_SIZE), 0, false);
+				
+				// Hurt this one
+				hurttarget = hitentity;
 			}
 			
 			// If it hit a tile, destroy it
@@ -291,6 +335,12 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 		default:
 			break;
 	}
+	
+	// Increase the object's pain
+	// If it is hurt too much, remove it
+	if (hurttarget != NULL)
+		if ((hurttarget->pain++) >= entityinfo[hurttarget->type].painthreshold)
+			SDL_memset(hurttarget, 0, sizeof(*hurttarget));
 }
 
 void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)

@@ -119,10 +119,21 @@ static LevelTile* PlaceTile(int x, int y, TileType type)
 	return mod;
 }
 
+EntityType RandomType()
+{
+	int32_t rv = NextRandom();
+	if (rv < 0)
+		rv = -rv;
+	
+	// Use it
+	return START_FURRIES + (rv % (NUM_ENTITYTYPES - START_FURRIES));
+}
+
 void InitializeLevel(int levelnum)
 {
-	int x, y, i, n, absln, q, v, gz, ngls;
-	Entity oldplayer;
+	int x, y, i, n, absln, q, v, gz, ngls, groundy, tries;
+	Entity oldplayer, *entity;
+	EntityInfo* info;
 	boolean docloud, doground, doplatform, startblock;
 	
 	// Remember the old player information
@@ -199,10 +210,46 @@ void InitializeLevel(int levelnum)
 		}
 	}
 	
-	// Spawn furries
-	
 	// Drop the player off at the spawn area
 	InternalRespawnPlayer(&oldplayer);
+	
+	// Spawn furries
+	n = 4 + (NextRandom() % 4) + (absln / 4);
+	if (n > MAX_ENTITIES / 2)
+		n = MAX_ENTITIES / 2;
+	for (int i = 0; i < n; i++)
+	{
+		// Get next entity
+		entity = BlankEntity();
+		if (entity == NULL)
+			break;
+		
+		// Clear it
+		SDL_memset(entity, 0, sizeof(*entity));
+		
+		// Determine random type
+		entity->type = RandomType();
+		info = &entityinfo[entity->type];
+		
+		// Try placing it somewhere
+		for (tries = 0; tries < 4; tries++)
+		{
+			// Use ranodm X
+			x = (NextRandom() % LEVEL_WIDTH) * TILE_SIZE;
+			if (x < 0)
+				x = -x;
+			
+			// If it cannot be placed on the ground, do not spawn it there
+			groundy = GroundHeight(x);
+			if (info->feelsgravity && groundy <= 0)
+				continue;
+			
+			// Set position
+			entity->x = x;
+			entity->y = groundy;
+			entity->angle = (NextRandom() & 1);
+		}
+	}
 }
 
 void RespawnPlayer()
