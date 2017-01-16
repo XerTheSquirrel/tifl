@@ -40,6 +40,15 @@
 /** The number of frames to be stunned after firing the anthrogun. */
 #define ANTHROGUN_PLAYER_STUN 2
 
+/** Speed of cats. */
+#define CAT_SPEED 12
+
+/** Speed of bats. */
+#define BAT_SPEED 6
+
+/** Bat fly amount. */
+#define BAT_FLY 2
+
 void Die(const char* format, ...)
 {
 #define DIE_SIZE 512
@@ -103,6 +112,22 @@ static void RunEntities()
 				case ENTITYTYPE_ANTHROBOLT:
 					WalkEntity(entity, (entity->angle == FACETYPE_RIGHT ?
 						ANTHROBOLT_SPEED : -ANTHROBOLT_SPEED), 0, false);
+					break;
+					
+					// Cats walk forward
+				case ENTITYTYPE_CAT:
+					WalkEntity(entity, (entity->angle == FACETYPE_RIGHT ?
+						CAT_SPEED : -CAT_SPEED), 0, true);
+					break;
+					
+					// Bats fly around
+				case ENTITYTYPE_BAT:
+					// Left/right movement, bats fly up or down depending on
+					// the tile they are on
+					WalkEntity(entity, (entity->angle == FACETYPE_RIGHT ?
+						BAT_SPEED : -BAT_SPEED),
+						(((entity->x / TILE_SIZE) & 1) ? -BAT_FLY : BAT_FLY),
+						true);
 					break;
 				
 					// Unknown, do nothing

@@ -234,10 +234,11 @@ void InitializeLevel(int levelnum)
 		// Try placing it somewhere
 		for (tries = 0; tries < 4; tries++)
 		{
-			// Use ranodm X
-			x = (NextRandom() % LEVEL_WIDTH) * TILE_SIZE;
+			// Use random X
+			x = (NextRandom() % LEVEL_WIDTH - 2) * TILE_SIZE;
 			if (x < 0)
 				x = -x;
+			x += 1;
 			
 			// If it cannot be placed on the ground, do not spawn it there
 			groundy = GroundHeight(x);
