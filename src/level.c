@@ -131,7 +131,7 @@ EntityType RandomType()
 
 void InitializeLevel(int levelnum)
 {
-	int x, y, i, n, absln, q, v, gz, ngls, groundy, tries;
+	int32_t x, y, i, n, absln, q, v, gz, ngls, groundy, tries, spawny;
 	Entity oldplayer, *entity;
 	EntityInfo* info;
 	boolean docloud, doground, doplatform, startblock;
@@ -244,9 +244,17 @@ void InitializeLevel(int levelnum)
 			if (info->feelsgravity && groundy <= 0)
 				continue;
 			
+			// Spawn on the ground
+			if (info->feelsgravity)
+				spawny = groundy;
+			
+			// Otherwise in the air somewhere
+			else
+				spawny = groundy + (((NextRandom() % 2) + 4) * TILE_SIZE);
+			
 			// Set position
 			entity->x = x;
-			entity->y = groundy;
+			entity->y = spawny;
 			entity->angle = (NextRandom() & 1);
 		}
 	}
