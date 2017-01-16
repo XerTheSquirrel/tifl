@@ -75,6 +75,7 @@ static void RunEntities()
 	int i;
 	Entity* entity;
 	EntityInfo* info;
+	boolean mighturn;
 	
 	for (i = 0; i < MAX_ENTITIES; i++)
 	{
@@ -108,6 +109,7 @@ static void RunEntities()
 			}
 			
 			// Run AI action for it
+			mighturn = false;
 			switch (entity->type)
 			{
 					// Anthrobolt, continues moving in the direction it is
@@ -119,12 +121,14 @@ static void RunEntities()
 					
 					// Cats walk forward
 				case ENTITYTYPE_CAT:
+					mighturn = true;
 					WalkEntity(entity, (entity->angle == FACETYPE_RIGHT ?
 						CAT_SPEED : -CAT_SPEED), 0, true);
 					break;
 					
 					// Bats fly around
 				case ENTITYTYPE_BAT:
+					mighturn = true;
 					// Left/right movement, bats fly up or down depending on
 					// the tile they are on
 					WalkEntity(entity, (entity->angle == FACETYPE_RIGHT ?
@@ -135,6 +139,7 @@ static void RunEntities()
 					
 					// Rabbits jump
 				case ENTITYTYPE_BUNNY:
+					mighturn = true;
 					WalkEntity(entity, 0, RABIT_JUMP, true);
 					break;
 				
@@ -142,6 +147,13 @@ static void RunEntities()
 				default:
 					break;
 			}
+			
+			// Turn around at edge of level?
+			if (mighturn)
+				if (entity->x < TILE_SIZE)
+					entity->angle = FACETYPE_RIGHT;
+				else if (entity->x >= (LEVEL_WIDTH_PIXELS - TILE_SIZE))
+					entity->angle = FACETYPE_LEFT;
 		}
 	}
 }
