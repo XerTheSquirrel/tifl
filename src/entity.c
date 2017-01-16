@@ -353,10 +353,14 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	TileInfo* tinfo;
 	LevelTile* hitsometile = NULL;
 	Entity* hitsomeentity = NULL;
+	EntityInfo* einfo;
 	
 	// If this is an impulse and it is stunned, do nothing
 	if (impulse && entity->stun)
 		return;
+	
+	// Get info
+	einfo = &entityinfo[entity->type];
 	
 	// If impulse, change facing direction
 	if (impulse && relx != 0)
@@ -402,15 +406,19 @@ void WalkEntity(Entity* entity, int32_t relx, int32_t rely, boolean impulse)
 	if (onground)
 		groundy = py - (py % TILE_SIZE);
 	
-	// If on the ground and Y thrust is down, cancel it
-	// Also cancel if it is an impulsed jump and we are not on the ground
-	if ((onground && rely < 0) || (!onground && impulse && rely > 0))
-		rely = 0;
+	// Must feel gravity for these cases
+	if (einfo->feelsgravity)
+	{
+		// If on the ground and Y thrust is down, cancel it
+		// Also cancel if it is an impulsed jump and we are not on the ground
+		if ((onground && rely < 0) || (!onground && impulse && rely > 0))
+			rely = 0;
 	
-	// If not on the ground make left/right movement weaker
-	// Or at the edge of a cliff
-	if ((!onground || cliffside) && impulse)
-		relx /= 2;
+		// If not on the ground make left/right movement weaker
+		// Or at the edge of a cliff
+		if ((!onground || cliffside) && impulse)
+			relx /= 2;
+	}
 	
 	// Check if bumping head on a block
 	if (rely > 0)
