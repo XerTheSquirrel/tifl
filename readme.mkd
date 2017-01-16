@@ -8,7 +8,8 @@
 **Trouble In Furry Land** is a side scroller. Due to unspecified plot reasons,
 everyone in Furry Land was transformed from their anthropomorphic form into
 a feral form. Your job is go to around with your anthrogun and transform them
-back while racking in as many points as possible.
+back while racking in as many points as possible. Another consideration is that
+bunnies have consumed unspecified large amounts of sugar.
 
 ## Licenses
 
