@@ -107,12 +107,16 @@ void DrawSolid(uint32_t* pixels, int color, int x, int y, int w, int h)
 		w = BASIC_SCREEN_WIDTH - x;
 	
 	// Nothing to draw?
-	if (w <= 0)
+	if (w <= 0 || y > BASIC_SCREEN_HEIGHT)
 		return;
 	
 	// Draw pixels
 	for (ey = y + h; y < ey; y++)
 	{
+		// Do not draw below screen
+		if (y < 0 || y >= BASIC_SCREEN_HEIGHT)
+			continue;
+		
 		pp = &pixels[(y * BASIC_SCREEN_WIDTH) + x];
 		
 		for (i = 0; i < w; i++)
@@ -129,6 +133,10 @@ void DrawImageTile(uint32_t* pixels, uint32_t* src, int x, int y,
 	uint32_t color;
 	boolean normal;
 	
+	// Nothing to draw?
+	if (y > BASIC_SCREEN_HEIGHT)
+		return;
+	
 	// Bounds
 	normal = (face == FACETYPE_RIGHT);
 	w = TILE_SIZE;
@@ -137,6 +145,10 @@ void DrawImageTile(uint32_t* pixels, uint32_t* src, int x, int y,
 	// Draw pixels
 	for (ey = y + h, b = 0; y < ey; y++, b++)
 	{
+		// Do not draw below screen
+		if (y < 0 || y >= BASIC_SCREEN_HEIGHT)
+			continue;
+		
 		pp = &pixels[(y * BASIC_SCREEN_WIDTH) + x];
 		ss = &src[(b * TILE_SIZE)];
 		
