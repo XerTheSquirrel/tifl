@@ -331,7 +331,7 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 			// Spawn an explosion
 			break;
 			
-			// Turn around if ran into a wall
+			// Turn around if ran into a wall or entity
 		case ENTITYTYPE_BAT:
 		case ENTITYTYPE_BUNNY:
 		case ENTITYTYPE_CAT:
@@ -339,6 +339,9 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 			source->angle = (source->angle == FACETYPE_RIGHT ?
 				FACETYPE_LEFT : FACETYPE_RIGHT);
 			
+			// If a player was hit, hurt them
+			if (hitentity != NULL && hitentity == playerentity)
+				hurttarget = hitentity;
 			break;
 			
 			// Unknown
