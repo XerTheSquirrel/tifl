@@ -92,44 +92,36 @@ void DrawImageTile(uint32_t* pixels, uint32_t* src, int x, int y,
 {
 	uint32_t* pp;
 	uint32_t* ss;
-	int w, h, i, ey, b;
+	int w, h, i, ey, b, snip, q;
 	uint32_t color;
+	boolean normal;
 	
 	// Bounds
+	normal = (face == FACETYPE_RIGHT);
 	w = TILE_SIZE;
 	h = TILE_SIZE;
-	
-	// Off the left side?
-	if (x < 0)
-	{
-		w = (w + x);
-		x = 0;
-	}
-	
-	// Off the right side?
-	else if (x + w >= BASIC_SCREEN_WIDTH)
-		w = BASIC_SCREEN_WIDTH - x;
-	
-	// Nothing to draw?
-	if (w <= 0)
-		return;
 	
 	// Draw pixels
 	for (ey = y + h, b = 0; y < ey; y++, b++)
 	{
 		pp = &pixels[(y * BASIC_SCREEN_WIDTH) + x];
-		ss = &src[b * TILE_SIZE];
+		ss = &src[(b * TILE_SIZE)];
 		
-		for (i = 0; i < w; i++)
+		q = (normal ? x : x + (TILE_SIZE - 1));
+		for (i = 0; i < w; i++, (normal ? q++ : q--))
 		{
 			color = *(ss++);
+			
+			// If off the screen, ignore
+			if (q < 0 || q >= BASIC_SCREEN_WIDTH)
+				continue;
 			
 			// Do not draw transparent areas
 			if (color == 0xFF00FF)
 				continue;
 			
 			// Unflipped
-			if (face == FACETYPE_RIGHT)
+			if (normal)
 				pp[i] = color;
 			
 			// Flipped
