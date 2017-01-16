@@ -330,7 +330,17 @@ void HitSomething(Entity* source, Entity* hitentity, LevelTile* hittile,
 			
 			// Spawn an explosion
 			break;
-		
+			
+			// Turn around if ran into a wall
+		case ENTITYTYPE_BAT:
+		case ENTITYTYPE_BUNNY:
+		case ENTITYTYPE_CAT:
+			// Turn around
+			source->angle = (source->angle == FACETYPE_RIGHT ?
+				FACETYPE_LEFT : FACETYPE_RIGHT);
+			
+			break;
+			
 			// Unknown
 		default:
 			break;
