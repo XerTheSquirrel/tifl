@@ -23,7 +23,7 @@ This was programmed in five days for a programming contest.
 
 ## Repository
 
- * [GitHub](<http://github.com/XerTheSquirrel/tifl)
+ * [GitHub](http://github.com/XerTheSquirrel/tifl)
 
 ## Links
 
