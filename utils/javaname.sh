@@ -1,7 +1,7 @@
 #!/bin/sh
 # ---------------------------------------------------------------------------
 # Multi-Phasic Applications: Trouble In Furry Land
-#     Copyright (C) Steven Gawroriski <steven@multiphasicapps.net>
+#     Copyright (C) Stephanie Gawroriski <xer@multiphasicapps.net>
 #     Copyright (C) Multi-Phasic Applications <multiphasicapps.net>
 # ---------------------------------------------------------------------------
 # Trouble In Furry Land is under the GNU General Public License v3+, or later.
@@ -51,8 +51,8 @@ do
 	fi
 	
 	# If the GPG is here, stop
-	if [ -f "$__dir/steven-gawroriski.gpg" ] || \
-		[ -f "$__dir/../steven-gawroriski.gpg" ]
+	if [ -f "$__dir/public-key.gpg" ] || \
+		[ -f "$__dir/../public-key.gpg" ]
 	then
 		break
 	fi

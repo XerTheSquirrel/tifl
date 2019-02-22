@@ -1,16 +1,18 @@
 # Trouble In Furry Land
 
- * Copyright (C) 2017-2017 Steven Gawroriski
-   <steven@multiphasicapps.net>
+ * Copyright (C) 2017-2017 Stephanie Gawroriski
+   <xer@multiphasicapps.net>
  * Copyright (C) 2017-2017 Multi-Phasic Applications
    <http://multiphasicapps.net/>
 
-**Trouble In Furry Land** is a side scroller. Due to unspecified plot reasons,
+**Trouble In Furry Land** is a side-scroller. Due to unspecified plot reasons,
 everyone in Furry Land was transformed from their anthropomorphic form into
 a feral form, additionally due to a recent sugar factory explosion the ferals
 have consumed unspecified large amounts of sugar. Your job is to walk and fly
-around in your invisible jetback with your anthrogun and transform them back,
+around in your invisible jet-pack with your anthro-gun and transform them back,
 sending them to an unspecified area that may be considered safe for them.
+
+This was programmed in five days for a programming contest.
 
 ## Licenses
 
@@ -21,20 +23,7 @@ sending them to an unspecified area that may be considered safe for them.
 
 ## Repository
 
- * [Online repository](http://multiphasicapps.net:8080/tifl)
-   * Trouble In Furry Land uses `fossil` <http://fossil-scm.org/>.
-   * The repository may be cloned with:
-     * `fossil clone -u http://multiphasicapps.net:8080/tifl `
-       ` tifl.fossil`
-     * `mkdir tifl`
-     * `cd tifl`
-     * `fossil open ../tifl.fossil`
-   * Trunk Source Snapshot (`fossil serve` only):
-     * [TAR.GZ](/tarball/tifl-trunk.tar.gz?uuid=trunk)
-     * [ZIP](/zip/tifl-trunk.zip?uuid=trunk)
-   * Read-Only Mirrors:
-     * Bitbucket: <https://bitbucket.org/mpasteven/tifl>
-     * GitHub: <http://github.com/mpasteven/tifl>
+ * [GitHub](<http://github.com/XerTheSquirrel/tifl)
 
 ## Links
 
@@ -54,5 +43,4 @@ the purchasing of food items for consumption.
    litecoin:LKytAQcbPyox75uYMKo1NH1w2k1SqBaELi)
  * DogeCoin (**DOGE**): [`DPsW21MV8RMuXhA3GoN8VPjkmQEugrEn8h`](
    dogecoin:DPsW21MV8RMuXhA3GoN8VPjkmQEugrEn8h)
- * [FreedomSponsors](https://freedomsponsors.org/user/mpasteven/)
 

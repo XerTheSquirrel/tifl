@@ -2,7 +2,7 @@
 
 Trouble In Furry Land is copyright:
 
- * Copyright (C) 2017-2017 Steven Gawroriski <steven@multiphasicapps.net>
+ * Copyright (C) 2017-2017 Stephanie Gawroriski <xer@multiphasicapps.net>
  * Copyright (C) 2017-2017 Multi-Phasic Applications <multiphasicapps.net>
 
 Trouble In Furry Land has two primary types of files, source code and
@@ -1123,7 +1123,7 @@ accepted.
 **CODE "ON THE CLOCK" OR UNDER CONTRACT, THEN THAT DEVELOPER MUST SEEK THE**
 **PERMISSION OF THE EMPLOYER.**
 
-	You grant Multi-Phasic Applications and Steven Gawroriski an irrevocable
+	You grant Multi-Phasic Applications and Stephanie Gawroriski an irrevocable
 	license that:
 	
 	 1. Grants a patent license, as per the GNU GPLv3.

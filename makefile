@@ -1,7 +1,7 @@
 #!/usr/bin/make
 # ---------------------------------------------------------------------------
 # Multi-Phasic Applications: Trouble In Furry Land
-#     Copyright (C) Steven Gawroriski <steven@multiphasicapps.net>
+#     Copyright (C) Stephanie Gawroriski <xer@multiphasicapps.net>
 #     Copyright (C) Multi-Phasic Applications <multiphasicapps.net>
 # ---------------------------------------------------------------------------
 # Trouble In Furry Land is under the GNU General Public License v3+, or later.
